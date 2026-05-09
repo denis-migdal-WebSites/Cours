@@ -36,6 +36,13 @@
 
 <div>Côté client, <script type="c-bash">ssh <h>[-p $PORT]</h> <h>$USER</h>@<h>$SERVER</h> <h>[$CMD]</h></script> exécute <script type="c-bash"><h>$CMD</h></script> sur le serveur (shell interactif si non précisé).</div>
 
+<div class="exo">Écrivez les commandes permettant de :
+    <ul>
+        <li>Se connecter à distance au serveur <script type="c-text">staging</script> en tant que <script type="c-text">stagiaire</script>.</li>
+        <li>Lister le contenu du home du serveur.</li>
+    </ul>
+</div>
+
 <h3>Les Clés SSH</h3>
 
 <div>Renseigner son un mot de passe à chaque fois qu’on utilise SSH est enquiquinant, et potentiellement peu sécurisé si le mot de passe est trop faible. On préfère ainsi généralement utiliser une <b>clé SSH</b> permettant aux utilisateurs de se connecter au serveur sans mot de passe.</div>
@@ -65,6 +72,8 @@ enquiquinant. Pour éviter cela, on utilise des <b>alias SSH</b>, permettant d'�
 </div>
 
 <div class="hint">L’autocomplétion du shell fonctionne aussi pour les alias SSH.</div>
+
+<div class="exo">Créez un alias <script type="c-text">stag</script> permettant de se connecter à <script type="c-text">staging</script> en tant que <script type="c-text">stagiaire</script>.</div>
 
 <h2>Les processus</h2>
 
@@ -416,6 +425,8 @@ TriggeredBy: <font color="#4CE64C"><b>●</b></font> ssh.socket
     X    tué (ne devrait jamais être vu) ;
 -->
 
+<div class="exo">Écrivez la ligne de commande permettant d'afficher les processus de l'utilisateur <script type="c-text">user</script>.</div>
+
 <h3>Monitorer l'exécution</h3>
 
 <div>Le fait que les calculs soient en cours d'exécution n'est pas suffisant afin de garantir l'absence de problèmes. Il arrive que, pour des raisons diverses et variées (plus de RAM disponible, boucle infinie, complexité algorithmique, etc.), un calcul ne progresse plus ou très lentement. Il se peut même que les résultats produits soient invalides.</div>
@@ -455,6 +466,8 @@ TriggeredBy: <font color="#4CE64C"><b>●</b></font> ssh.socket
 <!-- en réalité btop++, bpytop & bashtop anciennes version (author a écrit plein de versions), fork de gtop -->
 <!-- meilleurs que bottom -->
 
+<div class="exo">Écrivez la ligne de commande permettant de suivre le processus lancé par la commande <script type="c-text">man htop</script>.</div>
+
 <h2>Arrêter et reprendre les calculs</h2>
 
 <h3>Arrêter les calculs</h3>
@@ -490,6 +503,8 @@ TriggeredBy: <font color="#4CE64C"><b>●</b></font> ssh.socket
 </div>
 
 <div class="hint">Il est alors courant d'utiliser le signal <script type="c-bash">USR1</script> afin d'afficher la progression lors de sa réception.</div>
+
+<div class="exo">Écrivez la ligne de commande pour tuer brutalement le processus lancé par la commande <script type="c-bash">sleep</script> de PID 1337.</div>
 
 <h3>Reprendre les calculs</h3>
 
