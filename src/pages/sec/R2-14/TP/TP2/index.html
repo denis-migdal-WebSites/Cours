@@ -36,10 +36,10 @@
 <div>Retenir et écrire l’adresse IP du serveur à chaque connexion au serveur via SSH est enquiquinant. Pour éviter cela, on utilise des <b>alias SSH</b>, permettant d'écrire <script type="c-bash">ssh <h>$ALIAS</h></script> au lieu de <script type="c-bash">ssh <h>$USER</h>@<h>$SERVER</h></script>. Les alias sont définis dans la configuration du client SSH (<script type="c-text">~/.ssh/config</script>) comme suit :
     <script type="c-bash">
     Host <h>$ALIAS</h> # ssh ALIAS => ssh USER@SERVER
-    User <h>$USER</h>
-    HostName <h>$SERVER</h>
-    IdentityFile <h>$PRIVKEY_PATH</h> # si clé SSH
-    IdentitiesOnly yes         # si IdentityFile
+        User <h>$USER</h>
+        HostName <h>$SERVER</h>
+        IdentityFile <h>$PRIVKEY_PATH</h> # si clé SSH
+        IdentitiesOnly yes         # si IdentityFile
     </script>
 </div>
 

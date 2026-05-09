@@ -52,6 +52,14 @@ a[disabled] {
     pointer-events: none;
 }
 
+[ok] {
+    color: green;
+    font-weight: bold;
+}
+[rewrite] {
+    color: orange;
+}
+
 [unredacted] {
     color: red;
 }

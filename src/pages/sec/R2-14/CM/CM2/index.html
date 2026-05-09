@@ -10,9 +10,211 @@
     </head>
     <body>
         <main>
-            <h1>Processus et accès à distance</h1>
+            <h1>Accès à distance et processus</h1>
+
+
+<h2>Accès à distance</h2>
+
+<div>Les serveurs sont usuellement installés dans une salle dédiée avec contrôle d’accès, parfois à plusieurs centaines (ou milliers) de km de votre poste de travail. Par exemple, le serveur pourrait être à Clermont-Ferrand alors que votre bureau est à Aurillac.</div>
+
+<div>Bien évidement, vous n'allez pas faire l'aller-retour à Clermont-Ferrand, à chaque ligne de commande que vous souhaitez exécuter sur le serveur. Imaginez que vous deviez régulièrement intervenir sur le serveur, vous passeriez votre temps à faire l’aller-retour Aurillac/Clermont-Ferrand !</div>
+
+<h3>SSH</h3>
+
+<div>Il est ainsi nécessaire de pouvoir accéder au serveur à distance afin d’éviter de tels déplacements chronophages. Pour ce faire, on utilise <b>SSH</b> (<u>s</u>ecure <u>sh</u>ell) afin d’envoyer, via Internet, des lignes de commande au serveur, ce en à peine quelques millisecondes. Dans les faits, cela revient à ouvrir un terminal du serveur depuis votre poste de travail.</div>
+
+<img src="./assets/scheme.svg"/>
+
+<div>SSH suit une architecture client-serveur avec :
+    <ul class="flex-2">
+        <li>un <b>client SSH</b> sur le poste de travail ;</li>
+        <li>un <b>serveur SSH</b> sur le serveur.</li>
+    </ul>
+</div>
+
+<div>Le <i>client SSH</i> permet d’initier une connexion SSH (≈ session SSH) avec le <i>serveur SSH</i>. Une fois la connexion établie, le <i>client SSH</i> peut alors envoyer des commandes shell au <i>serveur SSH</i> qui les exécutera, et en retournera le résultat.</div>
+
+<div>Côté client, <script type="c-bash">ssh <h>[-p $PORT]</h> <h>$USER</h>@<h>$SERVER</h> <h>[$CMD]</h></script> exécute <script type="c-bash"><h>$CMD</h></script> sur le serveur (shell interactif si non précisé).</div>
+
+<h3>Les Clés SSH</h3>
+
+<div>Renseigner son un mot de passe à chaque fois qu’on utilise SSH est enquiquinant, et potentiellement peu sécurisé si le mot de passe est trop faible. On préfère ainsi généralement utiliser une <b>clé SSH</b> permettant aux utilisateurs de se connecter au serveur sans mot de passe.</div>
+
+<div>Le principe est alors très simple, l'utilisateur :
+    <ol>
+        <li>génère une paire de clés via <script type="c-bash">keygen</script>.</li>
+        <li>transmet la clef <i>publique</i> au serveur (dans <script type="c-text">~/.ssh/authorized_keys</script>).</li>
+        <li>indique au client SSH la clef <i>privée</i> à utiliser (cf suite).</li>
+    </ol>
+</div>
+
+<div>À chaque connexion SSH, le client donne alors une preuve qu'il a connaissance de la clef privée, que le serveur est capable de vérifier grâce à la clef publique.</div>
+
+<h3>Les alias SSH</h3>
+
+<div>Retenir et écrire l’adresse IP du serveur à chaque connexion au serveur via SSH est
+enquiquinant. Pour éviter cela, on utilise des <b>alias SSH</b>, permettant d'écrire <script type="c-bash">ssh <h>$ALIAS</h></script> au lieu de <script type="c-bash">ssh <h>$USER</h>@<h>$SERVER</h></script>. Les alias sont définis dans la configuration du client SSH comme suit :
+    <script type="c-bash">
+        Host <h>$ALIAS</h> # ssh ALIAS => ssh -p $PORT $USER@$SERVER
+            User           <h>$USER</h>
+            HostName       <h>$SERVER</h>
+            Port           <h>$PORT</h>         # si différent de 22
+            IdentityFile   <h>$PRIVKEY_PATH</h> # si clé SSH
+            IdentitiesOnly yes           # si IdentityFile
+    </script>
+</div>
+
+<div class="hint">L’autocomplétion du shell fonctionne aussi pour les alias SSH.</div>
 
 <h2>Les processus</h2>
+
+<div>Un processus représente un programme en cours d'exécution. Il est identifié par un <b>PID</b> (<u>P</u>rocess <u>Id</u>entifier) permettant de le contrôler et de le monitorer. Lorsque vous exécutez des lignes de commandes, le processus <script type="c-bash">bash</script> créé un sous-processus correspondant à la commande exécutée. <script type="c-bash">bash</script> est ainsi le <b>processus père</b> du processus ainsi lancé :
+    <div class="flex-2">
+        <script type="c-shell">
+            $ echo Hello
+            Hello
+        </script>
+        <script type="c-text">
+            PID     S STIME USER     COMMAND
+            1876379 S 19:34 demigda  bash
+            1890064 R 19:49 demigda   \_ echo Hello
+        </script>
+    </div>
+</div>
+
+<div class="hint">Le PID du processus père est appelé <b>PPID</b> (<i>Parent PID</i>).</div>
+
+<h3>Processus d'arrière-plan</h3>
+
+<div>Par défaut, un processus est lancé en <b>premier-plan</b> (<i>foreground</i>), c'est à dire qu'il bloque le terminal le temps de son exécution. Il est cependant possible de le lancer un <b>arrière-plan</b> (<i>background</i>) en suffixant la ligne de commande par <script type="c-text">&</script>. Ainsi, vous pourrez exécuter d'autres lignes de commandes, sans devoir attendre que les processus d'arrière-plan se terminent. Bien que les processus d'arrière-plan puissent écrire dans le terminal, ils ne peuvent récupérer les événements claviers.</div>
+
+<div class="danger">Il peut être très difficile d'écrire de nouvelles lignes de commandes lorsque, en même temps, les processus d'arrière-plan affichent du texte dans le terminal.</div>
+
+<div class="hint">Il est possible de transformer un processus de premier-plan en un processus d'arrière-plan, et inversement. Pour cela on utilise <script type="c-text">^+Z</script> pour stopper le processus de premier plan, permettant alors d'utiliser les commandes suivantes :
+    <ul class="flex-2">
+        <li><script type="c-bash">bg</script> (<i><b>b</b>ack<b>g</b>round</i>): pour le relancer en arrière plan.</li>
+        <li><script type="c-bash">fg</script> (<i><b>f</b>ore<b>g</b>round</i>): pour le relancer en premier plan.</li>
+        <li><script type="c-bash">jobs</script> : liste les processus en arrière plan.</li>
+    </ul>
+</div>
+
+<div class="center">
+    <img src="./assets/fgbg.png"/>
+</div>
+
+
+<h3>Fermeture d'une session</h3>
+
+<div>Lorsqu'une session SSH est fermée, le terminal associé l'est aussi. Usuellement, seuls les processus de premier-plan sont tués. À sa mort, chaque processus père décide s'il tue (ou non) ses fils. Les fils laissés vivant deviennent <i>orphelins</i>, et sont alors <i>adoptés</i> par le processus de PID 1 : <script type="c-bash">systemd</script>, ancêtre de tous les processus.</div>
+
+<div>Ainsi, lorsqu'on lance de longs calculs, non seulement le poste de travail doit rester allumé en permanence afin de maintenir la session, mais toute perte de connexion réseau (e.g. itinérance, panne réseau, etc) peut aussi entraîner sa fermeture. Il y a alors de forts risques que les calculs soient interrompus, et n'arrivent pas à terme. Cela peut ainsi entraîner des pertes de données si les résultats ne sont pas sauvegardés.</div>
+
+
+<div class="hint">Il est possible de déshériter manuellement des processus via <script type="c-bash">disown <h>[$PID]</h></script>.
+</div>
+
+<div class="danger">Bien qu'il soit possible d'adopter des processus via <script type="c-bash">reptyr <h>$PID</h></script>, cela ne fonctionne pas pour les processus orphelins.</div>
+
+<div>Le fonctionnement réel est un peu plus complexe :
+    <ul>
+        <li>Ouverture du terminal :
+            <ol>
+                <li>Un terminal (PTY) est créé dans le noyau Linux.</li>
+                <li>Une session (attachée au terminal) est créée avec le Shell comme <i>leader de session</i>.</li>
+            </ol>
+        </li>
+        <li>Fermeture du terminal :
+            <ol>
+                <li>Le terminal est détruit.</li>
+                <li>Le noyau notifie les processus en premier-plan ainsi que le leader de session (<script type="c-bash">bash</script>).</li>
+                <li>Chaque processus notifié (dont <script type="c-bash">bash</script>) décide s'il se suicide (et s'il tue ses fils).</li>
+            </ol>
+        </li>
+    </ul>
+</div>
+
+<div class="hint">Historiquement, les terminaux étaient des <i><u>t</u>élé<u>ty</u>pes</i> (TTY), i.e. un écran/clavier connecté au <i>mainframe</i>. Sous Linux les terminaux sont généralement des pseudo-TTY (PTY), qui simulent donc un terminal physique. Le PTY est composé d'un :
+    <ul>
+        <li>PTM (<i><u>m</u>aster</i>) : gère l'interaction avec l'utilisateur (clavier, souris, affichage).</li>
+        <li>PTS (<i><u>s</u>lave</i>) : gère l'interaction avec les processus (e.g. <script type="c-bash">bash</script>).</li>
+    </ul>
+</div>
+
+<h3>Screen</h3>
+
+<div>La commande <script type="c-bash">screen -ARR</script> permet d'éviter cela en ayant une sorte de "terminal" que l'on peut quitter et rejoindre à volonté, et qui n'est pas détruit lorsque la connexion SSH est fermée.</div>
+
+<div class="center">
+  <img src="./assets/screen.png"/>
+</div>
+
+<div class="hint">Nous avons configuré <script type="c-bash">screen</script> (fichier <script type="c-text">/etc/screenrc</script> afin d'en simplifier l'usage.</div>
+
+<div>À l’instar des onglets du terminal, <script type="c-bash">screen</script> permet de manipuler plusieurs <i>fenêtres</i> :
+    <ul class="flex-3">
+        <li><script type="c-text">F2</script> : créer une fenêtre.</li>
+        <li><script type="c-text">F3</script> : renommer la fenêtre.</li>
+        <li><script type="c-text">F4</script> : choisir une fenêtre.</li>
+    </ul>
+</div>
+
+<div class="hint">Le nom de la fenêtre courante est affichée en surbrillance en bas de la région.</div>
+
+<div>L’écran de <script type="c-bash">screen</script> est constitué de <b>régions</b> pouvant chacune afficher une fenêtre. Chaque région peut être subdivisée verticalement ou horizontalement :
+    <ul class="flex-2">
+        <li><script type="c-text">F6</script> : découper la région verticalement.</li>
+        <li><script type="c-text">F7</script> : découper la région horizontalement.</li>
+        <li><script type="c-text">F8</script> : supprimer la région courante.</li>
+        <li><script type="c-text">^+<h>←|↑|→|↓</h></script> : aller dans une autre région.</li>
+    </ul>
+</div>
+
+<div>Chaque région est vide à sa création. Vous pourrez alors soit :
+    <ul class="flex-2">
+        <li>créer une nouvelle fenêtre (<script type="c-text">F2</script>).</li>
+        <li>choisir une fenêtre à afficher (<script type="c-text">F4</script>).</li>
+    </ul>
+</div>
+
+<div class="hint">Lorsqu'il y a au moins une division verticale de l'écran, copier plusieurs lignes se fait en entrant en mode scroll (<script type="c-text">F5</script>), que vous pourrez quitter via touche <script type="c-text">Esc</script>. Le mode scroll permettra alors de déplacer le curseur via les flèches du clavier, ou la molette de la souris, puis de débuter et terminer une sélection via la touche espace du clavier. Le contenu sélectionné sera alors placé dans le presse-papier.</div>
+
+
+<h3>Les services</h3>
+
+<div>Pour des processus qui doivent s'exécuter au démarrage de l'ordinateur (e.g. gestion du bluetooth, serveur Web, serveur de fichiers, etc), on utilise usuellement des <b>services</b>. Les services, aussi appelés <b>daemon</b>, sont des processus d'arrière-plan contrôlés par <script type="c-bash">systemd</script>. Par exemple le serveur SSH utilise le daemon <script type="c-bash">sshd</script>.</div>
+
+<div class="hint">Le "d" à la fin du nom signifie <b>d</b>aemon.</div>
+
+<div>Ils sont contrôlés via la commande <script type="c-bash">systemctl</script> (<i>system <u>c</u>on<u>t</u>ro<u>l</u></i>) :
+    <ul>
+        <li><script type="c-bash">systemctl <h>[re]start|stop|reload|status</h> <h>$NAME</h></script>.</li>
+        <li><script type="c-bash">systemctl <h>(en|dis)able</h> <h>$NAME</h></script> : (des)activer le démarrage automatique du service au boot.</li>
+        <li><script type="c-bash">journalctl --unit=<h>$NAME</h></script> : afficher les logs du service <script type="c-bash"><h>$NAME</h></script> (possède de très nombreuses options).</li>
+    </ul>
+</div>
+
+<div class="terminal"><pre>$ systemctl status ssh
+<font color="#4CE64C"><b>●</b></font> ssh.service - OpenBSD Secure Shell server
+     Loaded: loaded (/usr/lib/systemd/system/ssh.service; <font color="#D7D75F"><b>disabled</b></font>; preset: <font color="#4CE64C"><b>enabled</b></font>)
+     Active: <font color="#4CE64C"><b>active (running)</b></font> since Mon 2026-05-04 14:33:08 CEST; 10min ago
+TriggeredBy: <font color="#4CE64C"><b>●</b></font> ssh.socket
+       Docs: man:sshd(8)
+             man:sshd_config(5)
+    Process: 583822 ExecStartPre=/usr/sbin/sshd -t (code=exited, status=0/SUCCESS)
+   Main PID: 583823 (sshd)
+      Tasks: 1 (limit: 38227)
+     Memory: 2.2M (peak: 5.5M)
+        CPU: 63ms
+     CGroup: /system.slice/ssh.service
+             └─<font color="#8A8A8A">583823 &quot;sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups&quot;</font>
+</pre></div>
+
+<div class="hint">Les services sont décrits par un fichier <script type="c-text">/etc/systemd/system/*.service</script> dont le format se rapproche des fichiers <script type="c-text">.desktop</script>.</div>
+
+<div class="danger">La commande <script type="c-bash">service</script> est aujourd'hui obsolète et a été remplacée par <script type="c-bash">systemctl</script>.</div>
+
+
+<h2>Les ressources</h2>
 
 <div>Pour exécuter un programme, l'ordinateur utilise :
     <ul class="flex-2">
@@ -21,7 +223,12 @@
     </ul>
 </div>
 
-<div>💡 Le CPU possède un à plusieurs <b>processeurs</b> contenant eux-même plusieurs <b>cœurs physiques</b>. Un cœur physique peut posséder des <b>cœurs virtuels</b> (parfois appelés <i>threads</i>) lui permettant d'exécuter plusieurs programmes simultanément.</div>
+<div>Lorsqu'on exécute des calculs, il est important d'estimer ses besoins en fonction des ressources à dispositions. Par exemple, il est inutile de lancer un calcul nécessitant 64Go de RAM sur un poste de travail qui n'en dispose que de 16Go. De même, il n'est pas utile d'utiliser un serveur de calculs si le poste de travail suffit.</div>
+
+<h3>Les ressources à disposition</h3>
+
+<div>La première étape est ainsi de déterminer les ressources à disposition :
+
 
 <div class="flex-2">
   <div>
@@ -72,289 +279,59 @@
   </div>
 </div>
 
-<div>💡 Lorsqu'on exécute des calculs, il est important d'estimer ses besoins en fonction des ressources à dispositions. Par exemple, il est inutile de lancer un calcul nécessitant 64Go de RAM sur un poste de travail n'en a que 16Go. De même, il n'est pas utile d'utiliser un serveur de calculs si le poste de travail suffit.</div>
-
-<h3>Qu'est-ce qu'un processus ?</h3>
-
-<div>Un processus représente un programme en cours d'exécution. Un programme est composé d'une suite d'instructions processeurs exécutées sur un <b>cœur</b> (<i>core</i>). Ils sont identifiés par un <b>PID</b> (<u>P</u>rocess <u>Id</u>entifier). Cet identifiant permet notamment d'envoyer des <b>signaux</b> aux processus, e.g. pour les tuer :
-    <ul class="flex-2">
-        <li><script type="c-bash">kill <h>$PID</h></script> : tue le processus.</li>
-        <li><script type="c-bash">pkill -x <h>$CMD</h></script> : tuer les commandes CMD.</li>
-    </ul>
 </div>
 
-<todo>besoin de présenter fils, services, etc.</todo>
+<div class="hint">Le CPU possède un à plusieurs <b>processeurs</b> contenant eux-même plusieurs <b>cœurs physiques</b>. Un cœur physique peut posséder des <b>cœurs virtuels</b> (parfois appelés <i>threads</i>) lui permettant d'exécuter plusieurs programmes simultanément.</div>
 
-<!-- 
- D    en  sommeil  non  interruptible  (normalement  entrées  et
-                    sorties) ;
-               I    fil inactif du noyau ;
-               R    s'exécutant  ou   pouvant   s'exécuter   (dans   la   file
-                    d'exécution) ;
-               S    en  sommeil  interruptible (en attente d'un événement pour
-                    finir) ;
-               T    arrêté par le signal de contrôle de la tâche ;
-               t    arrêté par le débogueur lors du traçage ;
-               W    pagination (non valable depuis le noyau 2.6.xx) ;
-               X    tué (ne devrait jamais être vu) ;
-               Z    processus zombie (<defunct>), terminé mais pas détruit par
-                    son parent.
--->
+<h3>Estimer ses besoins</h3>
 
-<div>Un processus peut se retrouver dans 3 "états" particuliers :
+<div>Le meilleur moyen d'estimer les ressources nécessaires à un calcul est de tout simplement l'exécuter, puis de regarder les ressources consommées. Cependant, lorsqu'on tente d'en déterminer les besoins, on souhaite éviter d'exécuter les calculs dans leur intégralité :
     <ul>
-        <li><b>mis en arrière plan</b> : ne bloque pas le terminal ;</li>
-        <li><b>déshérité</b> : adopté par le processus <script type="c-bash">systemd</script>.</li>
-        <li><b>service</b> : processus contrôlé via <script type="c-bash">service</script>.</li>
+        <li>si les calculs sont déjà finis, on a ainsi les résultats et il n'est alors plus nécessaire d'en estimer les besoins.</li>
+        <li>si les calculs sont très lents, on ne va pas attendre 100 an qu'ils se terminent.</li>
     </ul>
 </div>
 
-<h4>Processus d'arrière-plan</h4>
-
-<todo>Problématique : plusieurs process qui ne bloque pas le terminal (par contre si affiche peut vite devenir chaotique.)</todo>
-
-<div>Par défaut, un processus est lancé en <b>premier-plan</b> (<i>foreground</i>) et bloque le terminal lors de son exécution. Il est cependant possible de le lancer un <b>arrière-plan</b> en ajoutant `&` à la fin de la ligne de commande. Ainsi, vous pourrez entrer d'autres lignes de commandes pendant l'exécution du processus d'arrière plan.</div>
-
-<div>Vous pouvez stopper un processus de premier plan via `Ctrl+Z` puis utiliser :
-    <ul class="flex-2">
-        <li>`bg` (<i><b>b</b>ack<b>g</b>round</i>): pour le relancer en arrière plan.</li>
-        <li>`fg` (<i><b>f</b>ore<b>g</b>round</i>): pour le relancer en premier plan.</li>
-        <li>`jobs` : liste les processus en arrière plan.</li>
-    </ul>
-    <div class="center">
-        <img src="./assets/fgbg.png"/>
-    </div>
+<div>On va ainsi lancer les calculs sur des sous-ensembles de données (e.g. 1 entrée, 10 entrées, 100 entrées, etc), afin de pouvoir en estimer les besoins par extrapolation. Afin d'afficher les ressources consommées par les calculs (ainsi que diverses autres statistiques), on utilise la commande <script type="c-bash">time <h>$CMDLINE</h></script> (possède de très nombreuses options) :
+    <script type="c-shell">
+        $ time echo Hello
+        hello
+        Process ended in 0:00.00 (ran 100% of the time) with 1920kB max RAM.
+    </script>
 </div>
 
-<h4>Les services</h4>
-
-<todo>Autre solution les services + logs (évite bazar dans terminal).</todo>
-
-<div>Les services, aussi appelés <b>daemon</b>, sont des processus d'arrière-plan adoptés par `systemd`. Par exemple le serveur SSH utilise le daemon `sshd`.</div>
-
-<div>💡 Le "d" à la fin du nom signifie <b>d</b>aemon.</div>
-
-<div>Les services sont décrits dans `/etc/systemd/system/` par un fichier dont le format se rapproche des `.desktop`. Ils sont contrôlés via la commande `service` :
-    <ul class="flex-2">
-        <li>service $NAME [stop|restart|status] </li>
-        <li>service $NAME [en|dis]able : le (des)activer au boot.</li>
-    </ul>
+<div class="hint">Nous vous fournissons la commande <script type="c-bash">runner <h>$CMDLINE</h></script>, combinant les commandes <script type="c-bash">time</script> et <script type="c-bash">ts</script>:
+    <script type="c-shell">
+        $ ./runner echo "hello"
+        [2026-05-09 09:23:23] hello
+        [2026-05-09 09:23:23] Process ended in 0:00.00 (ran 0% of the time) with 1920kB max RAM.
+    </script>
 </div>
 
-<div class="terminal"><pre>$ service ssh status
-<font color="#4CE64C"><b>●</b></font> ssh.service - OpenBSD Secure Shell server
-     Loaded: loaded (/usr/lib/systemd/system/ssh.service; <font color="#D7D75F"><b>disabled</b></font>; preset: <font color="#4CE64C"><b>enabled</b></font>)
-     Active: <font color="#4CE64C"><b>active (running)</b></font> since Fri 2025-08-22 09:14:21 CEST; 5 days ago
-TriggeredBy: <font color="#4CE64C"><b>●</b></font> ssh.socket
-       Docs: man:sshd(8)
-             man:sshd_config(5)
-   Main PID: 1363753 (sshd)
-      Tasks: 1 (limit: 38233)
-     Memory: 2.2M (peak: 5.4M)
-        CPU: 116ms
-     CGroup: /system.slice/ssh.service
-             └─<font color="#8A8A8A">1363753 &quot;sshd: /usr/sbin/sshd -D [listener] 0 of 10-100 startups&quot;</font>
-</pre></div>
-
-<h3>EFI + grub + boot + initramfs (d'où viennent les processus ?)</h3>
-
-<todo>lancé au boot, comment ça fonctionne ?</todo>
-<todo>comment un ordi démarre.</todo>
-<todo>journalctl -b</todo>
-<todo>le truc pour le temps pris au boot</todo>
-
-
-<div>Lorsque vous lancez des lignes de commandes, le processus `bash` créé un sous-processus correspondant à la commande exécutée. On dit alors que `bash` est le <b>processus père</b> du processus ainsi lancé :
-    <todo>lsps img</todo>
+<div class="danger">Une simple valeur (e.g. moyenne, valeur maximale) ne suffit pas pour se représenter la consommation réelle des ressources. En effet, la consommation peut augmenter au cours du temps (e.g. fuite mémoire), ou connaître des pics ponctuels (dont il conviendra d'identifier la cause). Pour cela nous vous fournissons la commande <script type="c-bash">systats <h>$INTERVAL</h> <h>[$COUNT]</h></script> :
+    <script type="c-shell">
+        $ systats 1 3 | ts "[%F %T]"
+        [2026-05-09 13:12:43] CPU:   5% RAM:  55%
+        [2026-05-09 13:12:44] CPU:  10% RAM:  55%
+        [2026-05-09 13:12:45] CPU:   5% RAM:  55%
+    </script>
 </div>
 
-<div>💡 Le PID du processus père est appelé <b>PPID</b> (<i>Parent PID</i>).</div>
+<div class="hint">Pour des utilisations plus avancées, le paquet <a href="https://github.com/sysstat/sysstat">sysstat</a> contient de nombreux outils permettant de monitorer diverses métriques, ainsi que la production de grahiques.</div>
 
-<div>🕮 `systemd` est le processus de PID 1, ancêtre de tous les processus.<br/>
-💡 Pour des raisons de retro-compatibilités, vous trouverez des références à `initd` (dont des fichiers de configurations), qui était utilisé avant d'être remplacé par `systemd`.</div>
+<h3>Les serveurs de calculs</h3>
 
-- PID0 lance systemd
-
-https://en.wikipedia.org/wiki/Booting_process_of_Linux
-
-
-<h2>Monitorer des calculs</h2>
-
-<div>Linux utile les dossiers suivants pour stocker diverses informations sur l'état du système et ses processus :
-    <ul class="flex-2">
-        <li><script type="c-text">/proc/</script> (<i><u>proc</u>essus</i>) : les processus.</li>
-        <li><script type="c-text">/dev/</script> (<i><u>dev</u>ice</i>) : communication avec les périphériques.</li>
-        <li><script type="c-text">/run/</script> (<i><u>run</u>time</i>) : les services.</li>
-        <li><script type="c-text">/sys/</script> (<i><u>sys</u>tem</i>) : le système et ses périphériques.</li>
-    </ul>
-</div>
-
-<div>Cependant, il est rare de lire soit-même ces fichiers. On utilise plutôt des commandes affichant les informations désirées.</div>
-
-<h3>Monitorer l'état des processus</h3>
-
-<div>Il est important de suivre l'état de ses calculs, d'autant plus si ces derniers sont long. En effet, il est inutile d'attendre plusieurs jours qu'un calcul se finisse s'il a planté quelques secondes après son lancement.</div>
-
-<todo>proc status cf comments</todo>
-<todo>I/O wait ?</todo>
-<todo>service status</todo>
-
-<div>La commande <script type="c-bash">ps</script> (<i><u>p</u>rocess <u>s</u>tatus</i>) liste les processus en cours d'exécution (par défaut, du shell courant).
-    <ul class="flex-2">
-        <li><script type="c-bash"><h>-u $USER,...</h></script> : des utilisateurs <script type="c-bash"><h>$USER</h></script></li>
-        <li><script type="c-bash"><h>--pid $PID,...</h></script> : de pid <script type="c-bash"><h>$PID</h></script></li>
-        <li><script type="c-bash">-g</script> (?) : de la session.</li>
-        <li><script type="c-bash">-r</script> (running) : seulement en cours d'exécution.</li>
-    </ul>
-</div>
-
-<div>💡 Nous utiliserons la commande <script type="c-bash">lsps</script> qui a un meilleur affichage des résultats.
-    <div class="terminal">
-<pre>$ lsps
-    PID S STIME USER     COMMAND
-1562935 S 12:28 demigda  bash
-1669370 S 14:27 demigda   \_ sleep 10d
-1669395 R 14:27 demigda   \_ ps --forest -o pid,state,stime,user,command
-</pre>
-    </div>
-</div>
-
-<h3>Monitorer la progression des calculs</h3>
-
-<div>Il arrive que, pour des raisons diverses et variées (plus de RAM disponible, boucle infinie, complexité algorithmique, etc.), un calcul ne progresse plus ou très lentement. On recommande alors d'intégrer un indicateur de progression à ses calculs :
-    <ul>
-        <li>une barre de progression avec une estimation du temps restant.</li>
-        <li>un affichage de logs <b>avec timestamps</b>.</li>
-        <li>plus avancé, l'affichage de la progression lors de la réception d'un signal <script type="c-text">USR1</script> (<script type="c-text">kill -s USR1 <h>$PID</h></script>).</li>
-    </ul>
-</div>
-
-<div>💡 La ligne de commande <script type="c-bash"><h>$CMD</h> | ts "[%F %T]"</script> permet d'ajouter un timestamp à chaque ligne écrite par <script type="c-bash"><h>$CMD</h></script>.</div>
-
-<div>On va aussi éviter d'attendre un calcul sans avoir une estimation du temps qu'il va prendre : 1h ? 1 jour ? 1 an ? Pour cela, on peut lancer ses calculs sur un sous-ensemble de données, afin d'en estimer la durée et les ressources nécessaires.</div>
-
-<div>💡 La commande <script type="c-bash">time <h>$CMD</h></script> permet, une fois la commande exécutée, d'afficher diverses statistiques dépendant des options fournies (temps d'exécution, mémoire consommée, etc.).</div>
-
-<div>💡 La commande <script type="c-bash">runner <h>$CMD</h></script>, utilisant les deux commandes précédentes, vous sera fournie :
-    <div class="flex-2">
-        <script type="c-shell">
-            $ systats 1 5
-            CPU:  10% RAM:  55%
-            CPU:   6% RAM:  55%
-            CPU:   8% RAM:  55%
-            CPU:   8% RAM:  55%
-        </script>
-        <script type="c-shell">
-            $ runner systats 1 5
-            [2025-08-26 10:07:49] CPU:   6% RAM:  55%
-            [2025-08-26 10:07:50] CPU:   7% RAM:  55%
-            [2025-08-26 10:07:51] CPU:  13% RAM:  55%
-            [2025-08-26 10:07:52] CPU:  14% RAM:  55%
-            [2025-08-26 10:07:53] *Process ended*
-            Execution time   : 0:05.07 (2%)
-            Max allocated RAM: 3584kB (6382)
-        </script>
-    </div>
-</div>
-
-<h3>Monitorer la consommation des ressources</h3>
-
-<div>Des erreurs de programmation ou d'estimation des besoins peuvent conduire à une surconsommation des ressources de l'ordinateur, pouvant fortement ralentir la progression, voire faire planter le processus (e.g. plus de RAM disponible). Suivre (et d'estimer) l'évolution de la consommation des ressources permet d'éviter de laisser un calcul tourner si on sait qu'il va planter dans les prochaines heures.</div>
-
-<div>💡 <script type="c-bash">htop</script> est une version interactive de <script type="c-bash">ps</script>, il supporte aussi les options <script type="c-bash">-u <h>$USER,...</h></script> et <script type="c-bash">--pid <h>$PID,...</h></script>.<br/>
-💡 <script type="c-bash">btop</script> quant à lui permet de suivre les ressources de l'ordinateur, plus que les process.
-    <div class="flex-2">
-        <div class="center">
-            <center><b>htop (TUI)</b></center>
-            <img src="./assets/htop.png"/>
-        </div>
-        <div class="center">
-            <div class="center"><b>btop</b></div>
-            <img src="./assets/btop.png"/>
-        </div>
-    </div>
-</div>
-
-<div>htop :
-<todo>F2/screen : edit. / F5 tree / F6 sort</todo>
-<todo>Use htoprc + .config/htop/htoprc + refaire capture d'écran</todo>
-</div>
-
-<!-- en réalité btop++, bpytop & bashtop anciennes version (author a écrit plein de versions), fork de gtop -->
-<!-- meilleurs que bottom -->
-
-<div>btop :
-<todo>refaire la capture d'écran</todo>
-<todo>Presets (-p $ID) (2 conseillé) stored in .config/btop/btop.conf, affichage - help : keyboard (1,2,3,4,5+d,i,c afficher/cacher elements) + options - mais pas facile de sauvegarder le preset modifié (à la main...)</todo>
-</div>
-
-
-<div>💡 Pour des utilisations plus avancées, le paquet <a href="https://github.com/sysstat/sysstat">sysstat</a> contient de nombreux outils permettant le monitoring de diverses métriques, ainsi que la production de grahiques.</div>
-
-<h3>Monitorer les appels systèmes</h3>
-
-- qu'est-ce qu'un appel système ?
-- appels systèmes : lent e.g. écriture/lecture (opti).
-
-- strace -wc CMD
-    -c = --summary-only
-    -w # beg/end : inclus le temps d'attente donc. ! synchrone asynchrones.
-    ( -S / -U filtrer et select columns)
-    -p PID (attach).
-
-<script type="c-bash">
-    $ strace -cw systats 1 4
-    CPU:   7% RAM:  55%
-    CPU:   6% RAM:  55%
-    CPU:   6% RAM:  55%
-    CPU:   6% RAM:  55%
-    % time     seconds  usecs/call     calls    errors syscall
-    ------ ----------- ----------- --------- --------- ----------------
-     98,98    5,010314      178939        28        14 wait4
-      0,72    0,036365        1398        26           read
-</script>
-
-<todo>Interpréter</todo>
-<todo>conseil CM3 sur cache ici ?</todo>
-
-<h2>Accès à distance</h2>
-
-<div>Les serveurs sont usuellement installés dans une salle dédiée avec contrôle d’accès, parfois à plusieurs centaines (ou milliers) de km de votre poste de travail. Par exemple, le serveur pourrait être à Clermont-Ferrand alors que votre bureau est à Aurillac.</div>
-
-<div>Bien évidement, vous n'allez pas faire l'aller-retour à Clermont-Ferrand, à chaque ligne de commande que vous souhaitez exécuter sur le serveur. Imaginez que vous deviez régulièrement intervenir sur le serveur, vous passeriez votre temps à faire l’aller-retour Aurillac/Clermont-Ferrand !</div>
-
-<div>Il est ainsi nécessaire de pouvoir accéder au serveur à distance afin d’éviter de tels déplacements chronophages. Pour ce faire, on utilise <b>SSH</b> (<u>s</u>ecure <u>sh</u>ell) afin d’envoyer, via Internet, des lignes de commande au serveur, ce en à peine quelques millisecondes. Dans les faits, cela revient à ouvrir un terminal du serveur depuis votre poste de travail.</div>
-
-<img src="./assets/scheme.svg"/>
-
-<h3>SSH</h3>
-
-<div>SSH suit une architecture client-serveur avec :
-    <ul class="flex-2">
-        <li>un <b>client SSH</b> sur le poste de travail ;</li>
-        <li>un <b>serveur SSH</b> sur le serveur.</li>
-    </ul>
-</div>
-
-<div>Le <i>client SSH</i> permet d’initier une connexion SSH (≈ session SSH) avec le <i>serveur SSH</i>. Une fois la connexion établie, le <i>client SSH</i> peut alors envoyer des commandes shell au <i>serveur SSH</i> qui les exécutera, et en retournera le résultat.</div>
-
-<div>Côté client, <script type="c-bash">ssh <h>[$PORT]</h> <h>$USER</h>@<h>$SERVER</h> <h>[$CMD]</h></script> exécute <script type="c-bash"><h>$CMD</h></script> sur le serveur (shell interactif si non précisé).</div>
-
-<h4>Ordonnanceur (<i>scheduler</i>)</h4>
-
-<div>Sur certains serveurs de calculs, notamment sur les clusters, il est fréquent d'exécuter son code via un <b>ordonnanceur</b> (<i>scheduler</i>). On précise alors les ressources dont on a besoin, le temps nécessaire aux calculs, et l'ordonnanceur se charge de planifier les calculs, et de réserver les ressources nécessaires.</div>
-
-<div>💡 D'où l'importance de bien estimer ses besoins et de ne pas consommer plus de ressources que nécessaire.</div>
+<div>Sur certains serveurs de calculs, notamment sur les clusters, il est fréquent d'exécuter son code via un <b>ordonnanceur</b> (<i>scheduler</i>). On précise alors les ressources dont on a besoin (CPU, RAM, temps), et l'ordonnanceur se charge de planifier les calculs, et d'en réserver les ressources requises. Il est ainsi important d'anticiper ses besoins en ressources, et de ne pas en consommer plus que nécessaire.</div>
 
 <div>Cependant, il arrive aussi que certains serveurs de calculs soient plus "libre services", où il convient de respecter certaines règles de bienséance :
     <ul>
-        <li>vérifier s'il y a des calculs en cours avant de lancer les siens.</li>
+        <li>vérifier s'il y a d'autres calculs en cours, avant de lancer les siens.</li>
         <li>vérifier si d'autres personnes sont connectées au serveur.</li>
-        <li>ne pas monopoliser toutes les ressources, ou prévenir au besoin.</li>
+        <li>ne pas monopoliser les ressources, ou prévenir au besoin.</li>
     </ul>
 </div>
 
-<div>💡 En général, le serveur de calcul fourni une interface web permettant de suivre en temps réel l'utilisation et la charge du serveur de calcul. Les deux commandes suivantes sont toutefois intéressantes :
+<div class="hint">En général, le serveur de calcul fourni une interface web permettant de suivre en temps réel l'utilisation et la charge du serveur de calcul. Les deux commandes suivantes sont toutefois intéressantes :
     <div class="flex-2">
         <div>
             <div class="center"><b>who</b> (utilisateurs connectés)</div>
@@ -376,109 +353,187 @@ https://en.wikipedia.org/wiki/Booting_process_of_Linux
     </div>
 </div>
 
-<h3>Configuration de SSH</h3>
+<h2>Monitorer les calculs</h2>
 
-<h4>Clés SSH</h4>
-
-<div>Renseigner son un mot de passe à chaque fois qu’on utilise SSH est enquiquinant, et potentiellement peu sécurisé si le mot de passe est trop faible. On préfère ainsi généralement utiliser une <b>clé SSH</b> permettant aux utilisateurs de se connecter au serveur sans mot de passe.</div>
-
-<div>Le principe est alors très simple, l'utilisateur :
-    <ol>
-        <li>génère une paire de clés via `keygen`.</li>
-        <li>transmet la clef <i>publique</i> au serveur (dans `~/.ssh/authorized_keys`).</li>
-        <li>indique au client SSH la clef <i>privée</i> à utiliser (cf suite).</li>
-    </ol>
-</div>
-
-<div>À chaque connexion SSH, le client donne alors une preuve qu'il a connaissance de la clef privée, que le serveur est capable de vérifier grâce à la clef publique.</div>
-
-<h4>Alias SSH</h4>
-
-<div>Retenir et écrire l’adresse IP du serveur à chaque connexion au serveur via SSH est
-enquiquinant. Pour éviter cela, on utilise des <b>alias SSH</b>, permettant d'écrire `ssh $ALIAS` au lieu de `ssh $USER@$SERVER`. Les alias sont définis dans la configuration du client SSH comme suit :
-    <script type="c-bash">
-        Host <h>$ALIAS</h> # ssh ALIAS => ssh -p $PORT $USER@$SERVER
-            User           <h>$USER</h>
-            HostName       <h>$SERVER</h>
-            Port           <h>$PORT</h>         # si différent de 22
-            IdentityFile   <h>$PRIVKEY_PATH</h> # si clé SSH
-            IdentitiesOnly yes           # si IdentityFile
-    </script>
-</div>
-
-<div>💡 L’autocomplétion du shell marche aussi pour les alias SSH.</div>
-
-<h2>Reprise en cas d'erreurs</h2>
-
-<div>Il arrive fréquemment que les calculs soient interrompus, à cause :
+<div>Il arrive fréquemment que des calculs ne s'exécutent pas correctement, que ce soit en plantant, en produisant des résultats erronés, en prennant bien trop de temps, etc. à cause :
     <ul class="flex-2">
         <li>d'un bug.</li>
         <li>de la saturation d'une ressource (e.g. mémoire vive).</li>
-        <li>d'un dépassement du temps alloué (ordonnanceur).</li>
+        <li>d'un dépassement du temps alloué (cf ordonnanceur).</li>
         <li>etc.</li>
     </ul>
 </div>
 
-<div>Vous imaginez bien que si les calculs plantent après des heures, voire des jours, ce serait un gâchis que de devoir tout recommencer, au risque de tout perdre encore une fois lorsque les calculs plantent à nouveau au bout de quelques heures/jours. Il est ainsi important de sauvegarder régulièrement ses résultats, et de prévoir un moyen de reprendre les calculs à partir de la dernière sauvegarde.</div>
+<div>Il est ainsi important d'en monitorer l'état et la progression afin de réagir au plus tôt, et de ne pas attendre plusieurs jours alors qu'un problème est survenu quelques minutes après le lancement des calculs.</div>
 
-<div>⚠ Il est aussi important de s'assurer de la reproductibilités des calculs, notamment si vous utilisez des valeurs générée aléatoirement, en utilisant des <b>graines</b> (<i>seed</i>) fixées afin de pouvoir :
+<h3>Monitorer l'état des processus</h3>
+
+<div>Il est important de suivre l'état de ses calculs, d'autant plus si ces derniers sont long. En effet, il est inutile d'attendre plusieurs jours qu'un calcul se finisse s'il a planté quelques secondes après son lancement.</div>
+
+<div>La commande <script type="c-bash">ps</script> (<i><u>p</u>rocess <u>s</u>tatus</i>) liste les processus (par défaut, du terminal courant) :
+    <ul class="flex-2">
+        <li><script type="c-bash">-A</script> : tous les processus.</li>
+        <li><script type="c-bash"><h>--pid $PID,...</h></script> : les processus de pid <script type="c-bash"><h>$PID</h></script>.</li>
+        <li><script type="c-bash"><h>--user $USER,...</h></script> : tous ceux des utilisateurs <script type="c-bash"><h>$USER</h></script>.</li>
+    </ul>
+</div>
+
+<div class="hint">La commande <script type="c-bash">lsps</script> produisant un meilleur affichage vous sera fournie.
+    <div class="terminal">
+<pre>$ lsps
+    PID S STIME USER     COMMAND
+1562935 S 12:28 demigda  bash
+1669370 S 14:27 demigda   \_ sleep 10d
+1669395 R 14:27 demigda   \_ ps --forest -o pid,state,stime,user,command
+</pre>
+    </div>
+</div>
+
+<div>Le status du processus est décrit par une lettre :
+    <ul class="flex-2">
+        <li>R (<i><u>r</u>unning</i>) : en cours d'exécution.</li>
+        <li>S (<i><u>s</u>leep</i>) : en attente d'un événement.</li>
+        <li>Z (<i><u>z</u>ombie</i>) : terminé, mais pas détruit par son père.</li>
+        <li>D (<i><u>d</u>evice</i>) : en attente d'un événement d'I/O.</li>
+    </ul>
+</div>
+
+<!-- 
+    R    s'exécutant  ou   pouvant   s'exécuter   (dans   la   file
+        d'exécution) ;
+    S    en  sommeil  interruptible (en attente d'un événement pour
+        finir) ;
+    D    en  sommeil  non  interruptible  (normalement  entrées  et
+         sorties) ;
+
+    T    arrêté par le signal de contrôle de la tâche ;
+    t    arrêté par le débogueur lors du traçage ;
+    Z    processus zombie (<defunct>), terminé mais pas détruit par
+        son parent.
+
+    I    fil inactif du noyau ;
+    W    pagination (non valable depuis le noyau 2.6.xx) ;
+    X    tué (ne devrait jamais être vu) ;
+-->
+
+<h3>Monitorer l'exécution</h3>
+
+<div>Le fait que les calculs soient en cours d'exécution n'est pas suffisant afin de garantir l'absence de problèmes. Il arrive que, pour des raisons diverses et variées (plus de RAM disponible, boucle infinie, complexité algorithmique, etc.), un calcul ne progresse plus ou très lentement. Il se peut même que les résultats produits soient invalides.</div>
+
+<div>On souhaite ainsi pouvoir consulter ce que le processus a fait, et est en train de faire. Pour cela, il est nécessaire de produire des <i>logs</i> <b>horodatés</b>, qui permettront non seulement de voir la progression des calculs, mais aussi de faciliter les opérations de débogage.</div>
+
+<div class="hint"><script type="c-bash"><h>$CMDLINE</h> | ts "[%F %T]"</script> exécute <script type="c-bash"><h>$CMDLINE</h></script>, et préfixe chaque ligne affichée par son <u>t</u>ime<u>s</u>tamp.</div>
+
+<div class="danger">Écrire dans un support persistant (e.g. fichier, base de données) est très lent. Regrouper les écritures de logs dans un tampon (<i>buffer</i>) afin de procéder à une écriture unique, à interval régulier, est plus rapide. Cependant cela peut engendrer des pertes si le processus plante avant l'écriture des logs. On peut alors utiliser un intermédiaire qui collectera les logs, et se chargera de leur enregistrement. De même pour l'enregistrement des résultats finaux ou intermédiaires.</div>
+
+<div>Il est bien évidemment possible d'afficher une barre de progression avec une estimation du temps restant. Cependant, il est recommandé de séparer l'information de sa représentation. Le processus de calcul peut donner sa progression, régulièrement ou sur demande, e.g. via ses logs. Cependant, l'affichage de la progression devrait être la responsabilité d'un processus tiers.</div>
+
+
+<h3>Monitorer la consommation des ressources</h3>
+
+<div>Des erreurs de programmation ou d'estimation des besoins peuvent conduire à une surconsommation des ressources de l'ordinateur, pouvant fortement ralentir la progression, voire faire planter le processus (e.g. plus de RAM disponible). Suivre (et d'estimer) l'évolution de la consommation des ressources permet d'éviter de laisser un calcul tourner si on sait qu'il va planter dans les prochaines heures.</div>
+
+<div>
+    <div class="flex-2">
+        <div class="center">
+            <center><b>htop (TUI)</b></center>
+            <img src="./assets/htop.png"/>
+        </div>
+        <div class="center">
+            <div class="center"><b>btop</b></div>
+            <img src="./assets/btop.png"/>
+        </div>
+    </div>
+</div>
+
+<div><script type="c-bash">htop</script> est une version interactive de <script type="c-bash">ps</script> permettant de monitorer les processus en temps réel. <script type="c-bash">btop</script>, quant à lui, permet de suivre les ressources de l'ordinateur, plus que les processus.</div>
+
+<div>Comme <script type="c-bash">ps</script>, <script type="c-bash">htop</script> fournit lui aussi les options <script type="c-bash">-u <h>$USER,...</h></script> et <script type="c-bash">--pid <h>$PID,...</h></script> afin de filtrer les processus à afficher. Il fournit aussi d'autres options comme <script type="c-bash">--filter <h>$CMD</h></script> permettant de filtrer les processus à afficher en fonction de la ligne de commande correspondante.</div>
+
+<div class="hint"><script type="c-text">⇧+Z</script> permet de mettre en pause (puis de reprendre) la mise à jour de l'affichage de <script type="c-bash">htop</script>.</div>
+
+<!-- en réalité btop++, bpytop & bashtop anciennes version (author a écrit plein de versions), fork de gtop -->
+<!-- meilleurs que bottom -->
+
+<h2>Arrêter et reprendre les calculs</h2>
+
+<h3>Arrêter les calculs</h3>
+
+<div>Si un processus de calcul de fonctionne pas correctement, e.g. ne progresse plus, produit des résultats incorrects, on ne va pas attendre des jours voire des semaines qu'il se termine. Vous connaissez déjà <script type="c-text">^+C</script> pour arrêter un processus de premier-plan, mais il est aussi possible de lui envoyer des <i>signaux</i> pour en forcer l'arrêt :
+    <ul class="flex-2">
+        <li><script type="c-bash">kill <h>$PID</h></script> : tue le processus.</li>
+        <li><script type="c-bash">pkill -x <h>$CMD</h></script> : tuer les commandes <script type="c-bash"><h>$CMD</h></script>.</li>
+    </ul>
+</div>
+
+<div class="hint">Il existe différent types de signaux, chacun avec sa propre signification (<script type="c-bash">kill <h>[-$SIGNAL]</h> <h>$PID</h></script>) :
+    <ul class="flex-2">
+        <li><script type="c-bash">TERM</script> (<i><u>term</u>inate</i>) : arrêt du processus (<i>défaut</i>).</li>
+        <li><script type="c-bash">KILL</script> : tue le processus (ne peut être ignoré).</li>
+        <li><script type="c-bash">HUP</script> (<i><u>h</u>ang <u>up</u></i>): le terminal a été fermé.</li>
+        <li><script type="c-bash">INT</script> (<i><u>int</u>eruption</i>): correspond à <script type="c-text">^+C</script>.</li>
+        <li><script type="c-bash">STOP</script>/<script type="c-bash">STP</script> : mettre en pause l'exécution.</li>
+        <li><script type="c-bash">CONT</script> (<i><u>cont</u>inue</i>): reprendre l'exécution.</li>
+        <li><script type="c-bash">USR1</script>/<script type="c-bash">USR2</script> (<i><u>us</u>e<u>r</u></i>): pour un usage personnalisé.</li>
+    </ul>
+</div>
+
+<div>Ces signaux (à l'exception de <script type="c-bash">KILL</script>) peuvent être intercepté en Python :
+    <script type="c-python">
+        import signal
+
+        def handler():
+            <h>...</h>
+
+        signal.signal(signal.SIG<h>$SIGNAL</h>, handler)
+    </script>
+</div>
+
+<div class="hint">Il est alors courant d'utiliser le signal <script type="c-bash">USR1</script> afin d'afficher la progression lors de sa réception.</div>
+
+<h3>Reprendre les calculs</h3>
+
+<div>Vous imaginez bien que si les calculs plantent (ou sont arrêtés) après des heures, voire des jours, ce serait un gâchis que de devoir tout recommencer, au risque de tout perdre encore une fois lorsque les calculs plantent à nouveau au bout de quelques heures/jours. Il est ainsi important de sauvegarder régulièrement ses résultats (finaux ou intermédiaires), et de prévoir un moyen de reprendre les calculs à partir de la dernière sauvegarde.</div>
+
+<div class="danger">Il est aussi important de s'assurer de la reproductibilités des calculs, notamment si vous utilisez des valeurs générée aléatoirement, en utilisant des <b>graines</b> (<i>seed</i>) fixées afin de pouvoir :
     <ul>
         <li>partager ses résultats en permettant leur vérification et reproduction.</li>
         <li>reproduire des bugs en vue de les corriger (conserver des logs peut aussi aider).</li>
     </ul>
 </div>
 
-<h3>Screen</h3>
 
-<div>Lorsque le processus parent est tué (e.g. on ferme le terminal), ses processus fils peuvent soit :
+<h2>Pour aller plus loin : le boot</h2>
+
+<todo>Rediger</todo>
+
+<div>🕮 `systemd` est le processus de PID 1, ancêtre de tous les processus.<br/>
+💡 Pour des raisons de retro-compatibilités, vous trouverez des références à `initd` (dont des fichiers de configurations), qui était utilisé avant d'être remplacé par `systemd`.</div>
+
+<todo>EFI + grub + boot + initramfs (d'où viennent les processus ?)</todo>
+
+<todo>lancé au boot, comment ça fonctionne ?</todo>
+<todo>comment un ordi démarre.</todo>
+<todo>journalctl -b (logs au boot)</todo>
+<todo>systemd-analyse plot (analyse le temps de boot).</todo>
+<todo>systemd-analyze blame/critical-chain (bottleneck)</todo>
+
+
+- PID0 lance systemd
+
+https://en.wikipedia.org/wiki/Booting_process_of_Linux
+
+
+<div>Linux utile les dossiers suivants pour stocker diverses informations sur l'état du système et ses processus :
     <ul class="flex-2">
-        <li>être adoptés par le processus de PID 1 (`systemd`).</li>
-        <li>être tués.</li>
+        <li><script type="c-text">/proc/</script> (<i><u>proc</u>essus</i>) : les processus.</li>
+        <li><script type="c-text">/dev/</script> (<i><u>dev</u>ice</i>) : communication avec les périphériques.</li>
+        <li><script type="c-text">/run/</script> (<i><u>run</u>time</i>) : les services.</li>
+        <li><script type="c-text">/sys/</script> (<i><u>sys</u>tem</i>) : le système et ses périphériques.</li>
     </ul>
 </div>
 
-<div>Les processus lancés à l'intérieur d'une connexion SSH sont soit tués, soit adoptés à la fermeture de la connexion SSH. Ainsi, si on lance de longs calculs, non seulement il faut alors laisser le poste de travail allumé en permanence, mais surtout on risque de perdre nos résultats en cas de perte de connexion (e.g. en itinérance, panne réseau, etc).</div>
-
-<div>En général, les processus d'arrière plan sont adoptés, quand ceux de premier plan sont tués. Ce comportement peut varier en fonction de la configuration du shell.</div>
-
-<div>💡 Il est possible de déshériter/adopter manuellement des processus :
-    <ul class="flex-2">
-        <li>`disown $PID` : déshériter PID.</li>
-        <li>`reptyr $PID` : adopter PID.</li>
-    </ul>
-</div>
-
-<h4>Usage de screen</h4>
-
-<div>La commande `screen -ARR` permet d'éviter cela en ayant une sorte de "terminal" que l'on peut quitter et rejoindre à volonté, qui n'est pas détruit lorsque la connexion SSH est fermée.</div>
-
-<div class="center">
-  <img src="./assets/screen.png"/>
-</div>
-
-<div>💡 La configuration dans /etc/screenrc, adapté pour simplifier l'usage.</div>
-
-<div>À l’instar des onglets du terminal, Screen permet de manipuler plusieurs fenêtres :
-    <ul class="flex-3">
-        <li>`F2` : créer une fenêtre.</li>
-        <li>`F3` : renommer la fenêtre.</li>
-        <li>`F4` : choisir une fenêtre.</li>
-    </ul>
-💡 Le nom de la fenêtre courante est affichée en surbrillance en bas de la région.
-</div>
-
-<div>L’écran de Screen est constitué de <b>régions</b> pouvant chacune afficher une fenêtre. Chaque région peut-être subdivisé verticalement ou horizontalement :
-    <ul class="flex-2">
-        <li>`F6` : découper la région verticalement.</li>
-        <li>`F7` : découper la région horizontalement.</li>
-        <li>`F8` : supprimer la région courante.</li>
-        <li>`Ctrl + ←/↑/→/↓` : aller dans une autre région.</li>
-    </ul>
-</div>
-
-<div>À sa création, la région est vide. Il vous faudra alors utiliser `F2` pour créer une nouvelle fenêtre, ou `F4` pour choisir une fenêtre existante à afficher.</div>
-
-<div>💡 Lorsqu'il y a au moins une division verticale de l'écran, copier plusieurs lignes se fait en entrant en mode scroll (`F5`), que vous pourrez quitter via touche `Esc`. Déplacez ensuite le curseur avec les flèches ou la molette de la souris, puis appuyez sur `Space` pour débuter et terminer une sélection. Le contenu sélectionné sera alors placé dans le presse-papier.</div>
+<div>Cependant, il est rare de lire soit-même ces fichiers. On utilise plutôt des commandes affichant les informations désirées.</div>
 
         </main>
     </body>
