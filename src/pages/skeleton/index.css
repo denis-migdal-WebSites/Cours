@@ -108,3 +108,7 @@ a[disabled] {
         margin-top: 5px;
     }
 }
+
+main > h1 {
+    line-height: 26px;
+}

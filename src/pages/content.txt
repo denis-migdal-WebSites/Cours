@@ -18,7 +18,7 @@
         + CM:CM
             - CM1:CM1 - Administrer un ordinateur Linux
             - CM2:CM2 - Processus et accès à distance
-            - CM3:CM3 - Volumes de données et systèmes de fichiers
+            - CM3:CM3 - Protéger ses données
             - CM4:CM4 - ?
         + Slides:Slides
             - CM1:CM1 - Administrer un ordinateur Linux
