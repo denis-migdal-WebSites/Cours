@@ -374,14 +374,6 @@ Par exemple, <font color="#44AA44">r</font><font color="#8A8A8A">-</font><font c
 
 <div>Sous Linux, les volumes et les périphériques sont représentés par un <b>fichier</b> dans <script type="c-text">/dev/</script> (<i><u>dev</u>ices</i>). Cela signifie que vous pouvez aussi copier un volume avec <script type="c-text">cp</script> ou <script type="c-text">rsync</script>, comme on copie un fichier. La copie pouvant être longue, il est toutefois recommandé d'afficher la progression de la copie. Une fois la copie effectuée, il est aussi recommandé d'exécuter la commande <script type="c-text">sync</script> afin de vider les écritures encore en cache.</div>
 
-
-<div class="hint">Il est possible de créer une archive compressée afin de réduire la taille de la sauvegarde :
-    <ul class="flex-2">
-        <li><script type="c-bash">tar -fa <h>$ARCHIVE</h> -c <h>$SRC...</h></script> : <u>c</u>réer.</li>
-        <li><script type="c-bash">tar -fa <h>$ARCHIVE</h> -x <h>[-C $DST]</h></script> : e<u>x</u>traire.</li>
-    </ul>
-</div>
-
 <h3>Instantanés (<i>snapshots</i>)</h3>
 
 <div>Une sauvegarde n'est pas instantanée et prend du temps à enregistrer les données unes à unes. Pendant ce temps, ces mêmes données peuvent faire l'objet de modifications pouvant conduire à un état sauvegardé incohérent. En effet, la sauvegarde pourrait alors inclure un mélange de données pre et post modification, en fonction des données qui auraient déjà été sauvegardées au moment de la modification.</div>
@@ -400,26 +392,57 @@ Par exemple, <font color="#44AA44">r</font><font color="#8A8A8A">-</font><font c
 
 <todo>IMG instantané</todo>
 
-<h2>X</h2>
+<h3>Sauvegardes incrémentales et liens physiques</h3>
+
+<div>Les techniques vues précédemment sont des <b>sauvegardes complètes</b>, i.e. sauvegardent l'ensemble des données. Or si la majorité des fichiers ne changent pas d’une sauvegarde sur l’autre, on se retrouve alors avec des fichiers identiques, dupliqués dans différentes sauvegardes, et prenant très vite beaucoup de place pour rien.</div>
 
 
-<todo>Move LVM (below)</todo>
-
-<div>La solution est alors de créer un instantané (<i>snapshot</i>) du système de fichier à un instant donné, et d’effectuer la sauvegarde à partir de cet instantané :
-    <ol>
-        <li>arrêt des services</li>
-        <li>redémarrage des services</li>
-        <li>sauvegarde</li>
-        <li>suppression de l'instantané : <script type="c-bash">lvremove <h>$LV_NAME</h>-snap</script></li>
-    </ol>
+<div class="hint">Il est possible de créer une archive compressée afin de réduire la taille de la sauvegarde :
+    <ul class="flex-2">
+        <li><script type="c-bash">tar -fa <h>$ARCHIVE</h> -c <h>$SRC...</h></script> : <u>c</u>réer.</li>
+        <li><script type="c-bash">tar -fa <h>$ARCHIVE</h> -x <h>[-C $DST]</h></script> : e<u>x</u>traire.</li>
+    </ul>
 </div>
 
+<div>Cependant, on souhaite généralement effectuer des <b>sauvegardes incrémentales</b>, i.e. ne sauvegarder que les modifications depuis la dernière sauvegarde. Tout en conservant des sauvegardes qu'on puisse parcourir comme une arborescence normale.</div>
 
-<todo>
-        <li><script type="c-bash">lvcreate -s --name <h>$LV_NAME</h>-snap <h>$LV_NAME</h> <h>{-l 100%FREE,--size 10GB}</h></script></li></todo>
+<div>On souhaite ainsi placer un même fichier dans plusieurs sauvegardes différentes (i.e. dans plusieurs endroits à la fois), mais sans le copier. Cela est rendu possible par le fait que les dossiers sont en réalité un fichier spécial contenant la liste des identifiants (<b>inodes</b>) des fichiers qu'il contient. Il est alors possible d'ajouter un même fichier dans plusieurs dossiers différents en créant un <b>lien physique</b> (<i>hard link</i>) via la commande <script type="c-bash">ln <h>$SRC</h> <h>$DST</h></script> (<u>l</u>i<u>n</u>k). Dès lors, le fichier ne sera réellement supprimé que lorsque toutes ses occurrences seront supprimées.</div>
+
+<div><script type="c-bash">rsync --link-dest="<h>$LAST_SAV</h>"</script> effectue une sauvegarde incrémentale. Depuis la dernière sauvegarde, si le fichier :
+    <ul>
+        <li><b>n'a pas</b> été modifié : crée un lien physique à partir de la dernière sauvegarde.</li>
+        <li>a été modifié : copie le fichier normalement.</li>
+    </ul>
+</div>
+
+<div>💡 Comme la sauvegarde incrémentale utilise des liens physiques, vous pouvez parcourir, supprimer, renommer, modifier, etc. la sauvegarde comme tous dossiers.</div>
+
+<div>⚠ Il n'est pas possible de faire un lien physique d'un dossier. Dans ce cas, il faudra créer un <b>lien symbolique</b> (<script type="c-bash">ln -s</script>) : un fichier spécial contenant le chemin du fichier ciblé. Si le fichier ciblé est supprimé ou déplacé, le lien sera cassé.</div>
 
 
-<div class="hint">Usuellement, les systèmes de fichiers suivants sont utilisés :
+<h4>Autres fonctionnalités</h4>
+
+<div>En plus des instantanés, et des sauvegardes incrémentales, il existe d'autres fonctionnalités utiles aux sauvegardes. Ces fonctionnalités peuvent être très variées, e.g. chiffrement, compression, historique, etc. Elles peuvent être portées soit par le système de fichier, ou par le logiciel effectuant la sauvegarde/synchronisation.</div>
+
+<div>Par exemple, dans le cas de dossiers partagés entre plusieurs utilisateurs, on souhaite généralement conserver un historique de chaque modification afin d'en avoir un suivi, et d'être capable, lorsque nécessaire, de restaurer un fichier à une version précédente. Pour cela on utilisera usuellement un <b>logiciel de synchronisation de fichiers</b> (e.g. Seafile).</div>
+
+<div>Les <b>gestionnaires de versions</b> (e.g. git) quant à eux sont très utilisés pour les projets informatiques. Ils stockent différentes versions d'un projet via des sauvegardes incrémentales, tout en offrant de multiples fonctionnalités :
+    <ul class="flex-2">
+        <li>annoter les versions avec une description.</li>
+        <li>comparer des versions entre elles.</li>
+        <li>annuler une modification précise.</li>
+        <li>gérer, et maintenir plusieurs versions en parallèle.</li>
+        <li>intégration avec d'autres outils (e.g. issues)</li>
+    </ul>
+</div>
+
+<todo>Importance de découper les fichiers de config pour git.</todo>
+
+<h2>Gérer les volumes</h2>
+
+<h3>Pourquoi avoir plusieurs volumes ?</h3>
+
+<div>Comme nous l'avons vu différents systèmes de fichiers offrent différentes fonctionnalités. Usuellement, les systèmes de fichiers suivants sont utilisés :
     <ul class="flex-4">
         <li><script type="c-text">ext4</script> pour Linux ;</li>
         <li><script type="c-text">NTFS</script> pour Windows ;</li>
@@ -438,45 +461,21 @@ Il existe toutefois une pléthore de systèmes de fichiers différents, chacun f
     </ul>
 </div>
 
+<div>Comme il ne peut y avoir qu'un seul système de fichier sur un volume, si on souhaite utiliser plusieurs systèmes de fichiers, il est alors nécessaire d'avoir plusieurs volumes. Par exemple, dans le cas d'un dual boot, l'ordinateur aura e.g. un volume pour Windows et un autre pour Linux.</div>
 
-<h3>Les sauvegardes de fichiers</h3>
+<div class="hint">Lorsque le système d'exploitation est installé sur une clef USB, on parle alors de live USB.</div>
 
-<h4>Sauvegardes incrémentales et liens physiques</h4>
+<div class="danger">Il est très vivement conseillé d'avoir au moins un live USB en cas de problèmes avec l'OS.</div>
 
-<div>Les techniques vues précédemment sont des <b>sauvegardes complètes</b>, i.e. sauvegardent l'ensemble des données.  Or si la majorité des fichiers ne changent pas d’une sauvegarde sur l’autre, on se retrouve alors avec des fichiers identiques, dupliqués dans différentes sauvegardes, et prenant très vite beaucoup de place pour rien. On souhaite ainsi généralement effectuer des <b>sauvegardes incrémentales</b>, i.e. ne sauvegarder que les modifications depuis la dernière sauvegarde.</div>
+<div class="hint">Il est même recommandé de stocker ses données sur un volume à part, permettant de (ré)installer le système d'exploitation, sans effacer les données déjà présentes (une sauvegarde préalable des données est toutefois très vivement conseillée).</div>
 
-<div>On souhaite donc placer un même fichier dans plusieurs sauvegardes différentes (i.e. dans plusieurs endroits à la fois), mais sans le copier. Cela est rendu possible par le fait que les dossiers sont en réalité un fichier spécial contenant la liste des identifiants (<b>inodes</b>) des fichiers qu'il contient. Il est alors possible d'ajouter un même fichier dans plusieurs dossiers différents en créant un <b>lien physique</b> (<i>hard link</i>) via la commande <script type="c-bash">ln <h>$SRC</h> <h>$DST</h></script> (<u>l</u>i<u>n</u>k). Dès lors, le fichier ne sera réellement supprimé que lorsque toutes ses occurrences seront supprimées.</div>
+<h3>Partionner</h3>
 
-<div><script type="c-bash">rsync --link-dest="<h>$LAST_SAV</h>"</script> effectue une sauvegarde incrémentale. Depuis la dernière sauvegarde, si le fichier :
-    <ul>
-        <li><b>n'a pas</b> été modifié : crée un lien physique à partir de la dernière sauvegarde.</li>
-        <li>a été modifié : copie le fichier normalement.</li>
-    </ul>
-</div>
+<div>Comme nous l'avons vu, il peut être nécessaire d'avoir plusieurs volumes. Cependant, si on doit avoir un support de stockage (e.g. disque, clef USB) pour chaque volume, cela serait peu pratique. Heureusement, il est possible de <b>partitionner</b> un support de stockage physique en plusieurs volumes appelés <b>partitions</b>, qui auront chacun leur propre système de fichier. Pour cela, on utilisera la commande TUI <script type="c-bash">cfdisk <h>$DISK</h></script>, ou un logiciel comme gparted.</div>
 
-<div>💡 Comme la sauvegarde incrémentale utilise des liens physiques, vous pouvez parcourir, supprimer, renommer, modifier, etc. la sauvegarde comme tous dossiers.</div>
+<div class="danger">Il est recommandé de créer au moins une partition sur ses disques, même s'il est possible de les utiliser en entier sans les partitionner.</div>
 
-<div>⚠ Il n'est pas possible de faire un lien physique d'un dossier. Dans ce cas, il faudra créer un <b>lien symbolique</b> (<script type="c-bash">ln -s</script>) : un fichier spécial contenant le chemin du fichier ciblé. Si le fichier ciblé est supprimé ou déplacé, le lien sera cassé.</div>
-
-<h4>Autres types de sauvegardes</h4>
-
-<div>Certains logiciels (e.g. les SGBD) permettent d'<b>exporter</b> et d'<b>importer</b> leurs données, par exemple en faisant un <i>dump</i> d'une base de donnée. Le format de l'export dépend du logiciel, et est généralement adapté aux besoins spécifiques du logiciel.</div>
-
-<div>Dans le cas de dossiers partagés entre plusieurs utilisateurs, on souhaite généralement conserver un historique de chaque modification afin d'en avoir un suivi, et d'être capable, lorsque nécessaire, de restaurer un fichier à une version précédente. Pour cela on utilisera usuellement un <b>logiciel de synchronisation de fichiers</b> (e.g. Seafile).</div>
-
-<div>Les <b>gestionnaires de versions</b> (e.g. git) quant à eux sont très utilisés pour les projets informatiques. Ils stockent différentes versions d'un projet via des sauvegardes incrémentales, tout en offrant de multiples fonctionnalités :
-    <ul class="flex-2">
-        <li>annoter les versions avec une description.</li>
-        <li>comparer des versions entre elles.</li>
-        <li>annuler une modification précise.</li>
-        <li>gérer, et maintenir plusieurs versions en parallèle.</li>
-        <li>intégration avec d'autres outils (e.g. issues)</li>
-    </ul>
-</div>
-
-<h2>Les volumes de données</h2>
-
-<div>💡 Nous vous fournissons la commande <script type="c-bash">lsvol</script> afin de visualiser l'ensemble des volumes de l'ordinateur :
+<div class="hint">Nous vous fournissons la commande <script type="c-bash">lsvol</script> permettant de visualiser l'ensemble des volumes de l'ordinateur :
 <div class="terminal"><pre># lsvol
 PATH              LABEL TYPE  PARTTYPENAME       SIZE FSUSE% FSTYPE
 /dev/nvme0n1            disk                   238,5G                    
@@ -485,77 +484,43 @@ PATH              LABEL TYPE  PARTTYPENAME       SIZE FSUSE% FSTYPE
 </pre></div>
 </div>
 
-<h3>Monter un volume</h3>
+<h4>LVM</h4>
 
-<div>Le fichier <script type="c-text">/dev/</script> d'un volume contient des données binaires brutes que seul le système de fichier est capable d'interpréter. Pour en visualiser le contenu, il faudra le <b>monter</b>, c'est à dire associer le volume à un dossier (existant) de l'arborescence alors appelé <b>point de montage</b> (<i>mount point</i>) :
+<div><b>LVM</b> (<i><u>L</u>ogical <u>V</u>olume <u>M</u>anager</i>) est un logiciel permettant de gérer les volumes d'un ordinateur, tout en offrant diverses fonctionnalités comme le RAID, les snapshots, etc. Sa principale utilité est de pouvoir regrouper des volumes existant au sein d'un <i>disque virtuel</i>, qu'on peut ensuite redécouper en volumes virtuels. Cela permet ainsi d'étendre un volume sur plusieurs supports physiques, ainsi que d'en faciliter le redimensionnement ou déplacement, sans être limité par les contraintes des supports.</div>
+
+<div>LVM fonctionne ainsi en 3 étapes :
+    <ol>
+        <li><i>Préparer les volumes :</i> on formate des volumes existant, alors appelés <b>volumes physiques</b> (<i><u>p</u>hysical <u>v</u>olume</i>) :<br/>
+   <script type="c-bash">pvcreate <h>$VOLUME...</h></script></li>
+        <li><i>Ajouter les volumes au disque virtuel :</i> on regroupe au sein d'un <b>groupe de volume</b> (<i><u>v</u>olume <u>g</u>roup</i> ≈ disque virtuel) :<br/>
+   <script type="c-bash">vgcreate <h>$VG_NAME</h> <h>$VOLUME...</h></script></li>
+        <li><i>Partitionner le disque virtuel :</i> on redécoupe l'ensemble en <b>volumes logiques</b> (<i><u>l</u>ogicial <u>v</u>olume</i> ≈ partition virtuelle) :<br/>
+   <script type="c-bash">lvcreate --name <h>$LV_NAME</h> <h>$VG_NAME</h> <h>{-l 100%FREE,--size 10GB}</h></script></li>
+    </ol>
+</div>
+
+<div class="hint">Bien évidemment LVM possède de très nombreuses commandes permettant de manipuler les PV, VG, et LV.</div>
+
+<todo>CMD : (lv/pv/vg)(create/reduce/display/s/move/remove/rename/extends)</todo>
+
+<h4>RAID et snapshots</h4>
+
+<div>Les RAID et snapshots sont gérés à la création des <i>volumes logiques</i> :<br/>
+    <script type="c-bash">lvcreate <h>--name $LV_NAME</h> <h>{-l 100%FREE,--size 10GB}</h> <h>...</h></script>
     <ul class="flex-2">
-        <li><script type="c-bash">mount <h>$VOL</h> <h>$MOUNTPOINT</h></script> : <b>monter</b> un volume.</li>
-        <li><script type="c-bash">umount <h>$MOUNTPOINT</h></script> : <b>démonter</b> un volume.</li>
+        <li>RAID : <script type="c-bash"><h>...</h> --type raid1 --nosync</script></li>
+        <li>snapshot : <script type="c-bash"><h>...</h> --snapshot <h>$LV_TARGET</h></script></li>
     </ul>
 </div>
 
-<div>💡 Par convention, on monte par défaut les volumes dans les dossiers suivants :
-    <ul class="flex-2">
-        <li><script type="c-text">/media/<h>$NAME</h>/</script> : pour les volumes amovibles ;</li>
-        <li><script type="c-text">/mnt/<h>$NAME</h>/</script> : pour les volumes montés manuellement.</li>
-    </ul>
-</div>
-
-<div>💡 <script type="c-bash">mount</script> possède de nombreuses options, comme <script type="c-bash">-o ro</script> pour monter le volume en lecture seule.</div>
-
-<h4>Monter un dossier/volume distant</h4>
-
-<div>Il est possible de monter un dossier ou un volume distant :
-    <ul>
-        <li>dossier distant : <script type="c-bash">mount -t sshfs <h>$USER@$SERVER</h>:<h>$DIR</h> <h>$MOUNTPOINT</h></script>.</li>
-        <li>volume NFS (<i><u>N</u>etwork <u>F</u>ile<u>s</u>ystem</i>) distant :
-<script type="c-bash">mount -t nfs -o sec=<h>$AUTH</h>,vers=4.0 <h>$SRC</h> <h>$MOUNTPOINT</h></script></li>
-    </ul>
-</div>
-
-<div>⚠ Si plusieurs ordinateurs peuvent écrire dans le dossier ou volume distant, on préfera souvent utiliser un logiciel de synchronisation de données qui synchronisera le dossier tout en offrant les fonctionnalités nécessaires à un usage courant (historique, gestions de conflits, etc.).</div>
-
-<h4>Monter une archive</h4>
-
-<div>💡 Manipuler une archive en ligne de commandes n'est pas évident. Vous pouvez cependant en manipuler le contenu, comme on manipule des fichiers, en la montant dans un dossier grâce à <script type="c-bash">archivemount <h>$ARCHIVE</h> <h>$MOUNTPOINT</h></script>.</div>
-
-<h4>Monter la RAM (tmpfs)</h4>
-
-<div>Il est aussi possible de monter la RAM dans un dossier, permettant ainsi d'enregistrer des fichiers <b>temporaires</b> en RAM, pour des opérations de lecture/écriture bien plus rapides : <script type="c-bash">mount -t tmpfs -o size=<h>$SIZE</h> tmpfs <h>$MOUNTPOINT</h></script>.
-</div>
-
-<div>💡 C'est d'ailleurs généralement ce qui est fait avec <script type="c-text">/tmp/</script>.</div>
-
-<div>Les opérations d'entrées/sorties (E/S) sont en effet très coûteux, une simple boucle pouvant être :
-    <ul class="flex-2">
-        <li><b>10x plus lent</b> si on affiche du texte.</li>
-        <li><b>40x plus lent</b> si on écrit sur le disque.</li>
-        <li><b>12x plus lent</b> si on lit sur le disque.</li>
-        <li><b>> 528x plus lent</b> si on télécharge un fichier.</li>
-    </ul>
-</div>
-
-<div>On cherche donc à réduire le nombre d'opérations d'E/S qu'on effectue, que ce soit en <b>pré-chargeant</b> les ressources nécessaires, en utilisant un système de <b>cache</b> ou de <b>buffer</b>. Par exemple, au lieu de lire plusieurs fois le même fichier, le charger intégralement en mémoire au début du programme.</div>
-
-<div>⚠ La RAM est un stockage <b>temporaire</b>, il est nécessaire de sauvegarder régulièrement les résultats ou l'avancement d'un calcul, afin de ne pas (trop) perdre de données si le programme plante.</div>
+<div class="danger">Pensez à bien supprimer l'instantané une fois la sauvegarde effectuée : <script type="c-bash">lvremove <h>$LV_NAME</h></script></div>
 
 <h3>Formatter un volume</h3>
 
-<div>Comme nous l'avons vu précédemment, un volume est représenté sous la forme d'un fichier dans <script type="c-text">/dev/</script>. Monter un volume revient donc à monter un fichier un peu spécial.</div>
-
-<div>Il est possible de créer un tel fichier via la commande <script type="c-text">truncate -s <h>$SIZE</h> <h>$FILE</h></script> qui créera un fichier creux (<i>sparse</i>) d'une taille donnée. C'est à dire que les blocs vides (à 0) du fichier ne sont pas enregistrés sur le disque.<br/>
-💡 Il convient d'utiliser l'option <script type="c-bash">--sparse</script> pour copier un fichier avec <script type="c-bash">cd</script> ou <script type="c-bash">rsync</script>.
+<div>Il fois le volume créé, il faut le <b>formatter</b>, c'est à dire lui attribuer un système de fichier. Pour cela, on utilise les commandes <script type="c-bash">mkfs.<h>$FS</h> <h>$VOL</h></script> (<i><u>m</u>a<u>k</u>e <u>f</u>ile<u>s</u>ystem</i>).  Par exemple <script type="c-bash">mkfs.ext4</script> pour formatter en <script type="c-text">ext4</script>. Les options ne sont malheureusement pas consistantes entre les différents systèmes de fichiers.
 </div>
 
-<div>En réalité, on ne monte pas un volume, <b>mais un système de fichier</b>. Ainsi avant de pouvoir monter un tel volume, il faut d'abord le <b>formatter</b>, c'est à dire lui attribuer un système de fichier qui déterminera la manière dont seront enregistrés les fichiers sur le volume.</div>
-
-
-<div>Pour formatter un volume, on utilise les commandes <script type="c-bash">mkfs.<h>$FS</h> <h>$VOL</h></script> (<i><u>m</u>a<u>k</u>e <u>f</u>ile<u>s</u>ystem</i>).  Par exemple <script type="c-bash">mkfs.ext4</script> pour formatter en <script type="c-text">ext4</script>. Les options ne sont malheureusement pas consistantes entre les différents systèmes de fichiers.
-</div>
-
-<div>💡 Une fois le volume formaté, on peut lui donner un nom plus explicite en attribuant une <b>étiquette</b> (<i>label</i>) à son système de fichier, e.g. <script type="c-text">Data</script> au lieu de <script type="c-text">/dev/nvme0n1</script>. On pourra alors le monter via <script type="c-bash">mount LABEL=<h>$LABEL</h> <h>$MOUNTPOINT</h></script>.</div>
-
-<div>💡 <script type="c-bash">e2label <h>$VOL</h> <h>$LABEL</h></script> attribue une étiquette à un volume ext4. Malheureusement, chaque système de fichiers a sa propre commande d'attribution d'étiquettes.</div>
+<div class="hint">Une fois le volume formaté, on peut lui donner un nom plus explicite en attribuant une <b>étiquette</b> (<i>label</i>) à son système de fichier, e.g. <script type="c-text">Data</script> au lieu de <script type="c-text">/dev/nvme0n1</script>. Malheureusement, chaque système de fichiers a sa propre commande d'attribution d'étiquettes. Pour ext4, la commande est <script type="c-bash">e2label <h>$VOL</h> <h>$LABEL</h></script>.</div>
 
 <h4>Chiffrer un volume</h4>
 
@@ -568,16 +533,82 @@ PATH              LABEL TYPE  PARTTYPENAME       SIZE FSUSE% FSTYPE
     </ul>
 </div>
 
-<div>Lorsque le volume chiffré est déverrouillé, le volume <script type="c-text">/dev/mapper/<h>$NAME</h></script> permet de manipuler les données <b>en clair</b>, répercutant les modifications sur le volume chiffré. Comme tout autre volume, il doit être formaté pour être monté.</div>
+<div>Lorsque le volume chiffré est déverrouillé, le volume <script type="c-text">/dev/mapper/<h>$NAME</h></script> est créé, permettant de manipuler <b>en clair</b>, les données du volume chiffré. Comme tout autre volume, <script type="c-text">/dev/mapper/<h>$NAME</h></script> doit être formaté pour pouvoir être utilisé.</div>
 
-<div>💡 Pour chiffrer le home d'un utilisateur lors de sa création, il est possible d'utiliser <script type="c-bash">adduser --encrypt-home</script>.</div>
+<div class="hint">Il est aussi possible d'ajouter <script type="c-text">/dev/mapper/<h>$NAME</h></script> à un groupe de volume LVM. Permettant ainsi, e.g. de partitionner un disque chiffré.</div>
 
-<div>💡 Pour des raisons de sécurité, il est fréquent de remplir un volume de données aléatoires ou de 0, afin d'en effacer les données. Pour cela on peut copier, sur le volume, les fichier de taille infinis suivant :
+<div class="hint">Pour des raisons de sécurité, il est fréquent de remplir un volume de données aléatoires ou de 0, afin d'en effacer les données. Pour cela on peut copier, sur le volume, les fichier de taille infinis suivant :
     <ul class="flex-2">
         <li><script type="c-bash">/dev/<h>[u]</h>random</script></li>
         <li><script type="c-bash">/dev/zero</script></li>
     </ul>
 </div>
+
+
+<h3>Monter un volume</h3>
+
+<div>Le fichier <script type="c-text">/dev/<h>$NAME</h></script> d'un volume contient des données binaires brutes que seul le système de fichier est capable d'interpréter. Pour en visualiser le contenu, il faudra <b>monter</b> le système de fichier, c'est à dire l'associer à un dossier (existant) de l'arborescence, alors appelé <b>point de montage</b> (<i>mount point</i>) :
+    <ul class="flex-2">
+        <li><script type="c-bash">mount <h>$VOL|LABEL=$L</h> <h>$MOUNTPOINT</h></script> : <b>monter</b>.</li>
+        <li><script type="c-bash">umount <h>$MOUNTPOINT</h></script> : <b>démonter</b>.</li>
+    </ul>
+</div>
+
+<div class="hint"><script type="c-bash">mount</script> possède de nombreuses options, comme <script type="c-bash">-o ro</script> pour monter le système de fichier en lecture seule.</div>
+
+<div class="hint">Par convention, et par défaut, on monte les systèmes de fichiers dans les dossiers suivants :
+    <ul class="flex-2">
+        <li><script type="c-text">/media/<h>$NAME</h>/</script> : pour les volumes amovibles ;</li>
+        <li><script type="c-text">/mnt/<h>$NAME</h>/</script> : pour les volumes montés manuellement.</li>
+    </ul>
+</div>
+
+<div class="hint">Par abus de langage, on peut aussi dire "monter le volume" au lieu de "monter le système de fichier".</div>
+
+<h4>Monter un dossier/volume distant</h4>
+
+<div>Il est possible de monter un dossier ou un volume distant :
+    <ul>
+        <li>dossier distant : <script type="c-bash">mount -t sshfs <h>$USER@$SERVER</h>:<h>$DIR</h> <h>$MOUNTPOINT</h></script>.</li>
+        <li>volume NFS (<i><u>N</u>etwork <u>F</u>ile<u>s</u>ystem</i>) distant :
+<script type="c-bash">mount -t nfs -o sec=<h>$AUTH</h>,vers=4.0 <h>$SRC</h> <h>$MOUNTPOINT</h></script>.</li>
+    </ul>
+</div>
+
+<div class="danger">Si plusieurs ordinateurs peuvent écrire dans le dossier ou volume distant, on préfera souvent utiliser un logiciel de synchronisation de données qui synchronisera le dossier tout en offrant les fonctionnalités nécessaires à un usage courant (historique, gestions de conflits, etc.).</div>
+
+<h4>Monter la RAM (tmpfs)</h4>
+
+<div>Il est aussi possible de monter la RAM dans un dossier, permettant ainsi d'enregistrer des fichiers <b>temporaires</b> en RAM, pour des opérations de lecture/écriture bien plus rapides : <script type="c-bash">mount -t tmpfs -o size=<h>$SIZE</h> tmpfs <h>$MOUNTPOINT</h></script>.
+</div>
+
+<div class="hint">C'est d'ailleurs généralement ce qui est fait avec <script type="c-text">/tmp/</script>.</div>
+
+<div>Les opérations d'entrées/sorties (E/S) sont en effet très coûteux, une simple boucle pouvant être :
+    <ul class="flex-2">
+        <li><b>10x plus lent</b> si on affiche du texte.</li>
+        <li><b>40x plus lent</b> si on écrit sur le disque.</li>
+        <li><b>12x plus lent</b> si on lit sur le disque.</li>
+        <li><b>> 528x plus lent</b> si on télécharge un fichier.</li>
+    </ul>
+</div>
+
+<div>On cherche donc à réduire le nombre d'opérations d'E/S qu'on effectue, que ce soit en <b>pré-chargeant</b> les ressources nécessaires, en utilisant un système de <b>cache</b> ou de <b>buffer</b>. Par exemple, au lieu de lire plusieurs fois le même fichier, le charger intégralement en mémoire au début du programme.</div>
+
+<div class="danger">La RAM est un stockage <b>temporaire</b>, il est nécessaire de sauvegarder régulièrement les résultats ou l'avancement d'un calcul, afin de ne pas (trop) perdre de données si le programme plante.</div>
+
+
+<h4>Monter un fichier</h4>
+
+<div>Comme nous l'avons vu précédemment, un volume est représenté sous la forme d'un fichier dans <script type="c-text">/dev/</script>. Les manipulations effectuées sur le volume reviennent donc à manipuler un fichier un peu spécial. Il est possible de créer un tel fichier via la commande <script type="c-text">truncate -s <h>$SIZE</h> <h>$FILE</h></script>. Le fichier ainsi créé sera creux (<script type="c-bash">-s</script> : <i>sparse</i>), c'est à dire que les blocs vides du fichier (i.e. à 0) ne sont pas réellement enregistrés sur le disque.</div>
+
+<div class="danger">Lors de la copie d'un tel fichier <script type="c-bash">cd</script> ou <script type="c-bash">rsync</script>, il convient d'utiliser l'option <script type="c-bash">--sparse</script> afin d'éviter que les blocs vides ne prennent trop de places dans la copie.
+</div>
+
+<div>Il est ainsi possible de chiffrer un dossier, sans chiffrer l'entièreté d'un volume. Pour cela il suffit simplement de créer un volume chiffré sous la forme d'un fichier. Il est toutefois préférable d'utiliser des solutions dédiées, plutôt que de créer un tel volume à la main. Par exemple, <script type="c-bash">homectl create <h>$USER</h> --storage=luks</script> de <script type="c-bash">systemd-home</script> permet de créer un utilisateur dont les informations (et le home) seront chiffrés.</div>
+
+<div>Il est aussi possible de monter une archive via <script type="c-bash">archivemount <h>$ARCHIVE</h> <h>$MOUNTPOINT</h></script>, afin d'en parcourir et manipuler le contenu comme on manipule le contenu d'un dossier. Évitant ainsi des manipulations complexes en lignes de commande.</div>
+
 
 <h4>fstab (<i><u>f</u>ile<u>s</u>ystem <u>tab</u>le</i>)</h4>
 
@@ -588,23 +619,23 @@ LABEL=DATA      /               ext4    errors=remount-ro 0       1
 </script>
 </div>
 
-<div>Les 4 premières colonnes correspondent aux arguments de mount : <script type="c-bash">mount -t <h>$TYPE</h> -o <h>$OPTS</h> <h>$FS</h> <h>$MOUNTPOINT</h></script>.
+<div>Les 4 premières colonnes correspondent aux arguments de mount : <script type="c-bash">mount -t <h>$TYPE</h> -o <h>$OPTS</h> <h>$VOL</h> <h>$MOUNTPOINT</h></script>.
     <ul class="flex-2">
         <li><script type="c-bash"><dump></script> : obsolète</li>
         <li><script type="c-bash"><pass></script> : ordre de montage des systèmes de fichiers.</li>
     </ul>
 </div>
 
-<div>💡 Les systèmes de fichiers listés dans fstab :
+<div>Les systèmes de fichiers listés dans fstab :
     <ul>
         <li>sont montés au démarrage de la machine (sauf si option <script type="c-bash">noauto</script>).</li>
         <li>peuvent être monté via <script type="c-bash">mount <h>$MOUNTPOINT</h></script> en précisant uniquement le point de montage.</li>
     </ul>
 </div>
 
-<div>💡 De manière analogue, cryptsetup a un fichier  <script type="c-text">/etc/crypttab</script> pour les volumes à déverrouiller au démarrage.</div>
+<div class="hint">De manière analogue, cryptsetup a un fichier  <script type="c-text">/etc/crypttab</script> pour les volumes à déverrouiller au démarrage.</div>
 
-<h4>udisksctl</h4>
+<h4>Monter un volume en tant qu'utilisateur</h4>
 
 <div>Pour des raisons de sécurité, seul l'administrateur peut monter certains systèmes de fichiers avec mount. Les utilisateurs doivent généralitement utiliser <script type="c-bash">udisksctl</script> à la place (<i><u>u</u>ser <u>disks</u> <u>c</u>on<u>t</u>ro<u>l</u></i>) :
     <ul>
@@ -615,47 +646,7 @@ LABEL=DATA      /               ext4    errors=remount-ro 0       1
     </ul>
 </div>
 
-<div>⚠ Un utilisateur ne dispose pas des droits nécessaires pour formatter un volume déverrouillé avec <script type="c-bash">udisksctl unlock</script>.</div>
-
-<h2>Les partitions</h2>
-
-<div>Il est possible de <b>partitionner</b> un support de stockage physique (disque, clef USB) en plusieurs volumes appelés <b>partitions</b>, qui auront chacun leur propre système de fichier. Par exemple, dans le cas d'un dual boot, l'ordinateur aura une partition Windows et une partition Linux.</div>
-
-<div>💡 Lorsque le système d'exploitation est installé sur une clef USB, on parle alors de live USB.<br/>
-⚠  Il est très vivement conseillé d'avoir au moins un live USB en cas de problèmes avec l'OS.</div>
-
-<div>Il est même recommandé de stocker ses données sur une partition à part, permettant de (ré)installer le système d'exploitation, sans effacer les données déjà présentes (une sauvegarde préalable des données est toutefois très vivement conseillée).</div>
-
-<div>⚠ Il est recommandé de créer au moins une partitions sur ses disques, même s'il est possible de les utiliser en entier sans les partitionner. Pour cela, on utilisera la commande TUI <script type="c-bash">cfdisk <h>$DISK</h></script>, ou un logiciel comme gparted.</div>
-
-<h3>LVM</h3>
-
-<todo>Mieux expliquer les 3 étapes : disque virtuel constitué d'un ou plusieurs volumes (e.g. plusieurs disques), qu'on peut ensuite partitionner.</todo>
-
-<todo>+ partitionner volumes (e.g. partitionner un volume chiffré)</todo>
-
-<div><b>LVM</b> (<i><u>L</u>ogical <u>V</u>olume <u>M</u>anager</i>) est un logiciel permettant de gérer les volumes d'un ordinateur. Pour cela :
-    <ol>
-        <li>on formate des volumes alors appelés <b>volumes physiques</b> (<i><u>p</u>hysical <u>v</u>olume</i>) :<br/>
-   <script type="c-bash">pvcreate <h>$VOLUME...</h></script></li>
-        <li>qu'on regroupe ensuite au sein d'un <b>groupe de volume</b> (<i><u>v</u>olume <u>g</u>roup</i> ≈ disque virtuel) :<br/>
-   <script type="c-bash">vgcreate <h>$VG_NAME</h> <h>$VOLUME...</h></script></li>
-        <li>qu'on redécoupe ensuite en <b>volumes logiques</b> (<i><u>l</u>ogicial <u>v</u>olume</i> ≈ partition virtuelle) :<br/>
-   <script type="c-bash">lvcreate --name <h>$LV_NAME</h> <h>$VG_NAME</h> <h>{-l 100%FREE,--size 10GB}</h></script></li>
-    </ol>
-</div>
-
-<li>LVM offre alors différentes fonctionnalités :
-    <ul>
-        <li>RAID : <script type="c-bash">--type raid1 --nosync</script></li>
-        <li>instantanés (<i>snapshots</i>) du système de fichier ;</li>
-        <li>etc.</li>
-    </ul>
-</li>
-
-<div>💡 Bien évidemment LVM possède de très nombreuses commandes permettant de manipuler les PV, VG, et LV.</div>
-
-<todo>CMD : (lv/pv/vg)(create/reduce/display/s/move/remove/rename/extends)</todo>
+<div class="danger">Un utilisateur ne dispose pas des droits nécessaires pour formatter un volume déverrouillé avec <script type="c-bash">udisksctl unlock</script>.</div>
 
 </main>
     </body>
