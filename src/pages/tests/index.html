@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script type="module" src="/skeleton/TPEngine@2026/index.js"></script>
-        <link rel="stylesheet" href="/skeleton/TPEngine@2026/index.css"/>
-        <style>
-            :not(:defined) {
-                display: block;
-            }
-        </style>
+        <script type="module" src="/templates/TPEngine@2026/index.js"></script>
+        <link rel="stylesheet" href="/templates/TPEngine@2026/index.css"/>
     </head>
     <body>
         <main>
             <H1>TEST</H1>
+
+            <script type="c-ts">
+                console.warn("ok");
+            </script>
+
             <q-multitext data-config='{"QID": "12345678", "nbFields": 4, "coeff": 1, "comment": "ok", "scores": [1,1,0,1]}'>
                 OK
             </q-multitext>

@@ -1,0 +1,30 @@
+@import "MWL@2026:Components/page/theme/reset.css";
+
+@import "MWL@2026:Components/page/layout";
+@import "MWL@2026:Components/page/theme/table.css";
+@import "MWL@2026:Components/page/theme/utilities.css";
+
+@import "MWL@2026:Components/page/lastmodified";
+
+@import "MWL@2026:Components/page/menu";
+@import "MWL@2026:Components/page/color-switch/index.css";
+@import "MWL@2026:Components/page/blocks";
+
+.terminal {
+    border: 1px solid gray; border-radius: 5px; padding: 5px;
+    & > pre {
+        margin: 0;
+    }
+}
+
+/* for resources status */
+[ready] {
+    color: green;
+    font-weight: bold;
+}
+[revise] {
+    color: orange;
+}
+[draft] {
+    color: red;
+}
