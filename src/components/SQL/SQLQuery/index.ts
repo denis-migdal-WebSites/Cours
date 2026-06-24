@@ -1,8 +1,8 @@
 import {LISS, WithBare, WithContent, WithInput} from "@LISS/src/extensions"
 import define from "@LISS/src/define";
 
-const css    = require("!!raw-loader!./index.css").default;
-const theme  = require("!!raw-loader!@LISS/components/code/Tomorrow.css" ).default;
+const css = __LOAD_FILE__("./index.css");
+const theme = __LOAD_FILE__("@LISS/components/code/Tomorrow.css");
 
 export default class SQLQuery extends LISS({css: [theme, css]},
                                             WithBare,

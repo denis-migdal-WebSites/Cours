@@ -12,7 +12,7 @@ import { SelectedQueries } from "../SQLSelector";
 
 export type SQLExecutionOutput = SQLExecutionResult & {vars: Record<string, string>};
 
-const css  = require("!!raw-loader!./index.css" ).default;
+const css = __LOAD_FILE__("./index.css");
 
 export class SQLInteractive extends LISS({
                                             html: "<slot/>",

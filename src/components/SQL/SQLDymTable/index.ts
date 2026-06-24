@@ -2,7 +2,7 @@ import {LISS} from "@LISS/src/extensions"
 import define from "@LISS/src/define";
 import { db2 } from "@sqlite/SQLite";
 
-const css = require("!!raw-loader!./index.css").default;
+const css = __LOAD_FILE__("./index.css");
 
 export class SQLDymTable extends LISS({css}) {
 

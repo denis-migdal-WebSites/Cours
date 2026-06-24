@@ -41,7 +41,7 @@ function doStep(step: number) {
         return {cur: row_num === T2_rownum}
     });
 
-    T1_T2W.highlightRow( (row, row_num) => {
+    T1_T2W.highlightRow( (_row, row_num) => {
         return {
             cur : step !== 0 && row_num === T2_rownum && substep === 2,
             hide: step !== 0 && (step === 1 || row_num > T2_rownum! || row_num === T2_rownum && substep !== 2)

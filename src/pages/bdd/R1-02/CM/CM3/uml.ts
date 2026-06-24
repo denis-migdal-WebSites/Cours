@@ -74,6 +74,7 @@ function update() {
         for(let col of cols) {
 
             let w = max_w;
+            void w;
 
             let lsuffix = suffix;
             let lprefix = prefix

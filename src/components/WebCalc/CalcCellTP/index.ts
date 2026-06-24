@@ -5,7 +5,7 @@ import { Formula } from "../FormulaParser";
 import { TPSheet } from "../CalcSheetTP";
 import { hl } from "@LISS/components/code/hl";
 
-const css = require("!!raw-loader!./index.css").default;
+const css = __LOAD_FILE__("./index.css");
 
 export class CellFromSheet extends LISS({css}) {
 
@@ -22,7 +22,7 @@ export class CellFromSheet extends LISS({css}) {
 
         const sheet = document.querySelector<TPSheet>(`tp-sheet[sheet="${sheetname}"]`)!;
 
-        sheet.addEventListener('change', (ev) => {
+        sheet.addEventListener('change', () => {
             const cell = sheet.sheet.getRange(cellref!).cells[0];
             
             if( cell.rawContent instanceof Formula ) {

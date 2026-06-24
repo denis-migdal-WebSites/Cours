@@ -11,7 +11,7 @@ export type PrintResult = {
                             cmp_with: SelectResult|null
                         };
 
-const css = require("!!raw-loader!./index.css").default;
+const css = __LOAD_FILE__("./index.css");
 
 export default class SQLResult extends LISS({css},
                                             WithBare,

@@ -5,7 +5,7 @@ import type { CalcSheet } from "../CalcSheet";
 
 //TODO: syntax highlight ;)
 
-const css = require("!!raw-loader!./index.css").default;
+const css = __LOAD_FILE__("./index.css");
 
 
 export class CalcPlageEditor extends LISS({

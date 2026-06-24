@@ -18,7 +18,7 @@ export type Cell = HTMLTableCellElement & {
     cell ?: Cell
 };
 
-const css = require("!!raw-loader!./index.css").default;
+const css = __LOAD_FILE__("./index.css");
 
 function onInput(ev: Event) {
 
@@ -240,6 +240,9 @@ export class CalcSheet extends LISS({css}) {
     constructor() {
         super();
 
+        void this.#plage_selector;
+        void this.#format_mngr;
+
         const cursor = new RangeOverlay(this, "cursor");
         const recopy = new RecopyHandle(this);
         const copy   = new RangeOverlay(this, "copy_highlight");
@@ -361,7 +364,7 @@ export class CalcSheet extends LISS({css}) {
             this.host.classList.remove('recopy');
         })
 
-        this.#cursor.addEventListener('change', (ev) => {
+        this.#cursor.addEventListener('change', () => {
 
             if( this.#cursor.length !== 1 )
                 throw new Error('Cursor has invalid number of cells');
@@ -369,7 +372,7 @@ export class CalcSheet extends LISS({css}) {
             cursor.setRange( new CellList(this, [this.getVisibleCell(this.#cursor)]) );
         });
 
-        this.#selection.addEventListener('change', (ev) => {
+        this.#selection.addEventListener('change', () => {
 
             for( let cell of this.content.querySelectorAll('.highlight') )
                 cell.classList.remove('highlight');
@@ -918,7 +921,7 @@ export class CalcSheet extends LISS({css}) {
     }
 
     override attributeChangedCallback(  name: string,
-                                        oldval: string | null,
+                                        _oldval: string | null,
                                         newval: string | null): void {
         if( name === "ro")
             this.#isRO = newval === "true";

@@ -88,6 +88,7 @@ export const Formats = {
             value = value.cachedValue();
 
         const prec = +(this?.getAttribute('precision') ?? 2);
+        void prec;
 
         if( typeof value === "number") {
 

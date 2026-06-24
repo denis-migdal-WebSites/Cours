@@ -8,37 +8,30 @@
         "url": "git+[PROJECT_REPOSITORY]"
     },
     "scripts": {
-        "build-prod": "clear ; webpack --no-watch --mode=production",
         "build": "clear ; webpack --no-watch --mode=development",
-        "watch": "clear ; webpack --watch    --mode=development"
+        "watch": "clear ; webpack --watch    --mode=development",
+        "build-prod": "clear ; webpack --no-watch --mode=production",
+        "tests": "clear ; deno task --cwd ./tests test",
+        "types": "clear ; ./build/WebpackFramework/files/genTypes.sh"
     },
     "author": "[AUTHOR]",
     "license": "[LICENCE]",
     "private": "true",
     "dependencies": {
         "@types/sqlite3": "^3.1.11",
-        "jszip": "^3.10.1",
-        "raw-loader": "^4.0.2"
+        "jszip": "^3.10.1"
     },
     "devDependencies": {
-        "@swc/core": "^1.15.18",
-        "@types/node": "^25.6.0",
-        "copy-webpack-plugin": "^12.0.0",
+        "@swc/core": "^1.15.43",
+        "copy-webpack-plugin": "^14.0.0",
         "css-loader": "^7.1.2",
-        "file-loader": "^6.2.0",
         "fork-ts-checker-notifier-webpack-plugin": "^9.0.0",
         "fork-ts-checker-webpack-plugin": "^9.0.2",
-        "glob": "^11.0.0",
-        "highlight": "^0.2.4",
-        "highlight.js": "^11.10.0",
-        "html-loader": "^5.1.0",
-        "markdown-loader": "^8.0.0",
-        "marked-highlight": "^2.1.3",
+        "glob": "^13.0.0",
         "mini-css-extract-plugin": "^2.9.0",
         "style-loader": "^4.0.0",
         "swc-loader": "^0.2.7",
-        "url-loader": "^4.1.1",
-        "webpack": "^5.93.0",
-        "webpack-cli": "^5.1.4"
+        "webpack": "^5.106.2",
+        "webpack-cli": "^7.0.2"
     }
 }

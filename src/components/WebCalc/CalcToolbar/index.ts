@@ -4,7 +4,8 @@ import define from "@LISS/src/define";
 import { Format, Formats } from "../Format";
 import { CalcSheet, CellList } from "../CalcSheet";
 
-const html = require("!!raw-loader!./index.html").default;
+
+const html = __LOAD_FILE__("./index.html");
 
 function merge(celllist: CellList, is_align = false) {
 
@@ -187,8 +188,8 @@ const fcts: Record<string, { action: (cells: CellList) =>void, enabled?: (cells:
     }
 }
 
-const css     = require("!!raw-loader!./index.css"     ).default;
-const itemcss = require("!!raw-loader!./index-item.css").default;
+const css = __LOAD_FILE__("./index.css");
+const itemcss = __LOAD_FILE__("./index-item.css");
 
 export class CalcToolbarItem extends LISS({
     css: itemcss
@@ -224,7 +225,7 @@ export class CalcToolbarItem extends LISS({
                 cancel = true;
             }, {once: true});
 
-            color_picker.addEventListener('change', (ev) => {
+            color_picker.addEventListener('change', () => {
                 if( cancel )
                     return;
 
@@ -336,7 +337,7 @@ export class CalcToolbar extends LISS({html, css}) {
         this.#sheet = sheet;
 
 
-        sheet.selection.addEventListener('change', (ev) => {
+        sheet.selection.addEventListener('change', () => {
             this.#update();
         });
         this.#update();

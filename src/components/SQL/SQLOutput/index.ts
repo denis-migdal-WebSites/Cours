@@ -1,7 +1,7 @@
 import {getInput, LISS, WithBare, WithContent, WithInput} from "@LISS/src/extensions"
 import define from "@LISS/src/define";
 
-const css = require("!!raw-loader!./index.css").default;
+const css = __LOAD_FILE__("./index.css");
 
 import '../SQLQuery';
 import SQLQuery from "../SQLQuery";
@@ -59,7 +59,7 @@ export default class SQLOutput extends LISS({ css, html: "<slot/>" },
                 continue; // prev query likely exited with error.
 
             if( Array.isArray(result) ) // this is a SELECT query
-                cmp_to = value.results.filter( (v, i) => {
+                cmp_to = value.results.filter( (_, i) => {
                     return i !== id
                             && value.queries[id] === value.queries[i]
                             && typeof value.results[i] !== "string"; // error

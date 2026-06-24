@@ -4,7 +4,7 @@ import define from "@LISS/src/define";
 import { CalcSheet } from "../CalcSheet";
 import { load } from "./ods_loader";
 
-const html = require('!!raw-loader!./index.html').default;
+const html = __LOAD_FILE__("./index.html");
 
 export class TPSheet extends LISS({html}, WithBare,
                                           WithContent,

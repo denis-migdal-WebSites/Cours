@@ -10,3 +10,6 @@
 [submodule "libs/LISS3"]
 	path = libs/LISS
 	url = git@github.com:denis-migdal/LISS.git
+[submodule "libs/MWL@2026"]
+	path = libs/MWL@2026
+	url = git@github.com:denis-migdal-WebLibs/MiscWebLib.git

@@ -117,6 +117,8 @@ export class PlageSelector {
 
             this.#isCtrl         = ev.ctrlKey;
             this.#orig_target    = target;
+            void this.#orig_target;
+            
             this.#orig_pos       = this.#ev2pos(ev); // Can be TH...
             this.#final_pos      = this.#orig_pos;
             this.#prev_selection = sheet.selection.cells.slice();

@@ -1,8 +1,8 @@
 import {LISS, WithBare, WithContent, WithOutput} from "@LISS/src/extensions"
 import define from "@LISS/src/define";
 
-const html = require("!!raw-loader!./index.html").default;
-const css  = require("!!raw-loader!./index.css").default;
+const html = __LOAD_FILE__("./index.html");
+const css  = __LOAD_FILE__("./index.css");
 
 export class PlayerToolbar extends LISS({html, css},
                                  WithBare, WithContent, WithOutput<number>) {

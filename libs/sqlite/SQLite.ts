@@ -129,7 +129,7 @@ class DB {
 
         this.#db.exec(sql);
 
-        const [type, name] = this.#extractTableNameFromSQL(sql);
+        const [_type, name] = this.#extractTableNameFromSQL(sql);
 
         if( name in this.#desc )
             this.#updated_table.add(name);

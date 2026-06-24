@@ -4,7 +4,7 @@ import define from "@LISS/src/define";
 import { formatRaw } from "../Format";
 import type { CalcSheet, Cell } from "../CalcSheet";
 
-const css = require('!!raw-loader!./index.css').default;
+const css = __LOAD_FILE__("./index.css");
 
 export class CalcFormulaEditor extends LISS({
     css

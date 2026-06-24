@@ -10,8 +10,7 @@ if( title !== null) {
     title.after(div);
 }
 
-// @ts-ignore
-import menu  from "!!raw-loader!/src/pages/content.txt";
+const menu = __LOAD_FILE__("/src/pages/content.txt");
 import { initMenu } from "@LISS/components/page/menu/";
 
 initMenu(menu);
