@@ -1,0 +1,1 @@
+{"version":3,"file":"templates/TPEngine/index.css","mappings":";;;AAAA;IACI,eAAe;IACf,aAAa;IACb,aAAa;IACb,iBAAiB;AACrB,C","sources":["webpack://PROJECT_NAME/./src/pages/templates/TPEngine/index.css"],"sourcesContent":[".TPEngine-toolbar {\n    position: fixed;\n    bottom  : 5px;\n    right   : 5px;\n    cursor  : pointer;\n}"],"names":[],"sourceRoot":""}

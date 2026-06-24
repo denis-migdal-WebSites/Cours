@@ -3,6 +3,7 @@
     "compilerOptions": {
         "outDir": "./build/TS",
         "paths": {
+            "@libs/*"     : ["./libs/*"],
             "@LISS/*"     : ["./libs/LISS/V3/*"],
             "@TPEngine/*" : [ "./libs/TPEngine/src/*" ],
             "@WebSlides/*": [ "./libs/WebSlides/src/*" ],
