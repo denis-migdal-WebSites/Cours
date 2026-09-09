@@ -1,15 +1,15 @@
 + acc:👋 Accueil
     - R1-13:Accueil Numérique
         + CM:CM
-            - CM1:CM1 - Règles et outils UCA
+            - ../TD/TD1:CM1 - Règles et outils UCA
             - CM2:CM2 - Méthodes d'Apprentissage Universitaire
             - CM3:CM3 - Commandes Shell
         + Slides:Slides
             - CM2:CM2 - Commandes Shell
         + TD:TD
-            - TD1-2:TD1-2 - Postes de travail et Outils UCA
-            - TD3:TD3 - Méthodes d'Apprentissage Universitaire
-            - TD4-5:TD4-5 - Commandes Shell
+            - TD1:TD1 - Règles et outils UCA
+            - TD2:TD2 - Méthodes d'Apprentissage Universitaire
+            - TD3:TD3 - Commandes Shell
         - cheat:Cheat sheet
 - sec:🔒 Sécurité
     - R1-11:S1 Introduction à la Cybersécurité

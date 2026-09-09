@@ -104,14 +104,14 @@ traductions par un traducteur assermenté :
 
 <todo>captures d'écrans des deux procédures.</todo>
 
-<h4>Déposer une justification sur Odin</h4>
-
-<todo>exercice TP (justifier fausse absence)</todo>
-
 <h4>Utiliser un crédit-jour</h4>
 
 <todo>/!\ debut/fin crédit jours - peut compter comme 2 jours !</todo>
 <todo>montrer procédure.</todo>
+
+<h4>Déposer une justification sur Odin</h4>
+
+<todo>exercice TP (justifier fausse absence)</todo>
 
 <h3>Validation des UE</h3>
 
@@ -192,7 +192,7 @@ traductions par un traducteur assermenté :
     </ul>
 </div>
 
-<div>Plus d'informations dans la <a href="https://doc.uca.fr/Outils_Num%C3%A9riques/Wifi/Configuration/[WIFI]_-_Guide_de_Connexion_-_R%C3%A9seau_Wifi_Edu_132317638">la documentation officielle</a>.</div>
+<div>Plus d'informations dans la <a href="https://doc.uca.fr/Outils_Num%C3%A9riques/Wifi/Configuration/[WIFI]_-_Guide_de_Connexion_-_R%C3%A9seau_Wifi_Edu_132317638">documentation officielle</a>.</div>
 
 <h3>MyUCA</h3>
 
@@ -219,10 +219,32 @@ traductions par un traducteur assermenté :
 
 <todo>Procédure activation.</todo>
 
-<h3>Partage de fichier</h3>
+<h3>Partage de fichiers</h3>
 
-- UCA drive
-- file sender.
+<div>Pour partager des fichiers/dossiers avec un tiers, vous pouvez utiliser :
+    <ul>
+        <li><a href="https://filesender.renater.fr/">FileSender</a> : envoyer des fichiers volumineux (jusqu'à 100Go). Ce service Renater est accessible via votre compte UCA. Il permet d'uploader des fichiers puis d'obtenir un lien de téléchargement, que vos pouvez ensuite transmettre à vos destinataires.</li>
+        <li><a href="https://homeweb.iut.uca.fr">homeweb</a> : partager vos dossiers UCA sous la forme d'un lien URL. Le lien permet alors l'accès au dossier (en lecture ou en écriture) via l'interface Web de homeweb.</li>
+        <li><a href="https://drive.uca.fr/">UCA Drive</a> : partager ou synchroniser des bibliothèques de fichiers (jusqu'à 50Go). Ce serveur de fichiers basé sur <a href="https://www.seafile.com">Seafile</a> permet de partager des bibliothèques avec d'autres utilisateurs, de générer des liens de téléchargements, mais aussi de synchroniser des bibliothèques entre plusieurs postes de travail.</li>
+    </ul>
+</div>
+
+<div class="danger">Ces outils ne sont pas adaptés au travail collaboratif sur du code. On utilisera alors Git (cf cours de 2A).</div>
+
+<div>Pour synchroniser un dossier UCA Drive avec un ordinateur (ou un smartphone), vous devez installer le <a href="https://www.seafile.com/en/download/">client Seafile</a> (déjà installé sur les postes de travail UCA). Au lancement du client, vous devrez sélectionner un dossier dans lequel synchroniser vos dossiers UCA Drive (e.g. <script type="c-text">/home/uca/<h>$USER</h>/scratch/</script>), puis renseigner votre compte UCA Drive :
+    <div style="text-align:center">
+        <img src="./assets/Seafile.png"/>
+    </div>
+</div>
+
+<div>Vous pourrez ensuite :
+    <ul>
+        <li><i>Créer une bibliothèque à partir d'un dossier :</i> cliquer sur "Sélectionnez" en bas de la fenêtre.</li>
+        <li><i>Synchroniser une bibliothèque avec un dossier :</i> cliquer-droit sur la bibliothèque, puis <i>"Synchroniser cette bibliothèque"</i>, <i>"Synchroniser avec un dossier existant"</i>, puis <i>"Choisir..."</i>.</li>
+    </ul>
+</div>
+
+<div class="hint">Comme pour vos fichiers personnels, il faut convenir d'une politique. Par exemple, les bibliothèques partagées avec d'autres personnes pourront être synchronisées avec le dossier <script type="c-text">Seafile/Shared/<h>$NAME</h></script>. Le dossier <script type="c-text">Seafile/Shared/@me</script> pourra alors servir à transférer des fichiers entre votre poste de travail UCA et vos ordinateurs personnels.</div>
 
 <h3>Projets</h3>
 
