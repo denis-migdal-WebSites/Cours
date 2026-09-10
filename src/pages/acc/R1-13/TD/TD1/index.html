@@ -212,12 +212,60 @@
 
 <h2>Poste de travail</h2>
 
-<h3>Compte UCA</h3>
+<h3>Environnement de travail</h3>
 
-- fichier
-- quota
+<h4>Vos fichiers</h4>
 
-<h3>Partage de fichiers</h3>
+<div>Sur les postes de travail UCA, vous disposez de 2 dossiers personnels :
+    <ul>
+        <li><script type="c-text">/home/UCA/<h>$USER</h>/</script> (2Go) : aussi appelé <i>home</i>, sauvegardé régulièrement.</li>
+        <li><script type="c-text">/home/scratch/<h>$USER</h>/</script> (20Go) : à privilégier pour les fichiers volumineux.</li>
+    </ul>
+</div>
+
+<div class="danger">Le dépassement de votre quota peut entraîner des erreurs informatiques lors des TP. Pensez ainsi à régulièrement vider votre corbeille, ainsi que votre dossier de téléchargement.</div>
+
+<div>Votre <i>home</i> est usuellement structuré de la sorte :
+    <script type="c-bash">
+        🏠
+        ├── 📂 Documents       # là où stocker vos fichiers.
+        ├── 📂 Bureau          # contient les éléments à afficher sur le bureau.
+        ├── 📂 Téléchargements # documents téléchargés par le navigateur.
+        ├── 🔗 scratch         # raccourcis vers /home/scratch/<h>$USER</h>/.
+        ├── 📂 .local          # [NE PAS TOUCHER] données d'applications de l'utilisateur.
+        ├── 📂 config          # [NE PAS TOUCHER] fichiers de configuration de l'utilisateur.
+        ├── 📂 .cache          # [NE PAS TOUCHER] cache utilisateur.
+        ...
+    </script>
+</div>
+
+<div class="hint">Les fichiers commençant par <script type="c-text">.</script> sont des <b>fichiers cachés</b>. Par défaut, ils ne s'affichent pas dans l'explorateur de fichier.</div>
+
+<div class="danger">On ne <b><u>TOUCHE PAS</u></b> aux fichiers inconnus, même pour faire de la place !</div>
+
+<h4>Politique d'organisation de vos fichiers</h4>
+
+<div>Afin de faciliter les opérations de recherche, de sauvegardes, et d'archivage, il est important de ne pas enregistrer tous vos fichiers dans le même dossier. Vous devez ainsi définir votre propre politique d’organisation de vos fichiers, c’est-à-dire mettre en place une structure de dossiers organisée, cohérente et pérenne, et vous y tenir. Une bonne organisation de vos fichiers vous permettra notamment d’éviter les erreurs, comme rendre le mauvais fichier lors d’un TP.</div>
+
+<div>Voici un exemple de structure que vous pouvez adopter :
+    <script type="c-text">
+        📂 Documents/
+        ├── 📂 [<h>$CODE_MODULE</h>] <h>NOM_MODULE</h>
+        ... ├── 📂 Supports de cours
+            │   ├── 📄 CM<h>$ID</h> - <h>$NOM</h>
+            │   ...
+            ├── 📂 TP<h>$ID</h> - <h>$NOM</h>
+            ...
+    </script>
+</div>
+
+<h4>Mode DS</h4>
+
+<h3>Services et ressources</h3>
+
+<h4>Impressions</h4>
+
+<h4>Partage de fichiers</h4>
 
 <div>Pour partager des fichiers/dossiers avec un tiers, vous pouvez utiliser :
     <ul>
@@ -244,15 +292,15 @@
 
 <div class="hint">Comme pour vos fichiers personnels, il faut convenir d'une politique. Par exemple, les bibliothèques partagées avec d'autres personnes pourront être synchronisées avec le dossier <script type="c-text">Seafile/Shared/<h>$NAME</h></script>. Le dossier <script type="c-text">Seafile/Shared/@me</script> pourra alors servir à transférer des fichiers entre votre poste de travail UCA et vos ordinateurs personnels.</div>
 
-<h3>Accès à distance</h3>
+<h3>Accès au matériel</h3>
+
+<h4>Accès à distance</h4>
 
 - Homeweb
 - Guacamole
     > accueil : ctrl+shift+alt pour copier/coller avec Guacamole.
 
-<h3>Mode DS</h3>
-
-<h3>Prêt et réservations</h3>
+<h4>Prêt et réservations</h4>
 
 <div>L'université vous permet d'emprunter du matériel informatique :
     <ul>
@@ -263,8 +311,6 @@
 </div>
 
 <div>Vous pouvez aussi réserver des salles.</div>
-
-<h3>Impressions</h3>
 
 <h3>Autre</h3>
 

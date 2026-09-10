@@ -337,60 +337,6 @@ Les fichiers sous Linux sont usuellement organisés de la sorte :
     </script>
 </div>
 
-<h4>Votre home</h4>
-
-<div>Votre home est usuellement contenu dans le dossier <script type="c-text">/home/<h>$USER]</h>/</script>, et est usuellement organisé de la sorte :
-
-    <script type="c-bash">
-        📂 ~<h>$USER</h>
-        ├── 📂 Documents       # là où stocker vos fichiers.
-        ├── 📂 Bureau          # contient les éléments à afficher sur le bureau.
-        ├── 📂 Téléchargements # documents téléchargés par le navigateur.
-        ├── 📄 .bashrc         # [NE PAS TOUCHER] configuration du shell (bash).
-        ├── 📂 .local          # [NE PAS TOUCHER] données d'applications de l'utilisateur.
-        ├── 📂 config          # [NE PAS TOUCHER] fichiers de configuration de l'utilisateur.
-        ├── 📂 .cache          # [NE PAS TOUCHER] cache utilisateur.
-        ...
-    </script>
-</div>
-
-<div>💡 <script type="c-text">~<h>[$USER]</h>/</script> est un alias représentant le chemin absolu du home de l'utilisateur <script type="c-text"><h>$USER</h></script> (utilisateur actuel si non précisé).</div>
-
-<div>💡 Les fichiers commençant par <script type="c-text">.</script> sont des <b>fichiers cachés</b>. Par défaut, ils ne s'affichent pas dans votre explorateur de fichier. <script type="c-bash">ls -A <h>[$DIR]</h></script> pour les afficher (<i><u>a</u>ll</i>).</div>
-
-<div>⚠ On ne <b>TOUCHE PAS</b> les fichiers inconnus, même pour faire de la place.</div>
-
-<h4>Votre quota à l'UCA</h4>
-
-<div>Sur les postes de travail UCA, vous disposez de 2 dossiers personnels :
-    <ul>
-        <li><script type="c-text">/home/IUT/<h>$USER</h>/</script> (2Go) : votre home, sauvegardé régulièrement.</li>
-        <li><script type="c-text">/home/scratch/<h>$USER</h>/</script> (20Go) : à privilégié pour les fichiers volumineux.</li>
-    </ul>
-</div>
-
-<div>⚠ Atteindre son quota expose à des erreurs informatiques lors des TP. Pensez ainsi à régulièrement vider votre corbeille ainsi que votre dossier de téléchargement.</div>
-
-<div>💡 La commande <script type="c-text">gdu <h>[$DIR]</h></script> permet de visualiser les fichiers et dossiers les plus volumineux.</div>
-
-<h4>Politique d'organisation de vos fichiers</h4>
-
-<div>Il est important de ne pas enregistrer tous ses fichiers dans le même dossier, mais d'avoir une politique d'organisation de vos fichiers, et de s'y tenir. C'est à dire de définir une structure organisée, cohérente et consistante de votre dossier <script type="c-text">~/Documents/</script>.</div>
-
-<div>Voici un exemple de structure que vous pouvez adopter :
-    <script type="c-text">
-        📂 ~/Documents/
-        ├── 📂 [<h>$CODE_MODULE</h>] <h>NOM_MODULE</h>
-        ... ├── 📂 Supports de cours
-            │   ├── 📄 CM<h>$ID</h> - <h>$NOM</h>
-            │   ...
-            ├── 📂 TP<h>$ID</h> - <h>$NOM</h>
-            ...
-    </script>
-</div>
-
-<div>Cela facilite les opérations de recherche, de sauvegardes, et d'archivage. Notamment, peut vous éviter de rendre le mauvais fichier lors d'un TP...</div>
-
         </main>
     </body>
 </html>
