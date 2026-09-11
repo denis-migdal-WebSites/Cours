@@ -11,7 +11,7 @@
             - TD2:TD2 - Méthodes d'Apprentissage Universitaire
             - TD3:TD3 - Commandes Shell
         - cheat:Cheat sheet
-- sec:🔒 Sécurité
+- sec:🔐 Sécurité
     - R1-11:S1 Introduction à la Cybersécurité
         - CM:CM
         - TD:TD
@@ -57,7 +57,7 @@
         + DS:DS
             - cur:2024-2024
     - S5-07:S5 [SAÉ] Pentest, Hacking, et Renforcement
-- dev:🖳 Développement
+- dev:💻 Développement
     - R4-01:S4 Automatisation et Test en Programmation
         + CM:CM
             - CM1:CM1
@@ -106,9 +106,9 @@
         + CM:CM
             - CM1:CM1
 --
-- https://github.com/denis-migdal-ShellTools:🛠 Outils Shell
+- https://github.com/denis-migdal-ShellTools:🛠️ Outils Shell
 --
-- bdd:⛁ Bases de données (old)
+- bdd:🗃️ [OLD] Bases de données
     - R1-01:Tableur et Reporting
         + CM:CM
             - CM1:CM1
@@ -140,7 +140,7 @@
             - TP5:TP5
         - cheat:Cheat Sheet
         + DS:DS
-- web:🌐 Web (old)
+- web:🌐 [OLD] Web
     - R3-03:S3 Technologies Web
         + CM:CM
             - CM1:I. HTML5
