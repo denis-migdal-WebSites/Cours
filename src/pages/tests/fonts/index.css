@@ -7,11 +7,6 @@
         content: "Unicode : "
     }
 }
-.variants {
-    &::before {
-        content: "Variants : "
-    }
-}
 
 .results > div {
     
