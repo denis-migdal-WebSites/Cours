@@ -38,6 +38,7 @@ document.querySelector(".symbols")!.addEventListener("click", (ev) => {
     showSymbol(ev.target.textContent!);
 });
 
+/*
 setTimeout(async () => {
 
     const t = performance.now();
@@ -51,3 +52,4 @@ setTimeout(async () => {
 
     console.log(performance.now() - t);
 }, 20000);
+*/
