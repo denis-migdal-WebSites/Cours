@@ -1,0 +1,31 @@
+.symbols > span:hover {
+    cursor: pointer;
+}
+
+.unicode {
+    &::before {
+        content: "Unicode : "
+    }
+}
+.variants {
+    &::before {
+        content: "Variants : "
+    }
+}
+
+.results > div {
+    
+    margin: 0;
+
+    &[font] {
+        font-family: attr(font);
+    }
+
+    &::after {
+        content: " (" attr(font, "actuel") ")";
+    }
+
+    &::before {
+        content: var(--symbol)
+    }
+}

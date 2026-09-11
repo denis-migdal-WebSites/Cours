@@ -9,6 +9,8 @@
         "outDir": "./build/TS",
 
         "paths": {
+            "@Cours/*"    : ["./src/*"],
+            
             "MWL@2026/*"     : ["./libs/MWL@2026/src/*"],
             "TPEngine@2026/*" : ["./libs/TPEngine@2026/src/*"],
             "WebSlides@2026/*": ["./libs/WebSlides@2026/src/*"],
@@ -17,7 +19,6 @@
             "@TPEngine/*" : [ "./libs/legacy/TPEngine/src/*" ],
             "@WebSlides/*": [ "./libs/legacy/WebSlides/src/*" ],
             "@sqlite/*"   : [ "./libs/sqlite/*" ],
-            "@Cours/*"    : ["./src/*"]
         }
     }
 }
