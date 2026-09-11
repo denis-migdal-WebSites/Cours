@@ -37,3 +37,17 @@ document.querySelector(".symbols")!.addEventListener("click", (ev) => {
 
     showSymbol(ev.target.textContent!);
 });
+
+setTimeout(async () => {
+
+    const t = performance.now();
+
+    const font = new FontFace(
+        "Test",
+        'url("/assets/font/NotoColorEmoji.woff2")'
+    );
+
+    await font.load();
+
+    console.log(performance.now() - t);
+}, 20000);
