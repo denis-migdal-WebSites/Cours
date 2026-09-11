@@ -1,65 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
-    <head>
-        <meta charset="utf8"/>
-        <title>TD1-2 (Accueil Numérique)</title>
-        <meta name="color-scheme" content="dark light">
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link   href="/skeleton/tp/index.css"  rel="stylesheet">
-        <script  src="/skeleton/tp/index.js"  type="module"     blocking="render"></script>
-    </head>
-    <body>
-        <main>
-            <h1>TD1-2 : Postes de travail et outils UCA (2x2h)</h1>
-
-<todo>Ask préparer identifiants</todo>
-<todo>Expliquer les n° de salles</todo>
-<todo>durée ~2h30</todo>
-
-<h2>Prise en main du poste de travail</h2>
-
-<ol>
-    <li>Allumez le poste de travail</li>
-    <li>Saisissez vos identifiants</li>
-    <li>Cliquez en haut à gauche pour ouvrir la liste des applications <todo>img</todo></li>
-    <li><todo>Parler des fichiers</todo></li>
-</ol>
-
-<h2>Configuration de l'ENT</h2>
-
-<ol>
-    <li>Tapez "firefox" dans la barre de recherche en haut au milieu</li>
-    <li>Lancez le navigateur Web en cliquant sur l'icône de Firefox.</li>
-    <li>Entrez <script type="c-text">ent.uca.fr</script> dans la barre de navigation de Firefox</li>
-    <li>Connectez-vous avec vos identifiants</li>
-    <li>Vous pouvez alors personnaliser l'ENT (en haut à droite : "Personnaliser").</li>
-    <li>Assurez vous d'afficher vos mails et votre emploi du temps sur la page d'accueil</li>
-    <li>Pour que votre emploi du temps apparaisse, vous devez sélectionner le groupe auquel vous appartenez.</li>
-    <li>Cliquez en haut à gauche pour afficher le menu latéral</li>
-    <li>À droite du menu latéral, cliquez sur la flèche pour afficher la liste des applications</li>
-    <li>Dans l'onglet Administratif, vous pourrez déclarer l'utilisation de vos crédits jours. Il vous faudra faire une capture d'écran et la poster sur Odin.</li>
-    <li>Cliquez sur l'onglet "Ressources" puis sur "Activation Compte Office 365".<br/>Vous pourrez alors utiliser les services de la suite Office 365 avec votre compte UCA.</li>
-    <li>Note : il vous faudra consulter vos mails et emploi du temps très régulièrement. A noter que vous pouvez les exporter pour les utiliser dans l'application de votre choix. Vous pouvez aussi utiliser l'application mobile "MyUCA".</li>
-</ol>
-
-- Odin : marque page + saisir info puis f5.
-- envoyer mail pour tester
-- déposer truc sur Moodle + calendrier des rendus.
-
-<h2>Postes de travail</h2>
-
-<div>Vous pourrez accéder à vos fichiers à distance grâce au site homeweb, ainsi qu'à votre session Linux via Guacamole (faire).</div>
-
-<div>Vous pouvez aussi, dans certains TP, utiliser votre ordinateur personnel. Pour vous connecter au Wifi (cf lien).</div>
-
-<div>Si vous ne disposez pas d'ordinateur personnel, vous pouvez faire une demande de prêt sur l'année ou sur une période plus courte (cf liens).</div>
-
-<h2>Mode DS</h2>
-
-- mode DS.
-
-<h2>VSCode ?</h2>
-
 <h2>Liste des outils</h2>
 <ul class="flex-2">
     <li>ENT (+ personnalisation widgets)
@@ -104,7 +42,7 @@
             <li>Mode DS ?</li>
             <li><a href="https://dsi.uca.fr/catalogue-de-services/wifi">Wifi</a></li>
             <li>Impression : <a href="https://print.dsi.uca.fr">PaperCut</a> (payant)</li>
-            <li>Salles libre-service (S13 ou 14 ? + <a href="https://ent.uca.fr/bu/entView">bibliothèque</a> réservation)</li>
+            <li>Salles libre-service (S13 (?) + <a href="https://ent.uca.fr/bu/entView">bibliothèque</a> réservation)</li>
             <li>Réservation de matériel : <a href="https://mybookings.uca.fr/book/">MyBookings</a> PC portable étudiant (+ ptr lazer) + emprunts cours BU</li>
         </ul>
     </li>
