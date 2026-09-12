@@ -1,15 +1,15 @@
 + acc:👋 Accueil
     - R1-13:Accueil Numérique
         + CM:CM
-            - ../TD/TD1:CM1 - Règles et outils UCA
-            - CM2:CM2 - Méthodes d'Apprentissage Universitaire
-            - CM3:CM3 - Commandes Shell
+            - ../TD/TD1:1 - Règles et outils UCA
+            - CM2:2 - Méthodes d'Apprentissage Universitaire
+            - CM3:3 - Commandes Shell
         + Slides:Slides
-            - CM2:CM2 - Commandes Shell
+            - CM2:2 - Commandes Shell
         + TD:TD
-            - TD1:TD1 - Règles et outils UCA
-            - TD2:TD2 - Méthodes d'Apprentissage Universitaire
-            - TD3:TD3 - Commandes Shell
+            - TD1:1 - Règles et outils UCA
+            - TD2:2 - Méthodes d'Apprentissage Universitaire
+            - TD3:3 - Commandes Shell
         - cheat:Cheat sheet
 - sec:🔐 Sécurité
     - R1-11:S1 Introduction à la Cybersécurité
@@ -17,151 +17,151 @@
         - TD:TD
     - R2-14:S2 Administration Système Linux
         + CM:CM
-            - CM1:CM1 - Administrer un ordinateur Linux
-            - CM2:CM2 - Processus et accès à distance
-            - CM3:CM3 - Protéger ses données
-            - CM4:CM4 - ?
+            - CM1:1 - Administrer un ordinateur Linux
+            - CM2:2 - Processus et accès à distance
+            - CM3:3 - Protéger ses données
+            - CM4:4 - ?
         + Slides:Slides
-            - CM1:CM1 - Administrer un ordinateur Linux
-            - CM2:CM2 - Processus et accès à distance
-            - CM3:CM3 - Volumes de données et systèmes de fichiers
-            - CM4:CM4 - ?
+            - CM1:1 - Administrer un ordinateur Linux
+            - CM2:2 - Processus et accès à distance
+            - CM3:3 - Volumes de données et systèmes de fichiers
+            - CM4:4 - ?
         + TP:TP
-            - TP1:TP1
-            - TP2:TP2
-            - TP3:TP3
-            - TP4:TP4
+            - TP1:1 - Administrer un ordinateur Linux
+            - TP2:2 - Processus et accès à distance
+            - TP3:3 - Volumes de données et systèmes de fichiers
+            - TP4:4 - ?
         - cheat:Cheat Sheet
         + DS:DS
             - cur:2024-2025
     - R3-12-VCOD:S3-VCOD Cryptographie et Réseaux
         + CM:CM
-            - CM1:CM1
-            - CM2:CM2
-            - CM3:CM3
-            - CM4:CM4
+            - CM1:1 - Échanger des données avec un tiers
+            - CM2:2 - Infrastructures et services
+            - CM3:3 - Cryptographie et TLS
+            - CM4:4 - Serveur
         + TD:TD
-            - TD2:TD2
+            - TD2:2
         + TP:TP
-            - TP1:TP1
-            - TP2:TP2
-            - TP3:TP3
-            - TP4:TP4
+            - TP1:1 - Échanger des données avec un tiers
+            - TP2:2 - Infrastructures et services
+            - TP3:3 - Cryptographie et TLS
+            - TP4:4 - Serveur
         + DS:DS
             - cur:cur
     - R4-10-VCOD:S4-VCOD Identité Numérique
         + CM:CM
-            - CM1:CM1
+            - CM1:1 - ?
         + TP:TP
-            - TP1:TP1
+            - TP1:1 - ?
         + DS:DS
             - cur:2024-2024
     - S5-07:S5 [SAÉ] Pentest, Hacking, et Renforcement
 - dev:💻 Développement
-    - R4-01:S4 Automatisation et Test en Programmation
+    - R4-01:[S4] Automatisation et Test en Programmation
         + CM:CM
-            - CM1:CM1
-            - CM2:CM2
-            - CM3:CM3
-            - CM4:CM4
+            - CM1:1 - ?
+            - CM2:2 - ?
+            - CM3:3 - ?
+            - CM4:4 - ?
         + TP:TP
-            - TP3:TP3
-            - TP4:TP4
+            - TP3:3 - ?
+            - TP4:4 - ?
         - cheat:Cheat Sheet
         + DS:DS
             - cur:cur
-    - R5-06-VCOD-A:S5-VCOD UML et bonnes pratiques
-        + CM:CM
-            - CM1:CM1 - Analyse
-            - CM2:CM2 - Conception
-            - CM3:CM3 - Implémentation
-        + Slides:Slides
-            - CM1:CM1 - Analyse
-            - CM2:CM2 - Conception
-            - CM3:CM3 - Implémentation
-        + TD:TD
-            - TD2:TD2 - Conception
-        + TP:TP
-            - TP1:TP1 - Analyse
-            - TP2:TP2 - Conception
-            - TP3:TP3 - Implémentation
+    - R5-06-VCOD-A:[S5-VCOD] UML et bonnes pratiques
+        + W1:1. Analyse
+            - CM
+            - Slides
+            - TP
+        + W2:2. Conception
+            - CM
+            - Slides
+            - TD
+            - TP
+        + W3:3. Implémentation
+            - CM
+            - Slides
+            - TP
+        --
         + cheat:Cheat sheet
             - defs:Définitions
             - UML:UML
             - DP:Design Patterns
-        + DS:DS
+        + annales:Annales
             - cur:2024-2024
-    - R5-06-VCOD-B:S5-VCOD Gestion de projet
+    - R5-06-VCOD-B:[S5-VCOD] Gestion de projet
         + CM:CM
             - CM1:CM1 - ?
             - CM2:CM2 - ?
             - CM3:CM3 - ?
         + TP:TP
-            - TP1:TP1
-            - TP2:TP2
-            - TP3:TP3
+            - TP1:1 - ?
+            - TP2:2 - ?
+            - TP3:3 - ?
         + DS:DS
             - cur:2024-2024
-    + R6-01-VCOD:S6-VCOD Optimisation
+    + R6-01-VCOD:[S6-VCOD] Optimisation
         + CM:CM
-            - CM1:CM1
+            - CM1:1 - ?
 --
 - https://github.com/denis-migdal-ShellTools:🛠️ Outils Shell
 --
 - bdd:🗃️ [OLD] Bases de données
     - R1-01:Tableur et Reporting
         + CM:CM
-            - CM1:CM1
-            - CM2:CM2
+            - CM1:1 - Prise en main
+            - CM2:2 - Mise en forme
         + TP:TP
-            - TP1:TP1
-            - TP2:TP2
+            - TP1:1 - Prise en main
+            - TP2:2 - Mise en forme
     - R1-02:Bases de Données Relationnelles 1
         + CM:CM
-            - CM1:CM1
-            - CM2:CM2
-            - CM3:CM3
-            - CM4:CM4
+            - CM1:1 - Requêter une base de données
+            - CM2:2 - Manipuler des entrées
+            - CM3:3 - Tables et contraintes
+            - CM4:4 - Fusions et jointures
         + Slides:Slides
-            - CM1:CM1
-            - CM2:CM2
-            - CM3:CM3
-            - CM4:CM4
+            - CM1:1 - Requêter une base de données
+            - CM2:2 - Manipuler des entrées
+            - CM3:3 - Tables et contraintes
+            - CM4:4 - Fusions et jointures
         + TD:TD
-            - TD1:TD1
-            - TD2:TD2
-            - TD3:TD3
-            - TD4:TD4
+            - TD1:1 - Requêter une base de données
+            - TD2:2 - Manipuler des entrées
+            - TD3:3 - Tables et contraintes
+            - TD4:4 - Fusions et jointures
         + TP:TP
-            - TP1:TP1
-            - TP2:TP2
-            - TP3:TP3
-            - TP4:TP4
-            - TP5:TP5
+            - TP1:1 - Requêter une base de données
+            - TP2:2 - Manipuler des entrées
+            - TP3:3 - Tables et contraintes
+            - TP4:4 - Fusions et jointures
+            - TP5:5 - Interface graphique
         - cheat:Cheat Sheet
         + DS:DS
 - web:🌐 [OLD] Web
     - R3-03:S3 Technologies Web
         + CM:CM
-            - CM1:I. HTML5
-            - CM2:II. CSS3
-            - CM3:III. Code côté client
-            - CM4:IV. Architecture client/serveur
-            - CM5:V. Formulaires ?
+            - CM1:1 - HTML5
+            - CM2:2 - CSS3
+            - CM3:3 - Code côté client
+            - CM4:4 - Architecture client/serveur
+            - CM5:5 -  Formulaires ?
         + TP:TP
-            - TP1:TP1
-            - TP2:TP2
-            - TP3-4:TP3-4
+            - TP1:1 - HTML5
+            - TP2:2 - CSS3
+            - TP3-4:3-4 - 
         - cheat-html5:Cheat sheet HTML5
         - cheat-css3:Cheat sheet CSS3
     - R4-09-VCOD:S4 Programmation Web
         + CM:CM
-            - CM1:CM1
+            - CM1:1 - 
         + DS:DS
             - cur:cur
     + SAE4-02-VCOD:S4 [SAÉ] Collecte Automatisée de données Web
     - R5-07-VCOD:S5-VCOD Programmation Web pour la Visualisation
         + CM:CM
-            - CM1:CM1
+            - CM1:1 - 
         + DS:DS
             - cur:2024-2024
