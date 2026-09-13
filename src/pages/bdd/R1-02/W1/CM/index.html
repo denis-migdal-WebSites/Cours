@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>BDR1 (CM1)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/bdr/index.css"  rel="stylesheet">
+        <script  src="/templates/bdr/index.js"  type="module"     blocking="render"></script>
+        <script  src="./index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>Requêter une base de données</h1>
+
+<h2>Introduction à SQL</h2>
+
+<h3>Les SGBD</h3>
+
+<div>Il est fréquent de devoir traiter de larges quantités de données :
+  <ul>
+    <li>pour une entreprise : des listes de clients, de commandes, de produits, etc.</li>
+    <li>pour une administration : des listes d'administrés, de transactions, etc.</li>
+    <li>pour un site Web : des logs de consultation de ses différentes pages, etc.</li>
+    <li>...</li>
+  </ul>
+</div>
+
+<div>Ces données peuvent représenter des milliers, des millions (voire bien plus), d'éléments. Il est évident qu'on ne peut pas les manipuler "à la main". Par exemple, si on souhaite compter le nombre de ventes d'une entreprise à la main, c'est :
+  <ul>
+    <li><b>chronophage</b> :<br/></li>
+      <i>35 jours pour un million de ventes à raison de 1 vente/seconde et 8h/jours.</i>
+    <li><b>source d'erreurs</b> :<br/></li>
+      <i>Ventes comptées en double, sautées, etc.</i>
+    <li><b>incomplet</b> :<br/></li>
+      <i>Les ventes peuvent être stockées à plusieurs endroits différents, certaines perdues.</i>
+  </ul>
+</div>
+
+<div>Il est alors nécessaire d'utiliser un logiciel permettant d'efficacement :
+  <ul>
+    <li><b>stocker et organiser les données</b>.</li>
+    <li><b>manipuler les données</b> : ajouter/modifier/supprimer des données.</li>
+    <li><b>requêter les données</b> : e.g. compter le nombre de ventes.</li>
+  </ul>
+</div>
+
+<div>Pour répondre à ces besoins, on utilise un <b>Système de Gestion de Bases de Données</b> (SGBD). Un SGBD est un logiciel permettant de créer, stocker, manipuler et requêter des bases de données. Un SGBD répond aussi à d'autres besoins comme :
+  <ul>
+    <li><b>la cohérence des données :</b> garantie l'absence de données invalides.<br/></li>
+      <i>e.g. avoir un âge négatif.</i>
+    <li><b>la robustesse :</b> résister aux pannes.<br/></li>
+      <i>e.g. l'ordinateur plante alors qu'on est en train de modifier une donnée.</i>
+    <li><b>le contrôle d'accès :</b> qui peut faire quoi sur quelles données ?.<br/></li>
+      <i>e.g. l'administrateur peut modifier et les utilisateurs lire les données.</i>
+    <li><b>les logs :</b> que s'est-il passé ? qui a fait quoi et quand ?<br/></li>
+      <i>e.g. après une panne, qu'était-il en train de faire ?</i><br/>
+      <i>e.g. le stagiaire a fait une fausse manipulation, qu'a-t-il réellement fait ?</i>
+    <li><b>accès concurrent :</b> modifications simultanées de données.</li>
+  </ul>
+</div>
+
+<div class="hint">Dans le cadre de ce module, on se concentrera sur <b>SQL</b> (<i>Structured Query Language</i>), un langage permettant, entres autres, de structurer et de manipuler des bases de données.</div>
+
+<h3>Les SGBD SQL</h3>
+
+<div>Le langage SQL est normalisé par la norme ISO/CEI 9075. Cependant certaines fonctionnalités diffèrent selon le SGBD utilisé.</div>
+
+<div>Parmi eux, <b>SQLite</b> est un SGBD léger où chaque base est stockée sous la forme d'un fichier. Il est très utilisé pour stocker et gérer des données locales ayant peu d'accès concurrents.</div>
+
+<div>Pour des usages plus intensifs, <b>PostgreSQL</b>, <b>MySQL</b>, et <b>MariaDB</b> sont des SGBD open sources plus complets, sous la forme de <b>serveurs SQL</b>. On interagit alors avec le SGBD via un <b>client</b> qui se charge de :
+  <ul>
+    <li>se connecter au serveur ;</li>
+    <li>d'envoyer la requête SQL ;</li>
+    <li>et de réceptionner la réponse.</li>
+  </ul>
+</div>
+
+<div>Les clients peuvent prendre plusieurs formes :
+  <ul>
+    <li>une interface graphique de requêtage (<i>e.g.  ???</i>).</li>
+    <li>une interface graphique de gestion de bases de données (<i>e.g. pgAdmin</i>).</li>
+    <li>une application en ligne de commandes (<i>e.g. psgl, mysql</i>).</li>
+    <li>une API utilisée dans le langage de programmation de votre choix.</li>
+  </ul>
+</div>
+
+<h3>Les tables SQL</h3>
+
+<div>Comme dans un tableur, les données sont représentées sous forme de <b>tables</b> :
+  <ul>
+    <li>les lignes correspondent à des <b>entrées</b> ;</li>
+    <li>les colonnes correspondent aux différentes propriétés de ces entrées.</li>
+  </ul>
+</div>
+
+<div>Par exemple, la table suivante contient 2 entrées ayant les propriétés <script type="c-text">ID</script>, <script type="c-text">Nom</script>, <script type="c-text">Prenom</script>, <script type="c-text">Age</script> :
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Nom</th>
+      <th>Prenom</th>
+      <th>Age</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Doe</td>
+      <td>John</td>
+      <td>32</td>
+    </tr><tr>
+      <td>2</td>
+      <td>Durand</td>
+      <td>John</td>
+      <td>64</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<h4>Vocabulaire</h4>
+
+<ul>
+    <li>Une <b>base de donnée</b> est composée de plusieurs tables.</li>
+    <li>Un <b>schéma</b> de table décrit les colonnes de la table (cf CM3).</li>
+    <li>Les lignes d'une table sont appelées <b>entrées</b> ou <b>enregistrements</b>.</li>
+</ul>
+
+<div class="hint">Vous pouvez voir la base de données comme un fichier tableur, et les tables comme les feuilles de calculs contenues dans ce fichier.</div>
+
+<div class="hint">Les tables sont aussi parfois appelées <b>relations</b>, d'où le terme <i>base de données relationnelle</i>.</div>
+
+<h3>Les types SQL</h3>
+
+<div>En SQL chaque colonne a un type, i.e. le type des données qu'on peut y insérer. SQL supporte en général 4 familles de types :
+  <ul class="flex-2">
+    <li><script type="c-text">TEXT</script> : une chaîne de caractère.</li>
+    <li><script type="c-text">BLOB</script> : des données binaires. </li>
+    <li><script type="c-text">INT</script>/<script type="c-text">INTEGER</script> : un nombre entier.</li>
+    <li><script type="c-text">REAL</script> : un nombre décimal.</li>
+    <li><script type="c-text">ANY</script>  : accepte n'importe quelle valeur.</li>
+  </ul>
+</div>
+
+<div class="hint">Par défaut, chaque type accepte la valeur <script type="c-text">NULL</script>, qui indique une absence de données.</div>
+
+<div class="hint">En SQL les chaînes de caractères s'écrivent entre guillemets simples (<script type="c-text">'</script>). Pour échapper un guillemet simple dans la chaîne de caractères, il suffit de l'écrire en double, e.g. <script type="c-sql">'J''ai échappé.'</script>. </div>
+
+<div>En général, les SGBD (sauf SQLite) offrent une variété de sous-types permettant d'optimiser leur stockage. Une table (non-exhaustive) des sous-types les plus communs vous est proposée ci-dessous à titre informatif :
+
+<details>
+  <summary><em><strong>Montrer la table des sous-types</strong></em></summary>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Famille</th>
+        <th>Type</th>
+        <th>Octets</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td rowspan='9'>TEXT</td>
+        <td>CHAR</td>
+        <td>1 à 3</td>
+        <td>Caractère UTF8</td>
+      </tr><tr>
+        <td>CHAR(N)</td>
+        <td>N<i>1 à N</i>3</td>
+        <td>Taille fixe</td>
+      </tr><tr>
+        <td>VARCHAR(N)</td>
+        <td>0 à N*3</td>
+        <td>Taille variable</td>
+      </tr>
+      <tr><td></td><td></td><td></td></tr>
+      <tr>
+        <td>NCHAR</td>
+        <td>2</td>
+        <td>Caractère UTF16</td>
+      </tr><tr>
+        <td>NCHAR(N)</td>
+        <td>N*2</td>
+        <td>Taille fixe</td>
+      </tr><tr>
+        <td>NVARCHAR(N)</td>
+        <td>0 à N*2</td>
+        <td>Taille variable</td>
+      </tr>
+      <tr><td></td><td></td><td></td></tr>
+      <tr>
+        <td>TEXT(N)</td>
+        <td>N</td>
+        <td>Pour de gros textes.</td>
+      </tr>
+      <tr><td></td><td></td><td></td><td></td></tr>
+      <tr>
+        <td rowspan='2'>BLOB</td>
+        <td>BIT(N)</td>
+        <td>N/8</td>
+        <td>Champ de bits</td>
+      </tr><tr>
+        <td>BLOB(N)</td>
+        <td>N</td>
+        <td></td>
+      </tr>
+      <tr><td></td><td></td><td></td><td></td></tr>
+      <tr></tr>
+        <td rowspan='6'>INT</td>
+        <td>BOOLEAN</td>
+        <td>1</td>
+        <td></td>
+      </tr>
+        <td>SMALLINT</td>
+        <td>2</td>
+        <td></td>
+      </tr><tr>
+        <td>INTEGER</td>
+        <td>4</td>
+        <td></td>
+      </tr><tr>
+        <td>BIGINT</td>
+        <td>8</td>
+        <td></td>
+      </tr><tr>
+        <td>NUMERIC(N)</td>
+        <td>N</td>
+        <td></td>
+      </tr><tr>
+        <td>ENUM(val[,...])</td>
+        <td>2</td>
+        <td>Peut aussi être TEXT</td>
+      </tr>
+      <tr><td></td><td></td><td></td><td></td></tr>
+      <tr>
+        <td rowspan='4'>REAL</td>
+        <td>FLOAT</td>
+        <td>4</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>DOUBLE</td>
+        <td>8</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>FLOAT(N)</td>
+        <td>N</td>
+        <td>Virgule flottante</td>
+      </tr>
+      <tr>
+        <td>DECIMAL(N,S)</td>
+        <td>N</td>
+        <td>Précision fixe</td>
+      </tr><tr><td></td><td></td><td></td><td></td></tr>
+      <tr>
+        <td rowspan='4'>DATE</td>
+        <td>DATE</td>
+        <td>4</td>
+        <td>10 en SQLite (TEXT)</td>
+      </tr>
+      <tr>
+        <td>TIME</td>
+        <td>8 à 12</td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>DATETIME</td>
+        <td>12 à 16?</td>
+        <td>19 en SQLite (TEXT)</td>
+      </tr>
+      <tr>
+        <td>TIMESTAMP</td>
+        <td>8</td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hint">En fonction du SGBD utilisé, il existe une pléthore d'autres types plus ou moins complexes.</div>
+
+</details>
+</div>
+
+<h3>Documentation</h3>
+
+<div class="hint">Vous trouver plus amples documentation via les liens suivants :
+  <ul class="flex-2">
+    <li>SQL :
+      <ul>
+        <li>https://www.w3schools.com/sql/</li>
+        <li>https://sql.sh</li>
+      </ul>
+    </li>
+    <li>SGBD :
+      <ul>
+        <li>SQLite : https://www.sqlite.org</li>
+        <li>PostgreSQL : https://www.postgresql.org/docs/</li>
+        <li>MySQL : https://dev.mysql.com/doc/</li>
+      </ul>
+    </li>
+  </ul>
+</div>
+
+<h2>Requêtes de bases</h2>
+
+<h3>Les types de requêtes</h3>
+
+<div>Il existe plusieurs types de commandes SQL permettant d'effectuer différent types actions :
+  <ul class="flex-2">
+    <li><script type="c-sql">SELECT</script> : lire des données ;</li>
+    <li><script type="c-sql">UPDATE</script> : modifier des entrées ;</li>
+    <li><script type="c-sql">INSERT</script> : insérer des entrées ;</li>
+    <li><script type="c-sql">DELETE</script> : supprimer des entrées.</li>
+  </ul>
+</div>
+
+<div>Nous allons dans un premier temps nous concentrer sur le premier, et verrons les 3 autres par la suite.</div>
+
+<h2>La requête SELECT</h2>
+
+<div>La requête SQL <script type="c-sql">SELECT</script> permet de récupérer des données présentes dans une base de donnée, et se présente usuellement sous la forme suivante : <script type="c-sql">
+SELECT <h>$COLS[,...]</h> FROM <h>$TABLE</h>; 
+</script>
+  <ul>
+    <li><script type="c-sql"><h>$TABLE</h></script> est le nom de la table SQL à requêter.</li>
+    <li><script type="c-sql"><h>$COLS[,...]</h></script> est la liste des colonnes à récupérer séparées par ",".</li>
+  </ul>
+  <div class="hint"><script type="c-sql">*</script> correspond à l'ensemble des colonnes.</div>
+</div>
+
+<div class="danger">Il est d'usage de ne récupérer que les colonnes dont on a réellement besoin. En effet, sur de grandes tables et de grosses requêtes, réduire le nombre de colonnes récupérées permet de réduire le volume des données transférées.</div>
+
+<div class="danger">Le nom de la colonne devra être écrite entre guillemets s'il contient des caractères non-alphanumériques.</div>
+
+<h3>Sélection des colonnes</h3>
+
+<sql-interactive id="col-sql">
+  <sql-selector>
+    <script type="c-sql">
+      SELECT <h>$COLS</h> FROM Users;
+    </script>
+    <sql-option desc="Retourner toutes les colonnes">{"cols": "*"}</sql-option>
+    <sql-option desc="Retourner une seule colonne"  >{"cols": "Nom"}</sql-option>
+    <sql-option desc="Retourner plusieurs colonnes" >{"cols": "ID, Prenom"}</sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+  <sql-dymtable id="col-table" table="Users"></sql-dymtable>
+</sql-interactive>
+
+<h3>Alias de colonnes</h3>
+
+<div class="hint">Dans le cadre d'une requête SQL, vous pouvez temporairement associer un alias à une colonne grâce au mot clé <script type="c-sql">as</script> :
+<sql-interactive id="col-sql">
+  <sql-selector>
+    <script type="c-sql">
+      SELECT Nom <h>$COL_AS</h>, Age FROM Users;
+    </script>
+    <sql-option desc="Requête normale"     >{"col_as": ""       }</sql-option>
+    <sql-option desc="Renommer une colonne">{"col_as": "as User"}</sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+</sql-interactive>
+</div>
+
+
+<h3>Trier par ordre croissant/décroissant les lignes</h3>
+
+<div>La clause <script type="c-sql">ORDER BY <h>$COL [DESC|ASC][,...]</h></script> permet de trier les lignes retournées par ordre croissant (<script type="c-sql">ASC</script>) ou décroissant (<script type="c-sql">DESC</script>).
+
+<sql-interactive id="col-sql">
+  <sql-selector>
+    <script type="c-sql">
+      SELECT * FROM Users
+           ORDER BY <h>$ROW_SORT</h>;
+    </script>
+    <sql-option desc="Trier par Age croissant">
+      {"row_sort": "Age ASC"}
+    </sql-option>
+    <sql-option desc="Trier par Age décroissant">
+      {"row_sort": "Age DESC"}
+    </sql-option>
+    <sql-option desc="Trier par Age décroissant, puis par Nom croissant">
+      {"row_sort": "Age DESC, Nom ASC"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+</sql-interactive>
+</div>
+
+<h2>Selection des lignes</h2>
+
+<div><script type="c-sql">SELECT</script> retourne l'intégralité des entrées de la table, ce qui peut représenter des milliers de lignes. Or, bien souvent, seules quelques entrées nous intéressent.</div>
+
+<div>Il est ainsi important de sélectionner uniquement les lignes qui nous intéressent afin de réduire le volume des données transférées, ainsi que de réduire la consommation de ressources serveurs (processeur, RAM, disque).</div>
+
+<div>Il est ainsi possible de sélectionner des lignes de différentes manières :
+  <ul>
+    <li>via un filtre via la clause <script type="c-sql">WHERE <h>$COND</h></script> :<br/></li>
+      <i>e.g. les entrées correspondant aux utilisateurs mineurs.</i>
+    <li>en supprimant les doublons via la clause <script type="c-sql">DISTINCT</script> :<br/></li>
+      <i>e.g. les âges sans doublons.</i>
+    <li>en limitant le nombre de lignes retournées via les clauses <script type="c-sql">LIMIT <h>$N</h> OFFSET <h>$O</h></script> :<br/></li>
+  <i>e.g. les 10 plus jeunes utilisateurs.</i>
+  </ul>
+</div>
+
+<h3>Clause WHERE</h3>
+
+<div>La manière générique de filter les lignes à retourner est d'ajouter une clause <script type="c-sql">WHERE <h>$COND</h></script> à la requête. Seules les lignes pour lesquelles <script type="c-sql"><h>$COND</h></script> est vraie seront retournées.
+<sql-interactive id="row-sql">
+  <sql-selector>
+    <script type="c-sql">
+      SELECT * FROM Users
+              WHERE <h>$COND</h>;
+    </script>
+    <sql-option desc="Retourner les entrées où Age > 18">
+      {"cond": "Age > 18"}
+    </sql-option>
+    <sql-option desc="Retourner les entrées où Nom est 'Doe'">
+      {"cond": "Nom == 'Doe'"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+  <sql-dymtable id="row-table" table="Users"></sql-dymtable>
+</sql-interactive>
+</div>
+
+<h4>Opérateurs de comparaisons</h4>
+
+<div class="hint">La structure d'une condition est très simple, utilisant les opérateurs de comparaison que vous connaissez déjà : <script type="c-sql">></script>, <script type="c-sql"><</script>, <script type="c-sql">>=</script>, <script type="c-sql"><=</script>, <script type="c-sql">!=</script>.
+<sql-interactive>
+  <sql-selector>
+    <script type="c-sql">
+      SELECT Age, Nom, Prenom FROM Users
+       WHERE <h>$COND</h>;
+    </script>
+    <sql-option desc="Comparaison simple">
+      {"cond": "ID > 1"}
+    </sql-option>
+    <sql-option desc="Comparaison entre 2 colonnes">
+      {"cond": "Prenom == Nom"}
+    </sql-option>
+    <sql-option desc="Chaîner les opérateurs produit un résultat étrange">
+      {"cond": "0 < Age < 18"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+</sql-interactive>
+</div>
+
+<div class="hint">Vous pouvez utiliser les noms de colonnes comme opérandes, même si elles n'apparaissent pas dans les colonnes à retourner.</div>
+
+<div class="danger">Comme vous le constatez dans l'exemple ci-dessus, bien que cela soit syntaxiquement valide, <strong>chaîner les opérateurs de comparaisons ne produira pas le résultat attendu</strong>.<br/>
+Vous ne devez ainsi pas écrire, e.g. <script type="c-sql">0 < Age < 18</script>, mais (cf suite du cours) :
+<ul class="flex-2">
+  <li>soit <script type="c-sql">0 < Age AND Age < 18</script> ;</li>
+  <li>soit <script type="c-sql">Age BETWEEN 0 AND 18</script> .</li>
+</ul>
+</div>
+
+<h4>Opérateurs logiques</h4>
+
+<div>Vous pouvez composer des conditions à l'aide d'opérateurs logiques que vous connaissez déjà : <script type="c-sql">AND</script>, <script type="c-sql">OR</script>, <script type="c-sql">NOT</script>.
+
+<sql-interactive>
+  <sql-selector>
+    <script type="c-sql">
+      SELECT Age, Nom, Prenom FROM Users
+       WHERE <h>$COND</h>;
+    </script>
+    <sql-option desc="Intersection (et)">
+      {"cond": "Age > 18 AND Age < 45"}
+    </sql-option>
+    <sql-option desc="Union (ou)">
+      {"cond": "Age > 18 OR Age < 45"}
+    </sql-option>
+    <sql-option desc="Négation (non)">
+      {"cond": "NOT ( Age > 18 )"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+</sql-interactive>
+</div>
+
+<div class="hint">Vous pouvez aussi utiliser des parenthèses.</div>
+
+<h4>Autres opérateurs</h4>
+
+<sql-interactive>
+  <sql-selector>
+    <script type="c-sql">
+      SELECT Age, Nom, Prenom FROM Users
+       WHERE <h>$COND</h>;
+    </script>
+    <sql-option desc="Entrées où Age vaut null">
+      {"cond": "Age IS NULL"}
+    </sql-option>
+    <sql-option desc="Entrées où Nom est dans la liste">
+      {"cond": "Nom IN ('Doe', 'Nescio')"}
+    </sql-option>
+    <sql-option desc="Entrées où Age est compris entre 0 et 18">
+      {"cond": "Age BETWEEN 0 AND 18"}
+    </sql-option>
+    <sql-option desc="Entrées où Nom commence par 'D'">
+      {"cond": "Nom LIKE 'D%'"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+</sql-interactive>
+
+<ul>
+  <li><script type="c-sql">IS <h>[NOT]</h> NULL</script> : si la valeur est nulle/n'est pas nulle.<br/></li>
+    <div class="danger">En SQL <script type="c-sql">NULL == NULL</script> est généralement évalué à <script type="c-sql">False</script>.</div>
+  <li><script type="c-sql"><h>[NOT]</h> IN (<h>$VALS[,...]</h>)</script> : si la valeur est/n'est pas dans une liste donnée.</li>
+
+  <li><script type="c-sql"><h>[NOT]</h> BETWEEN <h>$MIN</h> AND <h>$MAX</h></script> : si la valeur est/n'est pas entre <script type="c-sql"><h>$MIN</h></script> et <script type="c-sql"><h>$MAX</h></script>.<br/></li>
+    <div class="hint">C'est l'équivalant de <script type="c-sql"><h>$VAL</h> >= <h>$MIN</h> AND <h>$VAL</h> <= <h>$MAX</h></script></div>
+    <div class="danger">Le comportement de l'opérateur <script type="c-sql">BETWEEN</script> peut changer en fonction du système, et peut alors être équivalent à <script type="c-sql"><h>$VAL</h> > <h>$MIN</h> AND <h>$VAL</h> < <h>$MAX</h></script>.</div>
+
+  <li><script type="c-sql"><h>[NOT]</h> LIKE <h>$PATTERN</h></script> : si la valeur correspond/ne correspond pas à <script type="c-sql"><h>$PATTERN</h></script>.<br/>
+    <script type="c-sql">_</script> correspond à n'importe quel caractère.<br/>
+    <script type="c-sql">%</script> correspond à un nombre indéterminé de n'importe quel caractère.<br/>
+    e.g. <script type="c-sql">LIKE 'D%'</script>: une valeur commençant par "D".
+  </li>
+</ul>
+<h3>Supprimer les doublons</h3>
+
+<div>La clause <script type="c-sql">DISTINCT</script> permet de supprimer les doublons dans les lignes retournées :
+
+<sql-interactive>
+  <sql-selector>
+    <script type="c-sql">
+      SELECT <h>$ROW_DISTINCT</h> Age FROM Users;
+    </script>
+    <sql-option desc="Requête normale">
+      {"row_distinct": ""}
+    </sql-option>
+    <sql-option desc="Ne pas retourner les doublons">
+      {"row_distinct": "DISTINCT"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+</sql-interactive>
+</div>
+
+<h3>Tops et pagination</h3>
+
+<h4>Tops</h4>
+
+<div>La clause <script type="c-sql">LIMIT <h>$N</h></script> permet de ne récupérer que les <script type="c-sql"><h>$N</h></script> premières entrées retournées. Souvent utilisée avec la clause <script type="c-sql">ORDER BY</script>, elle permet notamment de générer des tops, e.g. les X utilisateurs les plus jeunes.
+
+<sql-interactive>
+  <sql-selector>
+    <script type="c-sql">
+      SELECT * FROM Users
+        <h>$ORDERBY</h> LIMIT <h>$PAGINATION</h>;
+    </script>
+    <sql-option desc="Ne récupérer que la première entrée">
+      {"pagination": "1"}
+    </sql-option>
+    <sql-option desc="Ne récupérer que les deux premières entrées">
+      {"pagination": "2"}
+    </sql-option>
+    <sql-option desc="Ne récupérer que l'utilisateur le plus jeune">
+      {"pagination": "1", "orderby": "ORDER BY Age"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+</sql-interactive>
+</div>
+
+<h4>Pagination</h4>
+
+<div>Lorsqu'une requête retourne des milliers de lignes, il peut être coûteux de toutes les récupérer et les afficher en même temps. On peut alors découper la liste en plusieurs pages, en affichant que e.g. 50 lignes par pages. Ainsi la première page récupère et affiche les 50 premières lignes, la seconde les 50 suivantes, et ainsi de suite.</div>
+
+<div>Pour cela, on utilisera la clause <script type="c-sql">LIMIT 50</script> afin de ne récupérer que 50 entrées par requêtes. En conjonction, on utilisera la clause <script type="c-sql">OFFSET <h>$P</h><i>50</script> qui permet de ne pas récupérer les <script type="c-sql"><h>$P</h></i>50</script> premières entrées retournées. <script type="c-sql"><h>$P</h>+1</script> étant alors le numéro de la page actuelle.
+
+<sql-interactive id="pagination-sql">
+  <sql-selector>
+    <script type="c-sql">
+      SELECT * FROM Users
+              LIMIT <h>$PAGINATION</h> OFFSET <h>$P</h>;
+    </script>
+    <sql-option desc="Page 1 (1 entrée par page)">
+      {"pagination": "1", "p": "0"}
+    </sql-option>
+    <sql-option desc="Page 2 (1 entrée par page)">
+      {"pagination": "1", "p": "1"}
+    </sql-option>
+    <sql-option desc="Page 3 (1 entrée par page)">
+      {"pagination": "1", "p": "2"}
+    </sql-option>
+    <sql-option desc="Page 1 (2 entrée par page)">
+      {"pagination": "2", "p": "0*2"}
+    </sql-option>
+    <sql-option desc="Page 2 (2 entrée par page)">
+      {"pagination": "2", "p": "1*2"}
+    </sql-option>
+  </sql-selector>
+  <sql-output></sql-output>
+  <div class="spacing"></div>
+  <sql-dymtable id="pagination-table" table="Users"></sql-dymtable>
+</sql-interactive>
+</div>
+
+<h2>Astuces pour rédiger efficacement les requêtes SQL</h2>
+
+<ol>
+  <li>Indentez vos requêtes (e.g. en alignant les clauses), elle en devient bien plus lisible (et facile à modifier).</li>
+  <li>Lorsque vous ouvrez une parenthèse/guillemet/etc. fermez-la immédiatement, puis remplissez son contenu.</li>
+  <li>Évitez autant que possible d'écrire à la main :
+    <ol>
+      <li>Utilisez l'auto-complétion pour les mots clefs et noms de colonnes (touche de tabulation <script type="c-text">⭾</script>).</li>
+      <li>Utilisez les flèches (<script type="c-text">↑</script>/<script type="c-text">↓</script>) pour remonter l'historique et (<script type="c-text">←</script>/<script type="c-text">→</script>) pour modifier une requête.</li>
+      <li>Utilisez les copier/coller (<script type="c-text">^+⇧+C</script>/<script type="c-text">^+⇧+V</script>).</li>
+    </ol>
+  </li>
+  <li>Comme en programmation, ne <b>jamais</b> tout écrire d'un coup, mais procédez par étapes :
+    <ol>
+      <li>commencez par un <script type="c-sql">SELECT * FROM <h>$T</h>;</script> basique.</li>
+      <li>affichez les colonnes que vous utiliserez.</li>
+      <li>ajoutez les nouvelles clauses une par une, en testant à chaque fois.</li>
+      <li>idem pour les expressions, commencez simple, puis ajoutez les opérations au fur et à mesure.</li>
+    </ol>
+  </li>
+</ol>
+
+<div class="hint">Cela vous aidera à écrire plus simplement des requêtes SQL avec méthode, en transformant un problème complexe, en plusieurs petits problèmes simples. De surcroît, en cas d'erreur, vous saurez immédiatement son origine, et sera alors bien plus facile à déboguer et corriger.</div>
+
+<h3>Ordre d'exécution et d'écriture</h3>
+
+<div>Le différentes <b>clauses</b> des requêtes SQL sont généralement écrites dans leur ordre d'exécution, et exécutées dans leur ordre d'écriture, i.e. de gauche à droite.</div>
+
+<style>
+  .later {
+    color: gray;
+    font-style: italic;
+    opacity: 0.5;
+  }
+  .warning {
+    color: red;
+  }
+
+</style>
+
+
+<div>Par exemple lors d'une requête <script type="c-sql">SELECT</script>:
+
+<div style="text-align: center">
+  <player-toolbar speed="1500" id="order-player"></player-toolbar>
+</div>
+<div style="display:flex">
+  <ol id="order-list">
+    <li step="1">Récupère la table (clause <script type="c-sql">FROM</script>).</li>
+    <li step="2" class="warning"><em>Défini les alias de colonnes.</em></li>
+    <li step="3">On filtre les entrées (clause  <script type="c-sql">WHERE</script>).</li>
+    <li class="later">Groupe les entrées en lignes<br/> (clause  <script type="c-sql">GROUP BY</script>).</li>
+    <li class="later warning"><em>Défini les alias de colonnes d'agrégats.</em></li>
+    <li class="later">Filtre les lignes agrégées<br/> (clause <script type="c-sql">HAVING</script>).</li>
+    <li class="warning" step="4">Supprime les doublons<br/> (clause <script type="c-sql">SELECT DISTINCT</script>).</li>
+    <li step="5">Trie les lignes (clause  <script type="c-sql">ORDER BY</script>).</li>
+    <li step="6">Limite le nombre de lignes retournées<br/> (clauses  <script type="c-sql">LIMIT</script>/<script type="c-sql">OFFSET</script>).</li>
+  </ol>
+  <style>
+    .notyet {
+      color: gray;
+    }
+    .cur {
+      color: yellow;
+    }
+    .warning.cur {
+      color: orange;
+    }
+  </style>
+  <pre style="margin:0"><code id="order_sql">SELECT <span class="notyet">DISTINCT</span> Date, Ref, Q as Nb
+FROM Produits
+WHERE Ref = "Gomme"
+ORDER BY Q
+LIMIT 2;</code></pre>
+  <div style="flex-grow: 1"></div>
+  <sql-dymtable header="" table="Produits" id="order-table"><sql-dym-table>
+</div>
+</div>
+
+<div class="hint">Les étapes en gris seront étudiées au CM suivant.</div>
+
+<div class="danger">En rouge sont indiqués des cas d'exceptions dont l'ordre d'écriture ne correspond pas à leur ordre d'exécution. Une autre exception existe dans les requêtes <script type="c-sql">UPDATE</script> où la clause <script type="c-sql">SET</script> s'écrit <b>avant</b> la clause <script type="c-sql">WHERE</script>.</div>
+
+</main>
+    </body>
+</html>

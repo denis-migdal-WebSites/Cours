@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>CM3 (AdminSys)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/page@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/page@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+            <h1>Protéger ses données : droits d'accès, sauvegardes, et chiffrement</h1>
+
+<h2>Organiser ses données</h2>
+
+<div>Les données ne sont pas égales entre elles, certaines étant plus sensibles que d'autres avec des exigences de :
+    <ul class="flex-2">
+        <li><b>confidentialité</b> : pour la lecture.</li>
+        <li><b>disponibilité</b> : contre les pertes.</li>
+        <li><b>intégrité/authenticité</b> : pour la modification.</li>
+        <li><b>performances</b> : opérations "suffisamment rapides".</li>
+    </ul>
+</div>
+
+<div>Vos propres données sont généralement peu sensibles comparativement à des données d'organisations (entreprises, hôpitaux, etc). En effet, si la perte (ou le vol) d'un rendu de TP est gênant, cela ne représente au mieux qu'une semaine de travail. Pour une organisation, la perte (ou le vol) peut concerner des <u>décennies</u> de travail, dont des outils développés en interne par des employés qui ont depuis quitté l'organisation. Pour une entreprise, cela peut se traduire par sa <b>faillite</b>.</div>
+
+<div>Que ce soit du à une défaillance matérielle, à une erreur de manipulation, à un acte de malveillance, ou d'un sinistre (e.g. incendie, inondations), l'indisponibilité des données engendre fréquemment une interruption, ou une dégradation, des services fournis. Pour un hôpital, cela peut se traduire en pertes d'opportunités de soins, et de <b>vies humaines</b>.</div>
+
+<div>Il est donc important d'établir une <b>politique</b> relative à ses données, d'en déterminer en amont la sensibilité et les mesures à mettre en place. Il est en effet important d'<b>anticiper</b> les problèmes, car une fois qu'ils surviennent, il est bien souvent déjà trop tard.</div>
+
+<h3>Définir une politique</h3>
+
+<div>Dans un premier temps, il est nécessaire d'<b>identifier</b> ses données, leurs besoins, et les solutions à mettre en place :
+    <ul>
+        <li><b>droits d'accès</b> et <b>chiffrement</b>.</li>
+        <li><b>sauvegardes</b> : <b>où</b> ? <b>quand</b> ? <b>comment</b> ? À quelle <b>fréquence</b> ?</li>
+        <li><b>archivage</b> : quelles règles de conservation ?</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<div>Pour cela, une première étape est déjà de bien organiser ses fichiers autours d'une arborescence cohérente et consistante. Cela permet non-seulement de facilement pouvoir retrouver un fichier au quotidien, mais aussi d'identifier aisément les fichiers à chiffrer, sauvegarder, archiver, supprimer, etc. Il sera alors possible d'associer une politique à un dossier, e.g. :
+    <ul>
+        <li><script type="c-text">~/Documents/</script> : mes supports de cours, rendus de TP, etc. <i>chiffré, à sauvegarder chaque soir</i>.</li>
+        <li><script type="c-text">~/Téléchargements/</script> : mes téléchargements temporaires, <i>ne nécessite pas de sauvegardes</i>.</li>
+    </ul>
+</div>
+
+<div>Les dossiers, en eux-même, peuvent être de natures très différentes. Un serveur de calcul peut ainsi avoir des dossiers :
+    <ul>
+        <li><b>locaux</b> : non partagé, le plus rapide pour les opérations E/S (e.g. logs, données temporaires).</li>
+        <li><b>partagés</b> entre plusieurs serveurs.</li>
+        <li><b>personnels</b> : le plus lent, synchronisé avec votre compte / poste de travail, sauvegardé régulièrement.</li>
+        <li><b>chiffrés</b> : données sensibles, nécessite un mot de passe pour accéder à son contenu.</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+
+<h3>Arborescence Linux</h3>
+
+<div class="hint">Sous Linux les fichiers sont organisés comme suit :
+    <ul>
+        <li><script type="c-text">/home/<h>$USER</h>/</script> : les fichiers <b>personnels</b> de l'utilisateur <script type="c-text"><h>$USER</h></script> (donc dossier potentiellement <b>sensible</b>).</li>
+        <li><script type="c-text">/usr/{lib,bin,sbin}/</script> : logiciels installés, peut être en <b>lecture seule</b> et <b>partagé</b> entre plusieurs ordinateurs.</li>
+        <li><script type="c-text">/etc/<h>$NAME</h>/</script> : configuration du logiciel <script type="c-text"><h>$NAME</h></script>, données <b>spécifiques</b> à l'ordinateur, peut être en <b>lecture seule</b>.</li>
+        <li><script type="c-text">/var/</script> : données écrites par les logiciels en cours d'exécution, <script type="c-text">/var/logs/<h>$NAME</h>/</script> contient les logs.</li>
+        <li><script type="c-text">/tmp/</script> : les fichiers temporaires, supprimés au redémarrage de la machine, généralement stockés en RAM.</li>
+        <li><script type="c-text">/srv/<h>$NAME</h>/</script> : fichiers servis par le serveur (e.g. pour un serveur Web, de fichier, etc), peu utilisé de nos jours.</li>
+    </ul>
+</div>
+
+<div class="danger">Lorsqu'un fichier temporaire est volumineux, il risque de prendre trop de place en RAM si enregistré dans <script type="c-text">/tmp/</script>. On l'enregistrera alors usuellement dans <script type="c-text">/var/tmp/</script> (stocké sur le disque).</div>
+
+<h4>Fichiers des applications</h4>
+
+<div>Afin de garder une arborescence propre et explicite, les logiciels évitent d'écrire leurs fichiers n'importe où et respectent autant que possible des <b>conventions</b>. Cela permet notamment d'éviter des conflits, e.g. deux exécutables souhaitant utiliser le même chemin pour deux fichiers différents.</div>
+
+<div>Par convention on distingue 3 niveaux :
+    <ul>
+        <li><script type="c-text">/usr/</script> : les applications standards installées, potentiellement partagées entre plusieurs ordinateurs.</li>
+        <li><script type="c-text">/usr/local/</script> : les applications installées localement, spécifique à un ordinateur.</li>
+        <li><script type="c-text">~/.local/</script> : les applications/configurations personnelles, spécifique à un utilisateur.</li>
+    </ul>
+</div>
+
+<div>Par convention, on distingue alors 7 sous-dossiers (pas entièrement consistant) :
+<table>
+    <thead>
+        <tr><th></th><th>Standard</th><th>Local</th><th>Personnel</th></tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Base</th>
+            <td><script type="c-text">/usr/</script></td>
+            <td><script type="c-text">/usr/local/</script></td>
+            <td><script type="c-text">~/.local/</script></td>
+        </tr><tr>
+            <th>Exécutables</th>
+            <td><script type="c-text">/usr/<h>bin</h>/</script></td>
+            <td><script type="c-text">/usr/local/<h>bin</h>/</script></td>
+            <td><script type="c-text">~/.local/<h>bin</h>/</script></td>
+        </tr><tr>
+            <th>Exécutables (admin)</th>
+            <td><script type="c-text">/usr/<h>sbin</h>/</script></td>
+            <td><script type="c-text">/usr/local/<h>sbin</h>/</script></td>
+        </tr><tr>
+            <th>Bibliothèques</th>
+            <td><script type="c-text">/usr/<h>lib</h>/</script></td>
+            <td><script type="c-text">/usr/local/<h>lib</h>/</script></td>
+            <td><script type="c-text">~/.local/<h>lib</h>/</script></td>
+        </tr><tr>
+            <th>Ressources</th>
+            <td><script type="c-text">/usr/<h>share</h>/</script></td>
+            <td><script type="c-text">/usr/local/<h>share</h>/</script></td>
+            <td><script type="c-text">~/.local/<h>share</h>/</script></td>
+        </tr><tr>
+            <th>Configuration</th>
+            <td><script type="c-text">/etc/<h>$NAME</h>/</script></td>
+            <td><script type="c-text">/usr/local/<h>etc</h>/<h>$NAME</h>/</script></td>
+            <td><script type="c-text">~/.config/<h>$NAME</h>/</script></td>
+        </tr><tr>
+            <th>Cache</th>
+            <td><script type="c-text">/var/<h>cache</h>/<h>$NAME</h>/</script></td>
+            <td><script type="c-text">/var/local/<h>$NAME</h>/</script></td>
+            <td><script type="c-text">~/.cache/<h>$NAME</h>/</script></td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<div class="hint">Lorsqu'on exécute une commande, le shell recherche (puis exécute) le fichier de même nom présent dans les dossiers <script type="c-text">/usr/<h>[local/]</h>bin/</script>. Ainsi, pour créer une commande, il faut placer le fichier exécutable dans un de ces dossiers.</div>
+
+<div class="hint">Il est aussi possible d'installer ses applications locales dans <script type="c-text">/opt/<h>$NAME</h>/</script>, évitant ainsi d'avoir à en disperser le contenu entre ses executables, bibliothèques, et configurations.</div>
+
+<h2>Droits d'accès</h2>
+
+<div>Pour des raisons évidentes de sécurité, n'importe qui ne peut écrire n'importe quoi n'importe où. Par défaut, les utilisateurs n'ont accès qu'à leur propres fichiers, stockés dans leur home. Il est toutefois possible de configurer les droits d'accès d'un fichier. Ces droits d'accès sont stockés dans les méta-données associées au fichier.</div>
+
+<h3>Les méta-données</h3>
+
+<div>Un ordinateur enregistre ses données dans des <i>espaces de stockage</i> appelés <b>volumes</b>, qui peuvent être tout ou partie :
+    <ul class="flex-2">
+        <li>d'un disque dur/SSD (données <b>persistantes</b>) ;</li>
+        <li>d'un support amovible (e.g. clef USB) ;</li>
+        <li>de la mémoire vive (RAM) (données <b>temporaires</b>) ;</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<div>L'OS ne manipule pas les données directement sur le <i>volume</i>, mais utilise un <b>système de fichiers</b> (<i>filesystem</i>) qui détermine où et comment stocker les données d'un <b>fichier</b> (<i>file</i>), ainsi que ses <b>méta-données</b> (<i>metadata</i>) :
+    <ul class="flex-3">
+        <li>son type ;</li>
+        <li>sa taille ;</li>
+        <li>son propriétaire ;</li>
+        <li>les droits d'accès au fichier ;</li>
+        <li>sa date de dernière modification ;</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<div>La commande <script type="c-bash">stat <h>$FILE</h></script> affiche l'ensemble des méta-données d'un fichier, <b>mais est peu utilisée en pratique</b> :
+<div class="terminal">
+<pre>$ stat foo
+  Fichier : foo
+   Taille : 4096      	Blocs : 8          Blocs d&apos;E/S : 4096   répertoire
+Périphérique : fd01h/64769d	Inœud : 6577172     Liens : 3
+Accès : (0775/drwxrwxr-x)  UID : ( 1000/ demigda)   GID : ( 1000/ demigda)
+Accès : 2025-03-29 15:02:50.812405953 +0100
+Modif. : 2025-03-29 15:02:19.868310502 +0100
+Changt : 2025-03-29 15:02:19.868310502 +0100
+  Créé : 2025-03-29 15:01:55.808234278 +0100</pre>
+</div>
+</div>
+
+<div>On préfère bien souvent utiliser la commande <script type="c-bash">ls <h>-lh</h> -d <h>$FILE[...]</h></script> :
+<div class="terminal">
+<pre>$ ls -lh -d foo
+<u style="text-decoration-style:single">Permissions</u> <u style="text-decoration-style:single"> User  </u> <u style="text-decoration-style:single"> Group </u> <u style="text-decoration-style:single"> Size </u> <u style="text-decoration-style:single">     Date Modified      </u> <u style="text-decoration-style:single"> Name  </u>
+<font color="#0039AA"><b>d</b></font><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><font color="#44AA44">r</font><font color="#8A8A8A">-</font><font color="#AA0000">x</font>  <font color="#FFFFD7">demigda</font> <font color="#D7D7AF">demigda</font> <font color="#FFFFAF">4.0</font> <font color="#FFFFAF">KB</font> <font color="#00D700">Tue Apr  1 09:16:45 2025</font> <font color="#0039AA"><b>📂  foo</b></font></pre>
+</div>
+</div>
+
+<div class="danger">Il convient de ne pas confondre ces méta-données, stockées au niveau du système de fichiers, et communes entre tous les fichiers, avec des méta-données stockées <b>dans</b> le fichier, et dépendant de son format (e.g. png, jpeg, pdf, zip).</div>
+
+<h3>Droits d'accès UNIX</h3>
+
+<div>La manière dont les droits d'accès sont définis dépend donc du système de fichier utilisé. Dans le cadre de ce cours, nous nous concentrerons sur les <i>droits d'accès UNIX</i>, compatibles avec la grande majorité des systèmes de fichiers, à l'exception de <script type="c-text">FAT32</script> qui ne stocke pas de permissions.</div>
+
+<div>Les droits d'accès UNIX supportent 3 types de droits :
+    <ul>
+        <li><script type="c-text">r</script> (<i><u>r</u>ead</i>) : droit de <b>lecture</b> du fichier (ou <b>lister</b> le contenu d'un dossier).</li>
+        <li><script type="c-text">w</script> (<i><u>w</u>rite</i>) : droit d'<b>écriture</b> du fichier (ou <b>modifier</b> le contenu d'un dossier).</li>
+        <li><script type="c-text">x</script> (<i>e<u>x</u>ec</i>) : droit d'<b>exécution</b> du fichier script/binaire qui est alors un <i>exécutable</i> (ou <b>aller dans</b> le dossier).</li>
+    </ul>
+</div>
+
+<div class="danger">Pour pouvoir exécuter un script (ou une commande), il est nécessaire de posséder les droits d'exécution (et de lecture) sur le fichier. Bien qu'il soit possible d'utiliser ces droits pour contrôler les droits d'exécution de commandes d'administration, il est souvent préférable d'utiliser sudo/sudoers pour un meilleur contrôle.</div>
+
+<div>Les droits d'accès à un fichier sont alors décrits par ses <b>permissions</b> (<font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><font color="#44AA44">r</font><font color="#8A8A8A">-</font><font color="#AA0000">x</font>), indiquant les droits :
+    <ul>
+        <li><u><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font></u><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><font color="#44AA44">r</font><font color="#8A8A8A">-</font><font color="#AA0000">x</font> : de l'<b>utilisateur</b> (<i>user</i>) propriétaire du fichier.</li>
+        <li><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><u><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font></u><font color="#44AA44">r</font><font color="#8A8A8A">-</font><font color="#AA0000">x</font> : du <b>groupe</b> d'utilisateur (<i>group</i>) propriétaire du fichier.</li>
+        <li><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><u><font color="#44AA44">r</font><font color="#8A8A8A">-</font><font color="#AA0000">x</font></u> : des <b>autres</b> utilisateurs.</li>
+    </ul>
+</div>
+
+<div class="hint">La présence d'un <script type="c-text">-</script> à la place d'un <script type="c-text">r</script>, <script type="c-text">w</script>, ou <script type="c-text">x</script> indique que le droit n'est pas attribué.<br/>
+Par exemple, <font color="#44AA44">r</font><font color="#8A8A8A">-</font><font color="#AA0000">x</font> correspond au droit de lecture (<script type="c-text">r</script>) et d'exécution (<script type="c-text">x</script>), sans le droit de lecture (<script type="c-text">-</script>).</div>
+
+<div>Les droits d'un fichier peuvent être modifiés via les commandes suivantes :
+    <ul>
+        <li><script type="c-bash">chown <h>[-R]</h> <h>[$USER][:$GROUP]</h> <h>$FILES...</h></script> (<u>ch</u>ange <u>own</u>er) : changer le <b>propriétaire</b> des fichiers.</li>
+        <li><script type="c-bash">chmod <h>[-R]</h> <h>$MODE,...</h> <h>$FILES...</h></script> (<u>ch</u>ange <u>mod</u>e)
+ : changer les <b>permissions</b> des fichiers.</li>
+    </ul>
+</div>
+
+<div class="hint"><script type="c-bash">-R</script> (<u>r</u>ecursive) permet d'appliquer ces changements de manière récursive (i.e. au dossier et à son contenu).</div>
+
+<div><script type="c-text"><h>$MODE</h></script> s'écrit sous la forme suivante :
+    <div class="flex-3">
+        <div>
+            <center><script type="c-text"><h>$QUI...</h></script></center>
+            <ul>
+                <li><script type="c-text">u</script> (<u>u</u>ser) : l'<b>utilisateur</b> propriétaire</li>
+                <li><script type="c-text">g</script> (<u>g</u>roup) : le <b>groupe</b> propriétaire</li>
+                <li><script type="c-text">o</script> (<u>o</u>ther) : les <b>autres</b></li>
+                <li><script type="c-text">a</script> (<u>a</u>ll) : <b>tous</b> les utilisateurs</li>
+            </ul>
+        </div><div><center><script type="c-text"><h>$OP</h></script></center>
+            <ul>
+                <li><script type="c-text">+</script> : <b>ajouter</b></li>
+                <li><script type="c-text">-</script> : <b>retirer</b></li>
+                <li><script type="c-text">=</script> : <b>appliquer</b></li>
+            </ul>
+        </div><div>
+            <center><script type="c-text"><h>$DROITS...</h></script></center>
+            <ul>
+                <li><script type="c-text">r</script></li>
+                <li><script type="c-text">x</script></li>
+                <li><script type="c-text">w</script></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="hint">Par exemple :
+    <ul>
+        <li><script type="c-text">u+x</script> : ajouter le droit d'exécution à l'utilisateur propriétaire.</li>
+        <li><script type="c-text">go-r</script> : retire le droit de lecture au groupe propriétaire et aux autres.</li>
+        <li><script type="c-text">o=rx</script> : donne aux autres uniquement les droits de lecture et d'exécution (ils n'auront pas le droit de lecture).</li>
+        <li><script type="c-text">a-x,a+r</script> : retire le droit d'exécution à tous, et ajoute le droit de lecture.</li>
+    </ul>
+</div>
+
+<h4>Droits des fichiers créés</h4>
+
+<div>Lors de sa création, un fichier possède des droits par défaut définis via la commande <script type="c-bash">umask</script> (<i><u>u</u>ser <u>mask</u></i>) :
+    <ul class="flex-2">
+        <li><script type="c-bash">umask -S</script> : affiche le masque.</li>
+        <li><script type="c-bash">umask <h>$MODE</h></script> : change le masque.</li>
+    </ul>
+</div>
+
+<div class="danger">Par défaut, à la création d'un nouveau fichier, le masque attribue, <b>à tous</b>, le droit de lecture. Il est ainsi potentiellement important de modifier le masque afin de garantir la confidentialité des données :
+    <script type="c-bash">
+        umask a=,u=rwx
+    </script>
+</div>
+
+<h4>Le sticky bit</h4>
+
+<div>En réalité, un utilisateur peut non seulement créer des fichiers dans son home, mais aussi dans <script type="c-text">/tmp/</script> et <script type="c-text">/var/tmp/</script>. C'est à dire qu'il a le droit d'écriture dans ces dossiers. On souhaite cependant qu'il ne puisse pas supprimer les fichiers des autres utilisateurs.</div>
+
+<div>Pour cela on utilise un droit UNIX un peu particulier : le <i>sticky bit</i> (t/T), où seul le propriétaire du fichier peut le supprimer (si défini sur un dossier, s'applique à son contenu).</div>
+
+<div class="danger"> Tout le monde pouvant écrire dans ces dossiers, il est important d'éviter les conflits/collisions de noms. Pour cela on génère aléatoirement les noms de fichiers via : <script type="c-bash">mktemp <h>[-d]</h> <h>$PATH</h></script> (<i><u>m</u>a<u>k</u>e <u>temp</u>orary</i> [<u>d</u>irectory]). Les <script type="c-text">XXXXX</script> dans <script type="c-bash"><h>$PATH</h></script>, sont remplacés par des caractères aléatoires, e.g. <script type="c-bash">mktemp /tmp/foo-XXXXX.txt</script> peut créer un fichier <script type="c-bash">/tmp/foo-TTl96.txt</script>.</div>
+
+<h4>SUID/SGID</h4>
+
+<div>Les droits <i>SUID/SGID</i> (s/S) permettent d'exécuter un fichier binaire avec les droits de l'utilisateur/groupe propriétaire. Ces droits sont notamment utilisés par la commande <script type="c-bash">sudo</script>.</div>
+
+<div class="danger">Ces droits sont très dangereux, et peuvent très rapidement permettre de l'exécution de code ou de commandes arbitraires, permettant ensuite une élévation de privilèges. Il convient de toujours utiliser <script type="c-bash">sudo</script> à la place.</div>
+
+<h4>Droits d'accès avancés</h4>
+
+<div>La méthode usuelle d'attribution des droits permet d'indiquer des permissions uniquement pour le propriétaire, groupe propriétaire, et les autres. Pour une gestion plus fine des droits, on utilise les <b>ACL</b> (<i><u>A</u>ccess <u>C</u>ontrol <u>L</u>ist</i>) afin d'étendre les droits d'accès UNIX :
+    <ul>
+        <li><script type="c-bash">getfacl <h>$FILE</h> <h>[-R --skip-base]</h></script> (<i><u>get</u> <u>f</u>ile <u>acl</u></i>) : visualiser les droits ACL (si <script type="c-bash">-R</script>, <u>r</u>écursivement).</li>
+        <li><script type="c-bash">setfacl <h>$FILE</h> <h>-m|-x</h> <h>u|g:$WHO:$PERM[,..]</h></script> (<i><u>set</u> <u>f</u>ile <u>acl</u></i>) : <u>m</u>odifier ou supprimer les droits d'un <u>u</u>ser/<u>g</u>roup.</li>
+    </ul>
+</div>
+
+<div class="hint">Lorsqu'un fichier possède des droits ACL, <script type="c-bash">ls -lh</script> suffixe les permissions par un <script type="c-bash">+</script> :
+    <div class="terminal">
+        <pre>$ ls -lh /tmp/foo
+<u style="text-decoration-style:solid">Permissions</u> <u style="text-decoration-style:solid">User</u> <u style="text-decoration-style:solid">Group</u> <u style="text-decoration-style:solid">Size</u> <u style="text-decoration-style:solid">     Date Modified      </u> <u style="text-decoration-style:solid">   Name    </u>
+<font color="#44AA44"><b>.</b></font><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#8A8A8A">-</font><font color="#44AA44">r</font><font color="#AA5500">w</font><font color="#AA0000">x</font><font color="#44AA44">r</font><font color="#8A8A8A">--</font><font color="#1A92AA">+</font> <font color="#FFFFD7">root</font> <font color="#D7D7AF">root</font>  <font color="#FFFFAF">0</font> <font color="#FFFFAF">B</font>  <font color="#00D700">Wed Aug 27 10:44:06 2025</font> <font color="#44AA44"><b>  /tmp/foo</b></font></pre>
+    </div>
+</div>
+
+<div>En pratique les ACL sont peu utilisés au quotidien.</div>
+
+<h2>Les sauvegardes</h2>
+
+<div>Une sauvegarde peut s'effectuer à plusieurs niveaux différents :
+    <ul>
+        <li><b>volume</b> : on enregistre directement les octets stockés sur le volume, indépendant du système de fichier.</li>
+        <li><b>système de fichier</b> : on enregistre les fichiers.</li>
+        <li><b>logiciel</b> (e.g. SGBD) : via des mécanismes d'imports/exports.</li>
+    </ul>
+</div>
+
+<div class="danger">Il est nécessaire de s'assurer que les différentes solutions et procédures mises en place sont fonctionnelles. Par exemple, que les données sont correctement sauvegardées, et peuvent rapidement être restaurées en cas de perte.</div>
+
+<h3>RAID</h3>
+
+<div>Le RAID (<i><u>R</u>edundant <u>A</u>rray of <u>I</u>nexpensive <u>D</u>isk</i>) permet de dupliquer, en temps réel, les données sur plusieurs disques (ou volumes) afin d'éviter les pertes de données en cas de défaillance matérielle. Il possède plusieurs "niveaux" :
+
+<table>
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Description</th>
+            <th># disques</th>
+            <th>Résilience</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>RAID 0 (<i>striping</i>)</td>
+            <td>volume sur plusieurs disques</td>
+            <td>N</td>
+            <td>0</td>
+        </tr>
+        <tr>
+            <td>RAID 1 (<i>mirroring</i>)</td>
+            <td>duplique un disque</td>
+            <td>1+1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>RAID 5 (<i>distributed parity</i>)</td>
+            <td>bloc de parité b<sub>p</sub> = b<sub>1</sub> ⊕ ... ⊕ b<sub>n</sub></td>
+            <td>N+1</td>
+            <td>1</td>
+        </tr>
+        <tr>
+            <td>RAID 6 (<i>dual parity</i>)</td>
+            <td>2 blocs de parité</td>
+            <td>N+2</td>
+            <td>2</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+
+<div class="hint">Il est possible de faire des combinaisons, e.g. RAID 1+0 ou RAID 10.</div>
+
+<todo>Images + présenter stripping</todo>
+
+<h3>Sauvegarde de fichiers</h3>
+
+<div>Une méthode triviale de sauvegarde est de simplement copier les fichiers avec <script type="c-bash">cp -a <h>$SRC...</h> <h>$DST</h></script> (<i><u>a</u>rchive</i>).</div>
+
+<div class="danger">Il est important que les sauvegardes soient stockées dans des lieux différents afin de se prémunir contre des incidents pouvant toucher toute une zone (e.g. cambriolages, incendies, inondations, etc). Il est aussi possible d'enregistrer ses sauvegardes sur des disques coupés du réseau permettent de se protéger contre des attaques touchant l'intégralité du système informatique (e.g. rançongiciel).</div>
+
+<div>Pour une copie vers, ou depuis, un ordinateur distant, on remplacera <script type="c-bash">cp</script> par <script type="c-bash">rsync</script> (<i><u>r</u>emote <u>sync</u></i>) où les chemins sont alors de la forme : <script type="c-bash"><h>[$USER@$SERVER:]$PATH</h></script>.
+</div>
+
+<div class="hint">L'option <script type="c-bash">--info=progress2</script> de <script type="c-bash">rsync</script> permet de voir la progression du transfert.</div>
+
+<div>Sous Linux, les volumes et les périphériques sont représentés par un <b>fichier</b> dans <script type="c-text">/dev/</script> (<i><u>dev</u>ices</i>). Cela signifie que vous pouvez aussi copier un volume avec <script type="c-text">cp</script> ou <script type="c-text">rsync</script>, comme on copie un fichier. La copie pouvant être longue, il est toutefois recommandé d'afficher la progression de la copie. Une fois la copie effectuée, il est aussi recommandé d'exécuter la commande <script type="c-text">sync</script> afin de vider les écritures encore en cache.</div>
+
+<h3>Instantanés (<i>snapshots</i>)</h3>
+
+<div>Une sauvegarde n'est pas instantanée et prend du temps à enregistrer les données unes à unes. Pendant ce temps, ces mêmes données peuvent faire l'objet de modifications pouvant conduire à un état sauvegardé incohérent. En effet, la sauvegarde pourrait alors inclure un mélange de données pre et post modification, en fonction des données qui auraient déjà été sauvegardées au moment de la modification.</div>
+
+<div>De même, une modification n'est pas instantanée et prend du temps. Ainsi, la sauvegarde pourrait enregistrer un état intermédiaire. Par exemple, lors  de la suppression de plusieurs entrées d'un SGBD, la sauvegarde pourrait enregistrer un état invalide du SGBD où e.g. les entrées auraient été supprimées, mais pas leurs identifiants.</div>
+
+<div class="danger">Il est ainsi important, soit d'utiliser les mécanismes d'exportations, soit d'arrêter l'application le temps de la sauvegarde.</div>
+
+<div>Cependant, comme nous l'avons dit, une sauvegarde prend du temps. De plusieurs minutes à plusieurs heures, ce qui est autant de temps pendant lesquels les services devront être arrêtés et seront donc indisponibles.</div>
+
+<div>Pour éviter cela, on créé un instantané (<i>snapshot</i>) du système de fichier. Cet instantané représentera alors l'état du système de fichiers à un instant t, sur lequel on pourra ensuite effectuer la sauvegarde. Il n'est ainsi nécessaire d'arrêter les services que durant la création de l'instantané, qui est très rapide.</div>
+
+<div>Le fonctionnement de l'instantané est très simple. À sa création, il est vide (donc très rapide à créer). Lorsque le système de fichier originel est modifié, la version originale est stockée dans l'instantané. Ainsi l'instantané ne contient que les données modifiées depuis sa création.</div>
+
+<div>Lors de la lecture de l'instantané, la donnée sera alors d'abord recherchée dans l'instantané, puis dans le volume originel si non-trouvée, i.e. si n'a pas été modifiée depuis la création de l'instantané.</div>
+
+<todo>IMG instantané</todo>
+
+<h3>Sauvegardes incrémentales et liens physiques</h3>
+
+<div>Les techniques vues précédemment sont des <b>sauvegardes complètes</b>, i.e. sauvegardent l'ensemble des données. Or si la majorité des fichiers ne changent pas d’une sauvegarde sur l’autre, on se retrouve alors avec des fichiers identiques, dupliqués dans différentes sauvegardes, et prenant très vite beaucoup de place pour rien.</div>
+
+
+<div class="hint">Il est possible de créer une archive compressée afin de réduire la taille de la sauvegarde :
+    <ul class="flex-2">
+        <li><script type="c-bash">tar -fa <h>$ARCHIVE</h> -c <h>$SRC...</h></script> : <u>c</u>réer.</li>
+        <li><script type="c-bash">tar -fa <h>$ARCHIVE</h> -x <h>[-C $DST]</h></script> : e<u>x</u>traire.</li>
+    </ul>
+</div>
+
+<div>Cependant, on souhaite généralement effectuer des <b>sauvegardes incrémentales</b>, i.e. ne sauvegarder que les modifications depuis la dernière sauvegarde. Tout en conservant des sauvegardes qu'on puisse parcourir comme une arborescence normale.</div>
+
+<div>On souhaite ainsi placer un même fichier dans plusieurs sauvegardes différentes (i.e. dans plusieurs endroits à la fois), mais sans le copier. Cela est rendu possible par le fait que les dossiers sont en réalité un fichier spécial contenant la liste des identifiants (<b>inodes</b>) des fichiers qu'il contient. Il est alors possible d'ajouter un même fichier dans plusieurs dossiers différents en créant un <b>lien physique</b> (<i>hard link</i>) via la commande <script type="c-bash">ln <h>$SRC</h> <h>$DST</h></script> (<u>l</u>i<u>n</u>k). Dès lors, le fichier ne sera réellement supprimé que lorsque toutes ses occurrences seront supprimées.</div>
+
+<div><script type="c-bash">rsync --link-dest="<h>$LAST_SAV</h>"</script> effectue une sauvegarde incrémentale. Depuis la dernière sauvegarde, si le fichier :
+    <ul>
+        <li><b>n'a pas</b> été modifié : crée un lien physique à partir de la dernière sauvegarde.</li>
+        <li>a été modifié : copie le fichier normalement.</li>
+    </ul>
+</div>
+
+<div>💡 Comme la sauvegarde incrémentale utilise des liens physiques, vous pouvez parcourir, supprimer, renommer, modifier, etc. la sauvegarde comme tous dossiers.</div>
+
+<div>⚠ Il n'est pas possible de faire un lien physique d'un dossier. Dans ce cas, il faudra créer un <b>lien symbolique</b> (<script type="c-bash">ln -s</script>) : un fichier spécial contenant le chemin du fichier ciblé. Si le fichier ciblé est supprimé ou déplacé, le lien sera cassé.</div>
+
+
+<h4>Autres fonctionnalités</h4>
+
+<div>En plus des instantanés, et des sauvegardes incrémentales, il existe d'autres fonctionnalités utiles aux sauvegardes. Ces fonctionnalités peuvent être très variées, e.g. chiffrement, compression, historique, etc. Elles peuvent être portées soit par le système de fichier, ou par le logiciel effectuant la sauvegarde/synchronisation.</div>
+
+<div>Par exemple, dans le cas de dossiers partagés entre plusieurs utilisateurs, on souhaite généralement conserver un historique de chaque modification afin d'en avoir un suivi, et d'être capable, lorsque nécessaire, de restaurer un fichier à une version précédente. Pour cela on utilisera usuellement un <b>logiciel de synchronisation de fichiers</b> (e.g. Seafile).</div>
+
+<div>Les <b>gestionnaires de versions</b> (e.g. git) quant à eux sont très utilisés pour les projets informatiques. Ils stockent différentes versions d'un projet via des sauvegardes incrémentales, tout en offrant de multiples fonctionnalités :
+    <ul class="flex-2">
+        <li>annoter les versions avec une description.</li>
+        <li>comparer des versions entre elles.</li>
+        <li>annuler une modification précise.</li>
+        <li>gérer, et maintenir plusieurs versions en parallèle.</li>
+        <li>intégration avec d'autres outils (e.g. issues)</li>
+    </ul>
+</div>
+
+<todo>Importance de découper les fichiers de config pour git.</todo>
+
+<h2>Gérer les volumes</h2>
+
+<h3>Pourquoi avoir plusieurs volumes ?</h3>
+
+<div>Comme nous l'avons vu différents systèmes de fichiers offrent différentes fonctionnalités. Usuellement, les systèmes de fichiers suivants sont utilisés :
+    <ul class="flex-4">
+        <li><script type="c-text">ext4</script> pour Linux ;</li>
+        <li><script type="c-text">NTFS</script> pour Windows ;</li>
+        <li><script type="c-text">APFS</script> pour Apple ;</li>
+        <li><script type="c-text">FAT32</script> pour les clefs USB ;</li>
+    </ul>
+
+Il existe toutefois une pléthore de systèmes de fichiers différents, chacun fournissant des fonctionnalités spécifiques :
+    <ul class="flex-2">
+        <li><b>compression</b> des données (<script type="c-text">ZFS</script>, <script type="c-text">BTRFS</script>) ;</li>
+        <li>conservation d'un <b>historique</b> (via <script type="c-text">ZFS</script>, ou <script type="c-text">LVM</script>) ;</li>
+        <li><b>chiffrement</b> des données (via <script type="c-text">cryptosetup</script>) ;</li>
+        <li><b>modifications non-persistantes</b> (via <script type="c-text">overlayfs</script>, etc) ;</li>
+        <li>stocké <b>à distance</b> (via <script type="c-text">NFS</script>, <script type="c-text">sshfs</script>);</li>
+        <li>stocké en <b>RAM</b> (<script type="c-text">tmpfs</script>) ;</li>
+    </ul>
+</div>
+
+<div>Comme il ne peut y avoir qu'un seul système de fichier sur un volume, si on souhaite utiliser plusieurs systèmes de fichiers, il est alors nécessaire d'avoir plusieurs volumes. Par exemple, dans le cas d'un dual boot, l'ordinateur aura e.g. un volume pour Windows et un autre pour Linux.</div>
+
+<div class="hint">Lorsque le système d'exploitation est installé sur une clef USB, on parle alors de live USB.</div>
+
+<div class="danger">Il est très vivement conseillé d'avoir au moins un live USB en cas de problèmes avec l'OS.</div>
+
+<div class="hint">Il est même recommandé de stocker ses données sur un volume à part, permettant de (ré)installer le système d'exploitation, sans effacer les données déjà présentes (une sauvegarde préalable des données est toutefois très vivement conseillée).</div>
+
+<h3>Partionner</h3>
+
+<div>Comme nous l'avons vu, il peut être nécessaire d'avoir plusieurs volumes. Cependant, si on doit avoir un support de stockage (e.g. disque, clef USB) pour chaque volume, cela serait peu pratique. Heureusement, il est possible de <b>partitionner</b> un support de stockage physique en plusieurs volumes appelés <b>partitions</b>, qui auront chacun leur propre système de fichier. Pour cela, on utilisera la commande TUI <script type="c-bash">cfdisk <h>$DISK</h></script>, ou un logiciel comme gparted.</div>
+
+<div class="danger">Il est recommandé de créer au moins une partition sur ses disques, même s'il est possible de les utiliser en entier sans les partitionner.</div>
+
+<div class="hint">Nous vous fournissons la commande <script type="c-bash">lsvol</script> permettant de visualiser l'ensemble des volumes de l'ordinateur :
+<div class="terminal"><pre># lsvol
+PATH              LABEL TYPE  PARTTYPENAME       SIZE FSUSE% FSTYPE
+/dev/nvme0n1            disk                   238,5G                    
+├─/dev/nvme0n1p1  EFI   part  EFI System         512M     1% vfat
+├─/dev/nvme0n1p2  BOOT  part  Linux filesystem   732M    36% ext4
+</pre></div>
+</div>
+
+<h4>LVM</h4>
+
+<div><b>LVM</b> (<i><u>L</u>ogical <u>V</u>olume <u>M</u>anager</i>) est un logiciel permettant de gérer les volumes d'un ordinateur, tout en offrant diverses fonctionnalités comme le RAID, les snapshots, etc. Sa principale utilité est de pouvoir regrouper des volumes existant au sein d'un <i>disque virtuel</i>, qu'on peut ensuite redécouper en volumes virtuels. Cela permet ainsi d'étendre un volume sur plusieurs supports physiques, ainsi que d'en faciliter le redimensionnement ou déplacement, sans être limité par les contraintes des supports.</div>
+
+<div>LVM fonctionne ainsi en 3 étapes :
+    <ol>
+        <li><i>Préparer les volumes :</i> on formate des volumes existant, alors appelés <b>volumes physiques</b> (<i><u>p</u>hysical <u>v</u>olume</i>) :<br/>
+   <script type="c-bash">pvcreate <h>$VOLUME...</h></script></li>
+        <li><i>Ajouter les volumes au disque virtuel :</i> on regroupe au sein d'un <b>groupe de volume</b> (<i><u>v</u>olume <u>g</u>roup</i> ≈ disque virtuel) :<br/>
+   <script type="c-bash">vgcreate <h>$VG_NAME</h> <h>$VOLUME...</h></script></li>
+        <li><i>Partitionner le disque virtuel :</i> on redécoupe l'ensemble en <b>volumes logiques</b> (<i><u>l</u>ogicial <u>v</u>olume</i> ≈ partition virtuelle) :<br/>
+   <script type="c-bash">lvcreate --name <h>$LV_NAME</h> <h>$VG_NAME</h> <h>{-l 100%FREE,--size 10GB}</h></script></li>
+    </ol>
+</div>
+
+<div class="hint">Bien évidemment LVM possède de très nombreuses commandes permettant de manipuler les PV, VG, et LV.</div>
+
+<todo>CMD : (lv/pv/vg)(create/reduce/display/s/move/remove/rename/extends)</todo>
+
+<h4>RAID et snapshots</h4>
+
+<div>Les RAID et snapshots sont gérés à la création des <i>volumes logiques</i> :<br/>
+    <script type="c-bash">lvcreate <h>--name $LV_NAME</h> <h>{-l 100%FREE,--size 10GB}</h> <h>...</h></script>
+    <ul class="flex-2">
+        <li>RAID : <script type="c-bash"><h>...</h> --type raid1 --nosync</script></li>
+        <li>snapshot : <script type="c-bash"><h>...</h> --snapshot <h>$LV_TARGET</h></script></li>
+    </ul>
+</div>
+
+<div class="danger">Pensez à bien supprimer l'instantané une fois la sauvegarde effectuée : <script type="c-bash">lvremove <h>$LV_NAME</h></script></div>
+
+<h3>Formatter un volume</h3>
+
+<div>Il fois le volume créé, il faut le <b>formatter</b>, c'est à dire lui attribuer un système de fichier. Pour cela, on utilise les commandes <script type="c-bash">mkfs.<h>$FS</h> <h>$VOL</h></script> (<i><u>m</u>a<u>k</u>e <u>f</u>ile<u>s</u>ystem</i>).  Par exemple <script type="c-bash">mkfs.ext4</script> pour formatter en <script type="c-text">ext4</script>. Les options ne sont malheureusement pas consistantes entre les différents systèmes de fichiers.
+</div>
+
+<div class="hint">Une fois le volume formaté, on peut lui donner un nom plus explicite en attribuant une <b>étiquette</b> (<i>label</i>) à son système de fichier, e.g. <script type="c-text">Data</script> au lieu de <script type="c-text">/dev/nvme0n1</script>. Malheureusement, chaque système de fichiers a sa propre commande d'attribution d'étiquettes. Pour ext4, la commande est <script type="c-bash">e2label <h>$VOL</h> <h>$LABEL</h></script>.</div>
+
+<h4>Chiffrer un volume</h4>
+
+<div>Pour des raisons de sécurité, il est fréquent de chiffrer ses volumes, pour éviter qu'une personne mal intentionnée puisse exploiter les données sensibles d'un volume perdu ou volé (e.g. clefs USB, ordinateur portable).</div>
+
+<div>Pour cela, on utilise <script type="c-bash">cryptsetup luksFormat <h>$VOL</h></script> pour formatter le volume, qu'on peut ensuite (dé)verrouiller via : 
+    <ul class="flex-2">
+        <li><script type="c-bash">cryptsetup open <h>$VOL</h> <h>$NAME</h></script></li>
+        <li><script type="c-bash">cryptsetup close <h>$NAME</h></script></li>
+    </ul>
+</div>
+
+<div>Lorsque le volume chiffré est déverrouillé, le volume <script type="c-text">/dev/mapper/<h>$NAME</h></script> est créé, permettant de manipuler <b>en clair</b>, les données du volume chiffré. Comme tout autre volume, <script type="c-text">/dev/mapper/<h>$NAME</h></script> doit être formaté pour pouvoir être utilisé.</div>
+
+<div class="hint">Il est aussi possible d'ajouter <script type="c-text">/dev/mapper/<h>$NAME</h></script> à un groupe de volume LVM. Permettant ainsi, e.g. de partitionner un disque chiffré.</div>
+
+<div class="hint">Pour des raisons de sécurité, il est fréquent de remplir un volume de données aléatoires ou de 0, afin d'en effacer les données. Pour cela on peut copier, sur le volume, les fichier de taille infinis suivant :
+    <ul class="flex-2">
+        <li><script type="c-bash">/dev/<h>[u]</h>random</script></li>
+        <li><script type="c-bash">/dev/zero</script></li>
+    </ul>
+</div>
+
+
+<h3>Monter un volume</h3>
+
+<div>Le fichier <script type="c-text">/dev/<h>$NAME</h></script> d'un volume contient des données binaires brutes que seul le système de fichier est capable d'interpréter. Pour en visualiser le contenu, il faudra <b>monter</b> le système de fichier, c'est à dire l'associer à un dossier (existant) de l'arborescence, alors appelé <b>point de montage</b> (<i>mount point</i>) :
+    <ul class="flex-2">
+        <li><script type="c-bash">mount <h>$VOL|LABEL=$L</h> <h>$MOUNTPOINT</h></script> : <b>monter</b>.</li>
+        <li><script type="c-bash">umount <h>$MOUNTPOINT</h></script> : <b>démonter</b>.</li>
+    </ul>
+</div>
+
+<div class="hint"><script type="c-bash">mount</script> possède de nombreuses options, comme <script type="c-bash">-o ro</script> pour monter le système de fichier en lecture seule.</div>
+
+<div class="hint">Par convention, et par défaut, on monte les systèmes de fichiers dans les dossiers suivants :
+    <ul class="flex-2">
+        <li><script type="c-text">/media/<h>$NAME</h>/</script> : pour les volumes amovibles ;</li>
+        <li><script type="c-text">/mnt/<h>$NAME</h>/</script> : pour les volumes montés manuellement.</li>
+    </ul>
+</div>
+
+<div class="hint">Par abus de langage, on peut aussi dire "monter le volume" au lieu de "monter le système de fichier".</div>
+
+<h4>Monter un dossier/volume distant</h4>
+
+<div>Il est possible de monter un dossier ou un volume distant :
+    <ul>
+        <li>dossier distant : <script type="c-bash">mount -t sshfs <h>$USER@$SERVER</h>:<h>$DIR</h> <h>$MOUNTPOINT</h></script>.</li>
+        <li>volume NFS (<i><u>N</u>etwork <u>F</u>ile<u>s</u>ystem</i>) distant :
+<script type="c-bash">mount -t nfs -o sec=<h>$AUTH</h>,vers=4.0 <h>$SRC</h> <h>$MOUNTPOINT</h></script>.</li>
+    </ul>
+</div>
+
+<div class="danger">Si plusieurs ordinateurs peuvent écrire dans le dossier ou volume distant, on préfera souvent utiliser un logiciel de synchronisation de données qui synchronisera le dossier tout en offrant les fonctionnalités nécessaires à un usage courant (historique, gestions de conflits, etc.).</div>
+
+<h4>Monter la RAM (tmpfs)</h4>
+
+<div>Il est aussi possible de monter la RAM dans un dossier, permettant ainsi d'enregistrer des fichiers <b>temporaires</b> en RAM, pour des opérations de lecture/écriture bien plus rapides : <script type="c-bash">mount -t tmpfs -o size=<h>$SIZE</h> tmpfs <h>$MOUNTPOINT</h></script>.
+</div>
+
+<div class="hint">C'est d'ailleurs généralement ce qui est fait avec <script type="c-text">/tmp/</script>.</div>
+
+<div>Les opérations d'entrées/sorties (E/S) sont en effet très coûteux, une simple boucle pouvant être :
+    <ul class="flex-2">
+        <li><b>10x plus lent</b> si on affiche du texte.</li>
+        <li><b>40x plus lent</b> si on écrit sur le disque.</li>
+        <li><b>12x plus lent</b> si on lit sur le disque.</li>
+        <li><b>> 528x plus lent</b> si on télécharge un fichier.</li>
+    </ul>
+</div>
+
+<div>On cherche donc à réduire le nombre d'opérations d'E/S qu'on effectue, que ce soit en <b>pré-chargeant</b> les ressources nécessaires, en utilisant un système de <b>cache</b> ou de <b>buffer</b>. Par exemple, au lieu de lire plusieurs fois le même fichier, le charger intégralement en mémoire au début du programme.</div>
+
+<div class="danger">La RAM est un stockage <b>temporaire</b>, il est nécessaire de sauvegarder régulièrement les résultats ou l'avancement d'un calcul, afin de ne pas (trop) perdre de données si le programme plante.</div>
+
+
+<h4>Monter un fichier</h4>
+
+<div>Comme nous l'avons vu précédemment, un volume est représenté sous la forme d'un fichier dans <script type="c-text">/dev/</script>. Les manipulations effectuées sur le volume reviennent donc à manipuler un fichier un peu spécial. Il est possible de créer un tel fichier via la commande <script type="c-text">truncate -s <h>$SIZE</h> <h>$FILE</h></script>. Le fichier ainsi créé sera creux (<script type="c-bash">-s</script> : <i>sparse</i>), c'est à dire que les blocs vides du fichier (i.e. à 0) ne sont pas réellement enregistrés sur le disque.</div>
+
+<div class="danger">Lors de la copie d'un tel fichier <script type="c-bash">cd</script> ou <script type="c-bash">rsync</script>, il convient d'utiliser l'option <script type="c-bash">--sparse</script> afin d'éviter que les blocs vides ne prennent trop de places dans la copie.
+</div>
+
+<div>Il est ainsi possible de chiffrer un dossier, sans chiffrer l'entièreté d'un volume. Pour cela il suffit simplement de créer un volume chiffré sous la forme d'un fichier. Il est toutefois préférable d'utiliser des solutions dédiées, plutôt que de créer un tel volume à la main. Par exemple, <script type="c-bash">homectl create <h>$USER</h> --storage=luks</script> de <script type="c-bash">systemd-home</script> permet de créer un utilisateur dont les informations (et le home) seront chiffrés.</div>
+
+<div>Il est aussi possible de monter une archive via <script type="c-bash">archivemount <h>$ARCHIVE</h> <h>$MOUNTPOINT</h></script>, afin d'en parcourir et manipuler le contenu comme on manipule le contenu d'un dossier. Évitant ainsi des manipulations complexes en lignes de commande.</div>
+
+
+<h4>fstab (<i><u>f</u>ile<u>s</u>ystem <u>tab</u>le</i>)</h4>
+
+<div>Le fichier <script type="c-text">/etc/fstab</script> (<i><u>f</u>ile<u>s</u>ystem <u>tab</u>le</i>) liste les systèmes de fichiers connus. Ses lignes sont structurées ainsi :
+<script type="c-text">
+# <file system> <mount point>   <type>  <options>       <dump>  <pass>
+LABEL=DATA      /               ext4    errors=remount-ro 0       1
+</script>
+</div>
+
+<div>Les 4 premières colonnes correspondent aux arguments de mount : <script type="c-bash">mount -t <h>$TYPE</h> -o <h>$OPTS</h> <h>$VOL</h> <h>$MOUNTPOINT</h></script>.
+    <ul class="flex-2">
+        <li><script type="c-bash"><dump></script> : obsolète</li>
+        <li><script type="c-bash"><pass></script> : ordre de montage des systèmes de fichiers.</li>
+    </ul>
+</div>
+
+<div>Les systèmes de fichiers listés dans fstab :
+    <ul>
+        <li>sont montés au démarrage de la machine (sauf si option <script type="c-bash">noauto</script>).</li>
+        <li>peuvent être monté via <script type="c-bash">mount <h>$MOUNTPOINT</h></script> en précisant uniquement le point de montage.</li>
+    </ul>
+</div>
+
+<div class="hint">De manière analogue, cryptsetup a un fichier  <script type="c-text">/etc/crypttab</script> pour les volumes à déverrouiller au démarrage.</div>
+
+<h4>Monter un volume en tant qu'utilisateur</h4>
+
+<div>Pour des raisons de sécurité, seul l'administrateur peut monter certains systèmes de fichiers avec mount. Les utilisateurs doivent généralitement utiliser <script type="c-bash">udisksctl</script> à la place (<i><u>u</u>ser <u>disks</u> <u>c</u>on<u>t</u>ro<u>l</u></i>) :
+    <ul>
+        <li><script type="c-bash">udisksctl <h>[un]</h>mount -b <h>$DEV</h></script> : (dé)monter (dans <script type="c-bash">dans /media/<h>$USER</h>/<h>$NAME</h></script>).</li>
+        <li><script type="c-bash">udisksctl <h>[un]</h>lock -b <h>$DEV</h></script> : pour ouvrir un volume chiffré (dans <script type="c-bash">dans /media/<h>$USER</h>/<h>$NAME</h></script>).</li>
+        <li><script type="c-bash">udisksctl loop-setup -f <h>$FILE</h></script> : transformer un fichier en <script type="c-bash"><h>$DEV</h></script>.</li>
+        <li><script type="c-bash">udisksctl loop-delete -b <h>$DEV</h></script> : opération inverse.</li>
+    </ul>
+</div>
+
+<div class="danger">Un utilisateur ne dispose pas des droits nécessaires pour formatter un volume déverrouillé avec <script type="c-bash">udisksctl unlock</script>.</div>
+
+</main>
+    </body>
+</html>

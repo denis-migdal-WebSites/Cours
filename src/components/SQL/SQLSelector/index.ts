@@ -1,6 +1,6 @@
 import {LISS, WithBare, WithContent, WithOutput} from "@LISS/src/extensions"
 import define from "@LISS/src/define";
-import { keepSpaces, raw2html, unindent } from "@LISS/components/code/code-script";
+import { keepSpaces, raw2html, unindent } from "@LISS/components/code/legacy-code-script";
 
 const css = __LOAD_FILE__("./index.css");
 const theme = __LOAD_FILE__("@LISS/components/code/Tomorrow.css");
@@ -23,11 +23,20 @@ export default class SQLSelector extends LISS({css: [theme, css]},
         super();
 
         const query_script = this.host.querySelector<HTMLElement>("code-script, script")!;
-        const query = unindent(query_script.textContent!);
+
+        // safer
+        // @ts-expect-error
+        const queryText = query_script.api.properties.text;
+
+        const query = unindent(queryText);
 
         const select_script = this.host.querySelector<HTMLElement>(":is(code-script, script).select");
         if(select_script !== null) {
-            const q = unindent(select_script.textContent!.replaceAll('\u00a0',
+
+            // @ts-expect-error
+            const selectQueryText = select_script.api.properties.text;
+
+            const q = unindent(selectQueryText.replaceAll('\u00a0',
                                                                      ' ') );
             this.#select_queries = this.#splitQueries( q );
             this.#select_html = this.#select_queries.map(q=> raw2html(q,"sql"));

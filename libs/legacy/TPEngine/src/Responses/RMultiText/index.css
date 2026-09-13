@@ -1,8 +1,0 @@
-:host {
-
-    & .answers {
-        display: grid;
-        grid-template-columns: 0fr 1fr;
-        column-gap: 10px;
-    }
-}

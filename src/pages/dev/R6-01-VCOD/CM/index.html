@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>Optimisation</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport"     content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/page@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/page@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+            <h1>Optimisation</h1>
+
+<h2>Problématique</h2>
+
+<div>On veut que nos calculs s'effectuent en un <i>temps raisonnable</i>. Le terme <i>"raisonnable"</i> dépend du contexte, e.g. :
+    <ul>
+        <li>10ns à 10us pour une fonction critique.</li>
+        <li>16ms pour l'interactivité et calculs inter-frames (e.g. site Web, jeux vidéo).</li>
+        <li>2-3s pour le lancement d'un logiciel, pour un chargement/sauvegarde d'un fichier, etc.</li>
+        <li>2-3h pour des opérations complexes lancés la nuit, e.g. sauvegardes, mises à jours, générations de rapports, etc.</li>
+        <li>quelques jours pour des calculs très intensifs sur serveurs.</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<h3>Quand optimiser</h3>
+
+<div>Cependant, on ne va pas chercher à ce que le code s'exécute le plus rapidement possible. La lisibilité, stabilité, et maintenabilité du code sont bien plus importantes que ses performances.</div>
+
+<div>Nous allons donc chercher à optimiser en fonction de nos <i>besoins</i>. Il est en effet inutile de passer du temps à optimiser un code, lorsque le gain est inutile. Nous avons bien souvent une aversion au gaspillage, on aime quand le code s'exécute le plus rapidement possible, ne gaspille pas des ressources. Mais si le gain n'est pas utile, on gaspille un temps très conséquent sur le développement et la maintenance.</div>
+
+<div>De la même manière, il n'est pas utile d'optimiser une portion de code qui ne serait responsable que d'une part négligeable du temps d'exécution. Il n'est pas utile de passer du temps pour gagner 1ns sur un code qui s'exécute en 1h.</div>
+
+<h3>L'importance de la mesure</h3>
+
+<div>Il est important d'éviter les a priori, et de bien baser ses décisions sur des mesures objectives des performances afin d'identifier les portions de code critiques, i.e. responsables de la majorité du temps d'exécution.</div>
+
+<div>En effet, si la logique nous dicte parfois qu'un code serait plus rapide qu'un autre, cela ne signifie pas que cette différence est significative. Il se peut aussi même qu'en réalité nous observions des résultats inverses.</div>
+
+<div>Cela est d'autant plus vrai avec une compilation JIT (Just-In-Time) où le code est optimisé durant son exécution (e.g. moteurs JavaScript, PyPy). Les optimisations effectuées par le compilateur sont alors quasiment impossibles à prévoir. Les performances peuvent aussi grandement varier entre les micro-benchmarks (i.e. bout de code testé seul), et les benchmarks en situations réelles. En effet, certaines optimisations très agressives peuvent être appliquées lors des micro-benchmarks, rendant leurs résultats très peu fiables. L'optimisation agressive pouvant aller jusqu'à la suppression pure et simple de parties de code lorsque le résultat n'est pas réutilisé, qu'une condition est toujours fausse, etc.</div>
+
+<div>💡 Il vaut mieux ainsi entièrement éviter les micro-benchmarks et micro-optimisations lorsqu'un compilateur JIT est utilisé.</div>
+
+<h3>Éviter les optimisations prématurées</h3>
+
+<div>Il est important d'éviter les optimisations prématurées, i.e. chercher à optimiser un code dès son écriture. Lorsqu'on développe, il est en effet souvent bien plus intéressant de commencer par une implémentation triviale non-optimisée, lisible et correcte.</div>
+
+<div>On pourra alors en mesurer les performances, afin de déterminer si cette implémentation suffit, ou s'il faut une implémentation plus rapide. Le cas échéant, cette implémentation triviale pourra servir à valider l'implémentation optimisée. C'est à dire de vérifier que ces deux implémentations fournissent bien les mêmes résultats.</div>
+
+<div>Cela permet aussi d'attendre que le code soit stable avant de commencer à optimiser un code qui risque de changer, ce qui peut aussi faire gagner du temps de développement. En effet, écrire, valider, et modifier une implémentation triviale est bien plus facile et rapide que de le faire directement sur une implémentation optimisée.</div>
+
+<div>⚠ Une implémentation triviale ne signifie pas qu'il faille écrire du code contre-performant. Il convient tout de même de suivre les bonnes pratiques et idiomes du langage/domaine.</div>
+
+<h3>Comment benchmarker (TP?)</h3>
+
+<todo>XX</todo>
+
+<ul>
+    <li>Identifier fonction critiques : heat/stack tools (JS)</li>
+    <li>Jeu de donné petit + estimer la croissance (pas sur total données).</li>
+    <li>Micro-bench :
+        <ul>
+            <li>- petites mesures -> GROSSE variance possible.</li>
+            <li>- plusieurs fois (mean / max 0.95)</li>
+        </ul>
+    </li>
+    <li>Pas réplicable :
+        <ul>
+            <li>- attention outside peut influencer perfs code benchmarqué</li>
+            <li>- biais machine (RAM/CPU) + charge CPU/RAM actuelle + batterie laptop</li>
+        </ul>
+    </li>
+</ul>
+
+<h2>Complexité algorithmique</h2>
+
+<h3>Les algorithmes</h3>
+
+<div>Un <b>algorithme</b> est une série d'actions théoriques, <b>indépendant de tout langage</b>. Le code est l'implémentation d'un algorithme dans un langage de programmation donné. On peut voir un algorithme comme la description d'une opération sur des données d'entrées, en vu de les modifier, ou de produire un résultat :
+    <ul class="flex-3">
+        <li>Trier</li>
+        <li>Rechercher</li>
+        <li>Ajouter</li>
+        <li>Supprimer</li>
+        <li>Modifier</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<div>💡 Un algorithme (ainsi qu'un code) peut être représenté sous la forme d'un graphe où chaque noeud correspond à une étape, et chaque arrête à une action. Cela permet une représentation visuelle de l'algorithme, cf UML. Mais cela permet aussi d'effectuer des démonstrations formelles, e.g. vérifier si :
+    <ul class="flex-2">
+        <li>l'algorithme se fini ?</li>
+        <li>l'algorithme dévoile des secrets ?</li>
+        <li>des sous-graphes sont inutiles ?</li>
+        <li>on peut simplifier le graphe ?</li>
+        <li>un test passe par tous les noeuds et/ou arrêtes ?</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<todo>Exemples pseudo-code - code - arbre.</todo>
+
+<h3>Les structures de données</h3>
+
+<div>La <b>structure des données</b> décrit la manière dont les données sont organisées et reliées entre elles (e.g. tableau, liste chaînée, graphe). En fonction de la structure de donnée utilisée, les algorithmes ne seront pas les mêmes, et n'auront pas les mêmes coûts. Pour des structures classiques (e.g. tableaux, listes, ensembles, dictionnaires, arbres, graphes, etc.), les algorithmes optimums (ainsi de leur coût) sont généralement déjà connus et implémentés.</div>
+
+<div>Il conviendra alors de choisir les structures de données en fonction du type d'opérations qu'on souhaite effectuer et/ou optimiser. Par exemple, un tableau trié est plus lent lors de sa création et de ses modifications, mais permettra des recherches bien plus rapides. Le choix entre un tableau trié et un tableau non-trié se fera donc sur l'usage qu'on en fera : e.g. est-ce que les recherches sont plus fréquentes que les modifications ?</div>
+
+<div>⚠ Comme vu précédemment, il faut éviter les optimisations prématurées. C'est à dire utiliser en premier choix une structure de données pertinente  vis à vis des besoins, pour laquelle le coût en développement et en maintenance sera moindre.</div>
+
+<h3>Comment estimer la performance d'un algorithme ?</h3>
+
+<div>Intuitivement, on est tenté de mesurer la performance d'un algorithme à la rapidité de son implémentation. Cependant, cela requiert de l'implémenter pour en mesurer le temps d'exécution. Or, l'objectif est généralement de comparer plusieurs algorithmes, afin de choisir celui qu'on implémentera. On souhaite donc qualifier la performance d'un algorithme sans avoir à l'implémenter.</div>
+
+<div>De plus, la performance dépend bien souvent de la taille des données en entrée, sans être forcément linéaire pour autant. Soit N la taille des données en entrées, les algorithmes suivants nécessitent :
+    <div class="flex-3">
+        <div>
+            1 opération :
+            <script type="c-text">
+                op();
+            </script>
+        </div>
+        <div>
+            N opérations :
+            <script type="c-text">
+                data.map( d => op() );
+            </script>
+        </div>
+        <div>
+            N-2 opérations :
+            <script type="c-text">
+                data.slice(2).map(d=>op());
+            </script>
+        </div>
+    </div>
+</div>
+
+<div>La complexité algorithmique O(X) sera alors le <b>terme dominant sans les constantes multiplicatives</b> (i.e. la croissance asymptotique) du nombre d'opérations effectuées par l'algorithme. Par exemple, si N-2 opérations ou 2N opérations sont nécessaires, sa complexité sera de O(N). Cela permet ensuite d'aisément comparer la performances des algorithmes :
+    <ul class="flex-2">
+        <li>O(1) : temps constant (e.g. accès direct).</li>
+        <li>O(N*log<sub>2</sub>(N)) : quasi-linéaire (e.g. trie).</li>
+        <li>O(log<sub>2</sub>(N)) : logarithmique (e.g. recherche).</li>
+        <li>O(N<sup>2</sup>) : quadratique</li>
+        <li>O(N) : linéaire (e.g. parcours).</li>
+        <li>O(N<sup>3</sup>) : cubique, explose rapidement, à éviter.</li>
+    </ul>
+</div>
+
+<div>💡 Baisser la complexité d'un algorithme engendre des gains très importants sur de gros volumes de données. Par exemple, si une opération coûte 1ms, traiter un million de donnée prendra environ :
+    <ul class="flex-2">
+        <li>O(1) : 1ms</li>
+        <li>O(N*log<sub>2</sub>(N)) : ~5,5h</li>
+        <li>O(log<sub>2</sub>(N)) : ~20ms</li>
+        <li>O(N<sup>2</sup>) : ~105 ans</li>
+        <li>O(N) : ~17min</li>
+        <li>O(N<sup>3</sup>) : 105 millions d'années.</li>
+    </ul>
+</div>
+
+<div>💡 Le nombre d'opération n'est pas toujours fixe (e.g. recherche), on pourra alors utiliser la <b>complexité moyenne</b>, ou la <b>complexité dans le pire cas</b>.</div>
+
+<div>💡 Il est aussi possible d'utiliser la complexité pour d'autres ressources, e.g. la complexité mémoire.</div>
+
+<h2>Trouver l'algorithme qui résout le problème</h2>
+
+<h3>Trouver un problème équivalent</h3>
+
+<div>Bien souvent on va chercher à transformer le problème de départ afin d'en faciliter la résolution, que ce soit en terme de conception ou de complexité algorithmique.</div>
+
+<div>On va donc souvent chercher à réduire le problème de départ à un problème connu donc la résolution optimale est déjà connue. Par exemple, sur un jeu de 52 cartes (+ Jocker), quelle est la probabilité qu'on tire les 4 as avant le Jocker ?<br/>
+    <details>
+        <summary>Cliquez ici pour afficher l'astuce.</summary>
+        Les autres cartes n'ont aucune influence sur le problème, c'est du bruit qu'on peut ignorer. Le problème se réduit donc à un jeu de 5 cartes. Tirer les 4 as avant le Jocker implique de ne pas tirer le Jocker avant les 4 as, i.e. tirer le Jocker en dernier, i.e. que la 5ème carte soit le Jocker, i.e. la réponse est 1/5.
+    </details>
+</div>
+
+<div>Il est aussi possible de généraliser le problème, afin d'en retirer le bruits et les spécificités complexes. Par exemple trier un tableau partiellement trié peut être complexe. Toutefois, on peut tout simplement effectuer un tri classique sans prendre en compte les spécificités du tableau.</div>
+
+<div>À l'inverse, on peut aussi spécialiser le problème, i.e. le résoudre sur un cas particulier. Par exemple, certaines opérations sont complexes sur des listes non-triées, mais simples sur une liste triée. On peut alors assumer le coût d'un tri afin de grandement simplifier l'algorithme.</div>
+
+<div>Il est aussi possible de changer la perspective pour simplifier le problème. Par exemple, comment faire passer un cavalier sur toutes les cases d'un plateau d'échec ?
+    <details>
+        <summary>Cliquez ici pour afficher l'astuce.</summary>
+        On a donc un espace, avec des règles de déplacements. On peut changer de représentation en se ramenant à un graphe pour lequel chaque noeud est est case, et chaque arrête (orientée), un déplacement possible.
+    </details>
+</div>
+
+<h3>Découper le problème</h3>
+
+<div>Bien souvent, les problèmes sont trop complexes pour être résolus directement. Il est cependant possible de découper le problème en plusieurs sous-problèmes plus aisés à résoudre (<i>Divide & Conquer</i>).</div>
+
+<div>De manière générale, il est recommandé de procéder de la sorte afin de rendre l'algorithme plus facile à implémenter, et le code plus facile à valider. Le fait que cela engendre de potentielles répétitions de calculs n'est pas grave. Il faut chercher la simplicité, pas l'optimisation prématurée.</div>
+
+<div>De manière analogue, <i>Meet me in the middle</i>, consiste à trouver un chemin (ou en prouver l'existence) en partant simultanément des extrémités d'un graphe, pour se retrouver à l'un de ses noeuds intermédiaires. Reformulé autrement, on recherche un secret X permettant de faire le lien entre deux points/valeurs/états/etc. A et B (e.g. clef cryptographique, chemin, coefficients, etc). Pour le trouver, on teste les candidats partiels X1 depuis A et X2 depuis B, en enregistrant leurs résultats respectifs R1 et R2. Dès qu'une correspondance R1 = R2 est trouvée, on peut reconstruire le secret X à partir de X1 et X2.
+</div>
+
+<todo>Image + chiffres (2^N * 2^N) vs (2^N + 2^N) + double DES cassé.</todo>
+
+<h3>Trouver une approximation</h3>
+
+<div>Dans certains contextes, on peut se contenter d'une estimation ou d'une borne inférieure/supérieure. Par exemple calculer la valeur exacte de π est impossible, mais on peut se contenter d'une valeur <i>suffisamment</i> précise. De même, on peut parfois se contenter d'algorithmes probabilités, i.e. qui ont de grandes chances de donner la bonne réponse.</div>
+
+<div>Il est aussi possible d'ajouter des contraintes sur les données d'entrées afin d'interdire certains cas particuliers qu'on fera le choix de ne pas supporter. Dans d'autres cas, on peut retirer des contraintes du problème, notamment si ces dernières ont un faible impact. Par exemple, sur un modèle mathématique, on peut faire le choix d'ignorer certaines variables non-significatives.</div>
+
+<div>Les <i>heuristiques</i> aident à trouver <i>une solution</i>, mais non-optimale. Par exemple partir des règles les plus contraignantes pour construire la solution. Un autre exemple, les algorithmes gloutons construisent la solution par étapes, en choisissant la meilleure l'option optimale à chaque étape. Il peuvent donc se retrouver bloqué dans un optimum local.</div>
+
+<h3>Réduire le nombre d'opérations</h3>
+
+<div>Il existe quelques techniques permettant de réduire significativement le nombre d'opérations effectuées, sans nécessairement modifier la complexité de l'algorithme. Par exemple, pour calculer une matrice symétrique, on peut se contenter d'en calculer un triangle. Cela ne change pas la complexité de l'algorithme, mais divise pratiquement par 2 les opérations effectuées :
+    <div class="flex-2">
+        <script type="c-ts">
+            for(let i = 0; i < N; ++i)
+                for(let j = 0; j < N; ++j)
+                    M[i][j] = op(i,j)
+        </script>
+        <script type="c-ts">
+            for(let i = 0; i < N; ++i)
+                for(let j = i; j < N; ++j)
+                    M[i][j] = M[j][i] = op(i,j)
+        </script>
+    </div>
+</div>
+
+<div>Tout comme l'algorithme et le code, le calcul du résultat peut aussi être représenté sous la forme d'un arbre d'appels. Chaque noeud correspond alors à une valeur (e.g. <script type="c-ts">foo(a,b)</script>), et chaque arrête aux arguments utilisés pour la calculer. La racine représente donc le résultat final.</div>
+
+<todo>Exemple img</todo>
+
+<div>Il est alors possible d'effectuer plusieurs actions sur cet arbre :
+    <ul>
+        <li><i>pruning</i> : supprimer des sous-arbres jugés non-pertinents. i.e. ne pas explorer des possibilités qu'on sait inutiles.</li>
+        <li><i>memoisation</i> : fusionner des sous-arbres identiques, i.e. ne pas recalculer plusieurs fois les mêmes valeurs.</li>
+        <li><i>réordonnancement</i> : i.e. changer l'ordre de certains calculs.</li>
+        <li><i>fusionner des noeuds</i> : i.e. remplacer une série d'opération par une autre équivalente (e.g. --x => x).</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<h2>Optimisations de l'implémentation</h2>
+
+<h3>Les limites de la complexité algorithmique</h3>
+
+<div>La complexité algorithmique nous informe d'à quel point le nombre d'opérations explose lorsque la taille des données d'entrées grandissent. La complexité algorithmique n'a ainsi aucune notion quant à la durée d'exécution d'une opération.</div>
+
+<div>Ainsi, la complexité algorithmique ne nous dit rien des performances de l'implémentation sur des données de petites tailles. Un algorithme en O(N<sup>5</sup>) peut alors être bien plus rapide qu'un algorithme en O(1). Par exemple, les hashs sont souvent utilisés afin d'obtenir des algorithmes en O(1)/O(N), cependant, leurs calculs sont usuellement très coûteux et lent.</div>
+
+<div>Par exemple, le calcul d'un hash non-cryptographique peut prendre ~150 cycles (~50ns), lorsque le parcours coûte ~5 cycles par éléments. C'est à dire que pour des listes de moins de 30 éléments, le hash coûte plus cher que le parcours de la liste. Si on considère qu'une durée de 1ms est acceptable, on pourra continuer d'utiliser un simple parcours tant que la liste ne dépasse pas 600,000 éléments. Si la liste est triée, il faudra <i>en théorie</i> plus de 1 milliards d'éléments pour que le hash devienne plus intéressant.</div>
+
+<todo>IMG</todo>
+
+<div>Ainsi, lorsqu'on traite des données de petites tailles, il est important de ne pas trop se focaliser sur la complexité, et d'utiliser la structure de données la plus simple et pertinente au regard des besoins. Sur des données de tailles modestes, il est important de soit en mesurer les performances réelles, soit d'en estimer l'ordre de grandeur.</div>
+
+<div>Il est aussi possible d'accélérer très significativement l'exécution d'une opération, à des facteurs qui peuvent atteindre du x1,000. Ce qui peut augmenter très significativement le volume de données qu'on peut traiter en un temps raisonnable.</div>
+
+<h3>La compilation</h3>
+
+<div>La compilation est l'étape qui converti votre code en instruction machine (assembleur) qui pourra être exécuté par le processeur. La performance du code assembleur généré va dépendre du langage, du compilateur, et des options d'optimisations passées au compilateur.</div>
+
+<div>Par exemple, un simple addition ne coûte qu'un cycle CPU. Pourtant, en Python, elle coûte bien plus que cela du fait des fonctionnalités du langage (typage dynamique et surcharge des opérateurs) :
+    <script type="c-py">
+        def add(a, b):
+            res = type(a).__add__(a,b)
+            if res is NotImplemented:
+                res = type(b).__add__(b, a)
+            if res is NotImplemented:
+                raise Error("...")
+            return res
+    </script>
+</div>
+
+<div>Ainsi, lorsque les besoins en performances sont importantes, il est ainsi fréquent d'écrire des modules Python en C++.</div>
+
+<div>Sur un langage interprété, il est souvent possible de pré-compiler le code en amont, c'est à dire transformer le code en bytecode qui sera plus rapidement converti en assembleur à l'exécution. Derrière, le JIT va optimiser les fonctions au fur et à mesure de leurs appels. Par exemple si une condition est toujours fausse, si un argument donné est toujours un entier, etc. Les premiers appels sont donc lent, mais les appels consécutifs sont <i>censés</i>, avoir des performances proches du natif.</div>
+
+<div>💡 L'équivalent du JIT pour un langage compilé est le profiler. On exécute une première fois le programme pour générer un profil, qui sera ensuite utilisé pour optimiser la compilation.</div>
+
+<div>En fonction des options fournies au compilateur, il va pouvoir effectuer diverses optimisations comme inliner des fonctions, dérouler des boucles, supprimer des conditions toujours vraies ou toujours fausses, supprimer des instructions sans effets de bords et dont le résultat n'est pas utilisé, etc. Au contraire, certaines options vont empêcher certaines optimisations et vont ajouter des vérifications et des symboles dans un objectif de protection ou de débogue.</div>
+
+<div>Il va aussi être capable d'utiliser des instructions processeurs spéciales (e.g. calculs vectoriels avec SIMD) et de les placer dans un ordre optimal. En effet, on peut voir un processeur comme un ensemble de chaînes de productions, on peut :
+    <ul>
+        <li>lancer plusieurs instructions en parallèle (<i>unités de calculs</i>).</li>
+        <li>débuter la prochaine instruction avant que la précédente ne soit entièrement finie (<i>pipeline</i>).</li>
+    </ul>
+</div>
+
+<todo>Images pipeline</todo>
+
+<div>Ainsi avant de chercher à optimiser un code, assurez-vous de déjà bien donner les bonnes options au compilateur ou à l'interpréteur. On distingue usuellement une version développement (vise le débogue facile) d'une version de production (vise les performances).</div>
+
+
+<h3>Uniformiser et pré-calculer</h3>
+
+<div>Une première chose à faire est d'uniformiser la représentation de ses données afin de réduire le nombre de cas à gérer, et d'en faciliter le traitement (et l'optimisation). Par exemple, une température peut être une chaîne de caractère <script type="c-text">XX°C</script>, <script type="c-text">XX°K</script>, <script type="c-text">XX°F</script>, ou <script type="c-text">XX°</script>. Cependant, il ne faut pas confondre la représentation des données de ses affichages. Il vaut mieux représenter la température sous la forme d'un nombre (e.g. degrés Kelvin), puis de gérer les conversions <b>en dehors</b> des fonctions de calculs. Permettant aussi de personnaliser les conversions sans impacter les calculs :
+    <script type="c-py">
+        temp  = parseTemp("100°C") # valeur absolue
+        delta = parseDelta("1°K")  # difference
+        temp += delta
+        print( format(toFahrenheit(temp), "{.2f}°F") )
+    </script>
+</div>
+
+<div>De même uniformiser les API et structures de données permet de réduire le nombre de cas à gérer. Il convient en effet de ne pas confondre les structures avec les concepts métiers. Par exemple un <script type="c-py">UserList</script> peut être un simple alias d'un <script type="c-py">List<User></script>. Cela permet aussi de réutiliser des structures et des fonctions existantes, qui seront donc plus souvent appelées, et donc plus rapidement optimisées par le JIT.</div>
+
+<div>Comme nous l'avons vu précédemment, il est possible de mettre en cache des résultats pour ne pas avoir à les re-calculer plusieurs fois. Cependant, il est parfois plus efficace de pré-calculer tous ces résultats, en une fois, avant de lancer les calculs. Si les données sont constantes et les fonctions pures (i.e. déterministe et sans effets de bord), le résultat peut être pré-calculé dans le bytecode ou par le compilateur.</div>
+
+<h3>Le code</h3>
+
+<div>Certaines opérations sont plus coûteuses que d'autres, ainsi les éviter permet aussi d'optimiser les performances :
+    <ul>
+        <li>Opérations d'entrées/sorties (I/O) : échanges réseaux, utilisation du disque, affichages graphiques, etc.</li>
+        <li>Allocations mémoires.</li>
+        <li>Appels de fonctions.</li>
+        <li>Conditions et boucles.</li>
+    </ul>
+</div>
+
+<div>La compilateur est déjà capable d'optimiser certaines opérations, comme inliner des fonctions, dérouler des boucles, pré-calculer des valeurs constantes, remplacer certaines opérations (e.g. <script type="c-text">a%2 => a&1</script> ou <script type="c-text">a/2 => a>>1</script>), etc. Pour d'autres, il vous faudra choisir l'opération la plus appropriée, e.g. pour l'I/O:
+    <ul class="flex-4">
+        <li>(unix) sockets</li>
+        <li>messages queue</li>
+        <li>(named) pipes</li>
+        <li>mémoire partagée</li>
+    </ul>
+</div>
+
+<div>On va aussi chercher à réduire la fréquence de ces opérations en les regroupant ensemble (<i>batching</i>). Par exemple, lorsqu'on écrit dans un fichier, on écrit généralement dans un tampon (<i>buffer</i>), et l'écriture n'est effectuée que lorsque le tampon est vidé (<i>flush</i>).</div>
+
+<div>Pour des événements (e.g. souris, clavier), on va souvent n'exécuter l'opération qu'après une période d'inactivité (<i>debounce</i>). Ainsi lorsqu'un événement est reçu on va attendre un certain temps, si aucun autre événement n'est reçu entre temps, on exécute l'opération. Les événements précédents peuvent être annulés (e.g. déclenchement de calculs), ou fusionnés (e.g. écriture d'un fichier).</div>
+
+<div>Parfois, on souhaite effectuer l'opération régulièrement si des événements sont reçus (<i>throttle</i>), e.g. sauvegarde. L'exécution de l'opération pourra alors se faire directement (<i>leading</i>), ou après une période (<i>trailing</i>) ou les deux. Les événements reçus pendant cette période sont alors soit ignorés, soit fusionnés, soit planifié pour la prochaine période.</div>
+
+<h2>Parallélisme</h2>
+
+<todo></todo>
+
+<ul>
+    <li>Unité d'exécution</li>
+    <li>CPU (pseudo //)</li>
+    <li>async</li>
+    <li>thread/process / partages [mem + atomics] et locks (synchr => peut être très coûteux, plus que monothread) + critical code</li>
+    <li>GPU</li>
+    <li>Cluster (coût com => filtrer/réduire avant de transmettre => MapReduce)</li>
+</ul>
+
+<div>- Pipeline vs // sur data diff.</div>
+
+<div>- Idéalement, faire en sorte qu'il n'y ai qu'un seul writer/producteur pour éviter de bloquer. Read/consommer : cache / invalidée quand écriture finie (très rapide).</div>
+
+<h2>Programmation Orientée Données (DOP)</h2>
+
+<div>Jusqu'à présent nous avons surtout évoqué les algorithmes et opérations qui sont exécutées. Cependant, les calculs, ce sont aussi et surtout des données qu'il faut amener au processeur.</div>
+
+<div>La Programmation Orientée Données (DOP) part du constat que les processeurs exécutent les opérations très rapidement (4GHz = 4 milliards de cycles de 0.25ns), quand la récupération des données est bien plus lente (e.g. disque dur 10 millions de cycles ~= 2.5ms). Ainsi, le DOP considère qu'il convient, en premier lieu, de s'intéresser aux données (et leur accès/utilisations), plus qu'aux instructions réellement exécutées.</div>
+
+<div>En effet, plus les données sont "éloignées" du processeur, plus leur accès est coûteux :
+    <ul class="flex-2">
+        <li>registres CPU : gratuit, ~500 octets</li>
+        <li>cache CPU L1 : 3 cycles, ~64ko</li>
+        <li>RAM : ~200 cycles (TLB miss ~1 500 cycles).</li>
+        <li>cache CPU L2 : ~15 cycles, ~256ko</li>
+        <li>Disque dur : ~10 millions de cycles.</li>
+        <li>cache CPU L3 : ~45 cycles, ~2.5Mo</li>
+    </ul>
+</div>
+
+<div>Ainsi, dans le pire des cas, une simple addition peut nécessiter d'accéder 3x à la RAM, rendant l'opération 600 à 4 500 fois plus lente. Le DOP peut alors apporter des gains significatifs en performances même pour des codes déjà optimisés. Bien heureusement, le CPU et le langage sont capables d'anticiper les besoin, et de précharger les données (<i>prefetch</i>). Il est toutefois possible de les aider un peu.</div>
+
+<div>Ainsi, le DOP repose sur 2 principes :
+    <ul class="flex-2">
+        <li>Amener les données <i>utiles</i> au plus près du CPU.</li>
+        <li>Éviter les opérations coûteuses (e.g. allocations, copies).</li>
+    </ul>
+</div>
+
+<div>⚠ Certains des principes présentés sont à utiliser avec parcimonie, quand il y a un <b><i>réel besoin <u>critique</u></i></b> de performances.</div>
+
+<div>⚠ Certains des principes présentés ne sont pas applicables à des langages interprétés (ou à types dynamiques), qui ont leur propre fonctionnement interne, et offrent bien moins de contrôles sur les structures de données et les allocations. Il vaut alors mieux passer à un langage compilé (e.g. C++) s'il y a un <b><i>réel besoin <u>critique</u></i></b> de performances.</div>
+
+<div>⚠ Il est important de ne pas se baser sur des a priori, et de toujours bien <u><b><i>mesurer</i></b></u> les performances, <i>cache miss</i>, etc. Les principes <i><b><u>théoriques</u></b></i> ne sont pas une garantie de performance.</div>
+
+<h3>Améliorer la localité des données</h3>
+
+<div>Une manière d'amener les données au plus près du processeur, est tout simplement de la calculer au lieu de la récupérer. Par exemple, une addition ne coûte qu'un cycle si les opérandes sont déjà dans les registres du CPU, quand récupérer une donnée en RAM coûte 200 à 1 500 fois plus. Effectuer de simples opérations pour calculer la donnée (au lieu de la stocker) <i>peut</i> ainsi être bien moins coûteux.</div>
+
+<div>Chaque coeurs CPU possède ses propres caches L1 et L2, le cache L3 est partagé. Le principe d'un cache est de permettre la lecture des valeurs via le cache, au lieu de devoir accéder à un support plus coûteux (RAM, disque, réseau, etc). Lors de l'écriture, la synchronisation dépend de la manière dont la donnée est partagée :
+    <ul>
+        <li>non-partagée : écriture lors de l'éviction du cache.</li>
+        <li>partagée entre coeurs : invalidation de la donnée sur les L1 et L2, synchronisation sur L3 (~35 cycles).</li>
+        <li>autres partages : synchronisation directe, batching, debounce, ou throttling.</li>
+    </ul>
+</div>
+
+<div>Il est aussi possible de pré-charger des fichiers en RAM pour éviter d'avoir à accéder au disque à chaque opération. De même, il est possible de précharger en RAM des BDD en lecture seule (e.g. SQLite). Dans une certaine mesure, l'OS charge déjà en RAM des parties de fichiers de ~4ko (<i>page cache</i>) fréquemment utilisés. Les disques durs et SSD, ont aussi leur propre cache interne.</div>
+
+<div>Les caches sont aussi utilisés dans le Web. Que ce soit le cache navigateur qui va conserver le résultat de certaines requêtes en fonction de la <i>politique de cache</i> (quand invalider et mettre à jour le cache), ou de la mise en cache géographique (i.e. stocker les données au plus près de l'utilisateur e.g. CDN).</div>
+
+<div>Pré-charger les données en cache nécessite de pouvoir prédire (ou d'indiquer) les besoins qu'on aura, de sorte à ce que les données soient disponibles lorsqu'on souhaitera les utiliser. Comme nous l'avons vu, la mise en cache L1, L2, et L3 est gérée par le CPU. Mais pour que cela puisse fonctionner de manière optimale, il faut que le CPU puisse facilement prédire les données dont il va avoir besoin :
+    <div class="flex-4">
+        <script type="c-ts">
+            // facile (seq)
+            a[i];
+            a[i+1];
+            a[i+2];
+        </script>
+        <script type="c-ts">
+            // difficile (conv)
+            a[c[i  ]];
+            a[c[i+1]];
+            a[c[i+2]];
+        </script>
+        <script type="c-ts">
+            // difficile (ptr)
+            a = a.next
+            a = a.next
+            a = a.next
+        </script>
+        <script type="c-ts">
+            // difficile (cond)
+            if( i < 10 )
+                --i;
+            a[i]
+        </script>
+    </div>
+</div>
+
+<h3>Grouper les données</h3>
+
+<div>Lorsque le CPU transferts des données vers ou depuis les caches, il ne charge pas les octets uns à uns, mais des blocs de 64 octets continus (<i>line cache</i>). Pour les registres CPU, le bloc peut aller de 1 octet à 64 octets en fonction de l'instruction à exécuter. Enregistrer les données dans des blocs continus en mémoire permet alors de réduire le nombre de transfert lors de leur chargement en cache.</div>
+
+<div>Ainsi parcourir un tableau (<i>dense array</i>), où les éléments sont contigus en mémoire, est plus rapide que de parcourir une liste chaînée (<i>linked list</i>), dont les noeuds peuvent avoir été alloué n'importe où dans la RAM. Le parcours d'un tableau est aussi bien plus prévisible pour le prefetch (seq vs ptr).</div>
+
+<div>De plus, le compilater peut alors utiliser des instructions vectorielles (e.g. SIMD). Alors que 64 additions d'entiers de 1 octet peuvent prendre 64 cycles (+ 25 600 cycles pour charger), avec SIMD, 1 cycle (+ 400 cycles pour charger) peut suffire. L'opération <i>peut</i> alors être 64x plus rapide.
+</div>
+
+<div>⚠ Cela peut sembler être beaucoup, mais cela n'est rien face à des opérations bien plus coûteuses, e.g. la lecture/écriture de fichiers avec ses 10 millions de cycles (soit ~400x plus lent). Comme toujours, cela va dépendre des besoins <i><b><u>réels</u></b></i> de performances. Si vous faites des calculs sur de très grandes matrices, utiliser des bibliothèques dédiées qui utiliseront ce genre d'instructions (voire le GPU) pourra grandement accélérer les calculs. </div>
+
+<div>De même, pour les fichiers, l'OS effectue ses opérations le lecture et d'écriture sur des cache de 4ko (<i>page cache</i>). Il vaut ainsi mieux effectuer ses opérations de lecture/écriture de manière séquentielle (ou sinon de charger l'entièreté du fichier en RAM). Les <i>bundles</i>, permettent de regrouper plusieurs fichiers en un. Que ce soit par le biais d'une archive, ou d'une fusion dépendant de la nature des fichiers. Cela permet aussi de récupérer en une seule opération les fichiers dont on a besoin à partir du disque ou du réseau.</div>
+
+<div>⚠ Les différents blocs sont alignés, i.e. commencent à une adresse multiple de leur taille et ne se chevauchent pas. C'est à dire que des données contigus peuvent se retrouver sur deux blocs différents. Ainsi, on va parfois chercher à aligner les entrées quitte à gaspiller quelques octets.</div>
+
+<h3>Réduire les données</h3>
+
+<div>L'objectif est alors d'éviter les <i>cache miss</i>, i.e. faire en sorte que les données dont on a besoin soient déjà dans le cache. Pour rappel, plus le cache est proche du processeur, plus sa taille est limitée. Ainsi l'objectif est de pouvoir stocker un maximum de données utiles dans le cache.</div>
+
+<div>⚠ Les gains de performances d'une fonction (ou d'un module) peuvent alors être très difficile à évaluer. En effet l'ensemble du programme influence le contenu des différents caches. Par exemple, une fonction non-critique peut très bien remplir le cache de données non-utiles à la fonction critique à optimiser.</div>
+
+<div>💡 Réduire le volume des données aide aussi à diminuer le temps de leur transfert (réseau, disque, en cache, etc).</div>
+
+<h4>Compression</h4>
+
+<div>Une première technique est de compresser les données, i.e. de stocker le même volume d'informations sur un espace plus réduit. Un exemple trivial est l'utilisation d'algorithmes de compression (e.g. zip). Le temps gagné sur le transfert réseau des données pouvant être alors bien supérieur au temps de compression/décompression.</div>
+
+<div>Une autre technique est de stocker des données sous un format binaire au lieu d'un format texte (e.g. JSON). L'interprétation en est aussi accélérée, mais s'en retrouve aussi complexifiée. À éviter donc s'il n'y a pas besoins critiques de performances.</div>
+
+<div>Une autre solution est d'utiliser des structures de données permettant de représenter les informations de manière plus compactes. Par exemple, un entier est par défaut sur 8 octets, on peut le stocker sur 1 seul s'il ne dépasse pas 255 (ou -128/127). C'est le principe des <i>bitfields</i> qui permettent de stocker des booléens sur 1 bits au lieu d'un octet, permettant aussi des opérations plus rapides :
+    <div class="flex-2">
+        <script type="c-ts">
+            // définir les flags
+            const IS_READ  = 1<<0
+            const IS_WRITE = 1<<1
+            const IS_EXEC  = 1<<2
+        </script>
+        <script type="c-ts">
+            // utilisation
+            const RIGHTS = IS_READ | IS_WRITE // et
+            if( RIGHTS & IS_READ ) {} // si a le droit
+        </script>
+    </div>
+</div>
+
+<todo>IMG</todo>
+
+<div>Les <i>bitmap</i> sont un cas particulier de bitfields ou chaque bit représente l'état d'une entité différente. Par exemple la disponibilité (1) ou non (0) d'une ressource :
+    <div class="flex-2">
+        <script type="c-ts">
+            const RES_MASK = id => 1<<id;
+            const RES_A = RES_MASK(ID_A)
+            const RES_B = RES_MASK(ID_B)
+        </script>
+        <script type="c-ts">
+            // vérifier la disponibilité
+            bm & (RES_A | RES_B)        // et
+            (bm & RES_A) | (bm & RES_B) // ou
+        </script>
+    </div>
+</div>
+
+<div>Les opérations binaires s'effectuent en 1 cycle. Ils permettent alors d'effectuer, dans F2 et en un seul cycle, 64 additions (<script type="c-ts">^</script>) ou multiplications binaires (<script type="c-ts">&</script>), voire même 512 avec le SIMD. Cela tout en ayant 8 fois moins de données à charger.</div>
+
+<div>De même utiliser un identifiant la forme d'un nombre, plutôt que d'une chaîne de caractère réduit légèrement la consommation mémoire. Mieux, elle permet d'utiliser des tableaux, i.e. des données stockées contigus et accessible en 1 cycle. Alors qu'un dictionnaire a un stockage plus complexe, nécessitant soit un hash, soit une recherche en O(log(N)).</div>
+
+<h4>Retirer les données non-pertinentes</h4>
+
+<div>Dans le cadre d'un traitement, certaines données ne sont pas nécessaires. On souhaite donc éviter qu'elles prennent de la place en cache (ou du temps lors des transferts), i.e. éviter qu'elles soient contigus en mémoire aux données utilisées. Pour cela, on souhaite séparer les données utilisées par le traitement des données non-pertinentes. Ou reformulé autrement, séparer les données en fonction de leur différents traitements, et grouper ensemble ce qui est utilisé ensemble. Quitte à potentiellement dupliquer certaines informations (dérivées ou non).</div>
+
+<div>⚠ Les caches étant chargés par blocs, des données peuvent tout de même se retrouver en cache par "coïncidence" (<i>cache pollution</i>/<i>false sharing</i>).</div>
+
+<div>Par exemple, dans un logiciel de bibliothèques, chaque utilisateur a un nom, prénom, date de naissance, mail, numéro de téléphone, une liste de livres empruntés, ainsi qu'une liste de livre réservés. Or un traitement souhaitant faire des statistiques sur les livrés actuellement empruntés et réservés n'a pas besoin de connaître les informations de contact de l'utilisateur. On va donc séparer :
+    <ul>
+        <li>UserContactInfo : informations sur l'utilisateur.</li>
+        <li>UserLibraryState : ses listes de livres empruntés et réservés.</li>
+    </ul>
+</div>
+
+<todo>IMG</todo>
+
+<div>💡 Ce principe de séparation des données est aussi relativement proche du principe de responsabilité unique (SRP).</div>
+
+<div>Il est aussi possible d'effectuer un découpage, non pas en fonction des attributs, mais du status/état (~= <script type="c-sql">GROUP BY</script>). Par exemple un utilisateur pourrait très bien avoir une unique liste de livres avec un status "réservé", "emprunté", "rendus". Cependant, dans certains cas, il est plus intéressant de découper cette liste en 3 afin d'avoir une liste "réservé", une liste "emprunté", et une liste "rendus". Cela permet des parcours plus rapides, sans avoir besoin de vérifier le status à chaque itération. On a alors aussi le nombre d'éléments de chaque status (e.g. nombre de réservations et d'emprunts), sans avoir à effectuer un parcours conditionnel sur la liste entière.</div>
+
+<div>Parfois, il n'y a pas de découpages stables, e.g. certains traitements utilisent le nom/prénom, d'autres utilisent aussi la date de naissance, d'autres le numéro de téléphones, etc. On peut alors transformer le tableau de structure (AoS: <i>Array of Structs</i>) en une structure de tableaux (SoA: <i>Struct of Arrays</i>) :
+    <div class="flex-2">
+        <script type="c-ts">
+            type Users = {
+                nom   : string,
+                prenom: string
+            }[];
+        </script>
+        <script type="c-ts">
+            type Users = {
+                noms   : string[],
+                prenoms: string[],
+            }
+        </script>
+    </div>
+</div>
+
+<div>Il est alors possible de sélectionner les éléments dont on aura besoin. Cela est évidemment peu pratique lorsque des données sont fréquemment ajoutées ou modifiées. Pour l'accès, on peut utiliser une fonction qui sera inlinée e.g. <script type="c-ts">getUsername(users, userID)</script>. Encore une fois, ne vous complexifiez pas la vie, utilisez cela lorsque que vous en avez <i><b><u>réellement besoin</u></b></i>.</div>
+
+<div>💡 Cela est notamment utilisé dans les API Web, pour ne transmettre que les informations demandées. Certaines bases de données SQL permettent aussi un stockage en colonnes (<i>column-oriented</i>). On peut aussi l'utiliser pour stocker des données dans des fichiers, tout en permettant d'aisément ajouter et retirer des attributs, sans impacter l'ensemble du système.</div>
+
+<h4>Traiter par lots</h4>
+
+<div>Optimiser le cache ne consiste pas uniquement à faire tenir les données dans le cache, mais aussi d'éviter d'avoir constamment besoin de données différentes. Ce qui reviendrait à modifier constamment le cache. Donc d'exécuter ensemble les traitements qui se font sur les mêmes données.</div>
+
+<div>En programmation parallèle, cela revient à découper les traitements et les données en ensembles indépendants qui seront chacun traités par une unité d'exécution. Cela permet ainsi de diminuer les dépendances et partages, réduisant les blocages et synchronisations.</div>
+
+<div>Le code assembleur étant lui-même des données, on va donc souvent préférer les traitements par lots, i.e. exécuter le traitement sur un ensemble de données. Cela permet aussi d'avoir des étapes claires pendant l'exécution :
+    <div class="flex-2">
+        <script type="c-ts">
+            onUserChange( () => {
+                move  (users[i].pos)
+                update(users[i].state)
+                print (users[i].pos, users[i].state)
+            });
+        </script>
+        <script type="c-ts">
+            beforeFrameUpdate( () => {
+                moveAll  (users.pos);
+                updateAll(users.states);
+                printAll (users.pos, users.states);
+            });
+        </script>
+    </div>
+</div>
+
+<div>Dans l'OO, les méthodes sont usuellement stockées avec les attributs. Le DOP va alors préférer séparer les deux. C'est à dire d'avoir des structures de données brutes d'un côté, et des fonctions helpers de l'autre, qui permettront la manipulation des données. Évitant ainsi de charger en cache des méthodes qui ne sont pas utilisées par le traitement. Attention cependant, si les données sont mutables, et sans les méthodes pour en contrôler l'accès, leur cohérence n'est alors plus garantie.</div>
+
+<h3>Éviter les allocations et copies</h3>
+
+<div>Certaines opérations sont coûteuses comme les allocations et les copies. On va donc vouloir minimiser ces opérations.</div>
+
+<div>Sur des systèmes réactifs, on va potentiellement attendre que le système se stabilise (e.g. debounce), avant d'exécuter les opérations coûteuses (e.g. calculs). On peut aussi effectuer des calculs "à la demande", c'est à dire ne calculer la valeur que si elle est utilisée (puis sera mise en cache).</div>
+
+
+
+<h4>Les copies</h4>
+
+<div>Pour les copies, elle peut se faire dans les caches CPU au double du coût d'accès. Pour des volumes plus importants, le DMA (<i>Direct Memory Access</i>) est souvent utilisé. Il permet au CPU d'envoyer une source, destination, et taille, aux supports de stockage qui se chargeront de la copie (e.g. RAM vers RAM, Disque vers Disque, RAM vers Disque, Disque vers RAM, etc.).</div>
+
+<div>En soit, envoyer cette instruction ne prend que très peu de cycles CPU, qui peut alors effectuer d'autres traitements en parallèle. Cependant, son traitement prendra bien plus de temps, et dépendra des vitesses de lecture/écriture des supports (et de la bande passante du bus). D'où l'intérêt d'utiliser des opérations d'I/O asynchrones, afin de pouvoir continuer ses traitements sans attendre que l'opération (lecture, écriture, ou copie) ne se termine.</div>
+
+<h4>Les allocations</h4>
+
+<div>Pour les allocations mémoire, on distingue les allocations :
+    <ul>
+        <li><b>statiques</b>, sur la pile : pour les variables temporaires/locales, très rapide (~1 cycle)</li>
+        <li><b>dynamiques</b>, sur le tas : pour les variables "persistantes", dont le coût varie grandement :
+            <ul>
+                <li>~100 cycles si bloc libre trouvé dans le fastbin (~cache de blocs).</li>
+                <li>~1 000 cycles s'il doit rechercher un bloc libre.</li>
+                <li>~10 000 cycles si doit demander plus de mémoire à l'OS.</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div>La désallocation est gratuite pour les allocations statiques. En revanche, pour les allocations dynamiques, elle coûte presque autant que l'allocation. À noter que les allocations statiques sont contigus en mémoire, alors que les allocations dynamiques peuvent allouer des blocs n'importe où dans la RAM. Bref, on souhaite éviter autant que possible des allocations dynamiques.</div>
+
+<div>⚠ On évite ainsi autant que possible les allocations dans les boucles, par comme les iterators JavaScript qui créent un nouvel objet inutile à chaque itérations, plombant les performances (~ 6,5x plus lent).</div>
+
+<div>💡 À son chargement, un programme va usuellement demander à l'OS une certaine quantité de mémoire. Il est alors possible, en connaissant la consommation mémoire du programme, de le configurer pour qu'il demande une quantité suffisante pour ne pas avoir à en redemander à l'OS par la suite.</div>
+
+<div>💡 Lors d'un traitement, il est possible d'effectuer l'ensemble des allocations (et désallocations) de ressources en une fois. Pour les ressources mémoire, on utilise alors des <i>arena allocators</i> qui allouera l'ensemble de l'espace mémoire nécessaire au début du traitement, puis le libérera à la fins. Cela facilite alors grandement la gestion de la mémoire, et évite les fuites mémoires.</div>
+
+<h4>Les clones</h4>
+
+<div>Cloner un objet coûte usuellement une allocation et une copie. On veut donc les éviter.</div>
+
+<div>On distingue deux types d'objets :
+    <ul>
+        <li>à <b>sémantique de valeurs</b>: e.g. un nombre, qui est égal à tous les autres objets ayant la même valeur.</li>
+        <li>à <b>sémantique d'entité</b>: e.g. un utilisateur, qui n'est égal qu'à lui-même.</li>
+    </ul>
+</div>
+
+<div>Les objets à <i>sémantique de valeurs</i> doivent être constantes, car toutes modifications changent sa valeur. Si on veut créer une valeur dérivée, il faudra alors créer une nouvelle instance. Ces objets sont transmis par pointeur/référence (ou par copie si plus petit qu'un pointeur - 8 octets), ce qui permet, autant que possible, de réutiliser la même instance pour une même valeur. Cloner l'objet n'a ici aucune utilité.</div>
+
+<div>Les objets à <i>sémantique d'entités</i> peuvent être mutables, toutes modifications changent uniquement ses propriétés, pas son identité. Par exemple, je peux changer mon numéro de téléphone, cela ne change pas qui je suis. En revanche, chaque objet est unique, identité par son adresse mémoire, et ne peut (<i>en théorie</i>) pas avoir de "copie" : un nouvel objet étant une nouvelle entité. Ces objets sont transmis par pointeur/référence, car on doit partager la même instance pour une même entité.</div>
+
+<div>Il est cependant toujours possible de cloner une entité, créant alors une autre entité. Ou de la copier pour produire un objet à sémantique de valeur. Par exemple copier la liste des notes des 3A (entité) pour obtenir une liste de notes (valeur), e.g. pour éviter que la liste (niveau entité) ne soit modifiée au cours de son traitement (niveau valeur).</div>
+
+<div>Le <i>copy-on-write</i>, permet alors d'éviter les copies inutiles tant que les données ne sont pas modifiées. Le principe est alors très simple : on sépare l'entité de ses données. Lors d'un clone, les données sont alors partagées (sans copies donc) entre plusieurs entités. Lorsqu'une entité veut modifier ses valeurs, les données sont clonées (si partagées avec d'autres entités) avant d'être modifiées.</div>
+
+<todo>IMG</todo>
+
+<h3>Structures de données</h3>
+
+<h4>Les tableaux</h4>
+
+<div>Il existe quelques astuces pour éviter les allocations et copies inutiles dans les tableaux.</div>
+
+<div>Pour <b>filtrer</b> (ou copier): allouer un tableau de la même taille que celui d'origine, ajouter les éléments, puis réduire :
+    <script type="c-ts">
+        // filtrer :
+        const res = new Array(a.length);
+        let off = 0;
+        for(let i = 0; i < a.length; ++i)
+            if( filter(a[i]) )
+                res[off++] = a[i];
+        res.length = off;
+    </script>
+</div>
+
+<div>Pour <b>supprimer</b> (in place):
+    <ul>
+        <li>si l'ordre n'a pas d'incidence : me</li>
+        <li>si seq : déplacer (~= filter inplace)</li>
+        <li>si non seq : marquer pour supr ou NOOP (compact before parcours).</li>
+    </ul>
+</div>
+
+<ul>
+    <li>Transformer un tableau N-Dim en 1-Dim en jouant sur les idx (calc rapide)</li>
+    <li>Parcours => données continue => Dim la plus faible.</li>
+</ul>
+
+<div>Array alloue x2 sa taille lorsque se réalloue (+ copies).</div>
+
+<h4>Buffers</h4>
+
+<ul>
+    <li>=> qu'est-ce qu'un buffer ?</li>
+    <li>circular (FIFO) / pile (LIFO) / dble buffer</li>
+    <li>sync 1 écrivain opti / sauf pile.</li>
+</ul>
+
+<div>dble buffer : flip</div>
+<div>Array circulaire => modulo</div>
+
+<todo>IMG</todo>
+
+<h4>Sparse Array / index indirections</h4>
+
+<ul>
+    <li>Move without copy</li>
+    <li>copy elements by dupl ptr</li>
+    <li>remove => idx free elements at the end ?</li>
+    <li>+ dense (tableau idx) + (tableau data - can be moved - last delete, change correspondance).</li>
+    <li>parcours</li>
+</ul>
+
+<h4>Graphes</h4>
+
+<div>Allocation peut être un (ou plusieurs) tableaux, cf sparse, et pointer dessus.</div>
+
+<div>Ajouter/Supprimer => oresque comme sur une liste chaînée.</div>
+<div>Astuce : sous-tableaux de tailles fixes => calc avec idx au lieu de parcourir. ~> presque le principe d'une hash map.</div>
+
+<div>E.g. graphe binaire équilibré. => search binaire + rapide / modifications + compliqué...</div>
+
+<h4>SoA</h4>
+
+<ul>
+    <li>Strats, on a vu struct d'array, mais d'autres strats.</li>
+    <li>Éviter un objet "noeud" qui contient méta-data.</li>
+    <li>flags => séparer en plusieurs array</li>
+    <li>ou un array avec les props à côté.</li>
+</ul>
+
+<h4>Pool</h4>
+
+<div>Réutiliser</div>
+<div>Au lieu de désaouller mettre dans pool pour réutiliser ensuite.</div>
+
+<h4>Views</h4>
+
+<div>Et les view... => pas copié, mais un intermédiaire (taille diff ou transformé).</div>
+
+        </main>
+    </body>
+</html>

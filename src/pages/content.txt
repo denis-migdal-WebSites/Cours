@@ -1,74 +1,79 @@
 + acc:👋 Accueil
     - R1-13:Accueil Numérique
-        + CM:CM
-            - ../TD/TD1:1 - Règles et outils UCA
-            - CM2:2 - Méthodes d'Apprentissage Universitaire
-            - CM3:3 - Commandes Shell
-        + Slides:Slides
-            - CM2:2 - Commandes Shell
-        + TD:TD
-            - TD1:1 - Règles et outils UCA
-            - TD2:2 - Méthodes d'Apprentissage Universitaire
-            - TD3:3 - Commandes Shell
-        - cheat:Cheat sheet
+        + W1:1. Règles et outils UCA
+            - TP
+        + W2:2. Méthodes d'Apprentissage Universitaire
+            - CM
+            - TP
+        + W3:3. Commandes Shell
+            - CM
+            - Slides
+            - TD
+            - cheat:Cheat sheet
 - sec:🔐 Sécurité
-    - R1-11:S1 Introduction à la Cybersécurité
-        - CM:CM
-        - TD:TD
-    - R2-14:S2 Administration Système Linux
-        + CM:CM
-            - CM1:1 - Administrer un ordinateur Linux
-            - CM2:2 - Processus et accès à distance
-            - CM3:3 - Protéger ses données
-            - CM4:4 - ?
-        + Slides:Slides
-            - CM1:1 - Administrer un ordinateur Linux
-            - CM2:2 - Processus et accès à distance
-            - CM3:3 - Volumes de données et systèmes de fichiers
-            - CM4:4 - ?
-        + TP:TP
-            - TP1:1 - Administrer un ordinateur Linux
-            - TP2:2 - Processus et accès à distance
-            - TP3:3 - Volumes de données et systèmes de fichiers
-            - TP4:4 - ?
+    - R1-11:[S1] Introduction à la Cybersécurité
+        - CM
+        - TD
+    - R2-14:[S2] Administration Système Linux
+        + W1:1. Administrer un ordinateur Linux
+            - CM
+            - Slides
+            - TP
+        + W2:2. Processus et accès à distance
+            - CM
+            - Slides
+            - TP
+        + W3:3. Protéger ses données
+            - CM
+            - Slides
+            - TP
+        + W4:4. ?
+            - CM
+            - Slides
+            - TP
+        --
         - cheat:Cheat Sheet
-        + DS:DS
+        + annales:Annales
             - cur:2024-2025
-    - R3-12-VCOD:S3-VCOD Cryptographie et Réseaux
-        + CM:CM
-            - CM1:1 - Échanger des données avec un tiers
-            - CM2:2 - Infrastructures et services
-            - CM3:3 - Cryptographie et TLS
-            - CM4:4 - Serveur
-        + TD:TD
-            - TD2:2
-        + TP:TP
-            - TP1:1 - Échanger des données avec un tiers
-            - TP2:2 - Infrastructures et services
-            - TP3:3 - Cryptographie et TLS
-            - TP4:4 - Serveur
-        + DS:DS
+    - R3-12-VCOD:[S3-VCOD] Cryptographie et Réseaux
+        + W1:1. Échanger des données avec un tiers
+            - CM
+            - TP
+        + W2:2. Infrastructures et services
+            - CM
+            - TD
+            - TP
+        + W3:3. Cryptographie et TLS
+            - CM
+            - TP
+        + W4:4. Serveur
+            - CM
+            - TP
+        --
+        + annales:Annales
             - cur:cur
-    - R4-10-VCOD:S4-VCOD Identité Numérique
-        + CM:CM
-            - CM1:1 - ?
-        + TP:TP
-            - TP1:1 - ?
-        + DS:DS
+    - R4-10-VCOD:[S4-VCOD] Identité Numérique
+        + W1:1. Internet et ses acteurs
+            - CM
+            - TP
+        --
+        + annales:Annales
             - cur:2024-2024
-    - S5-07:S5 [SAÉ] Pentest, Hacking, et Renforcement
+    - S5-07:[S5-VCOD] SAÉ Pentest, Hacking, et Renforcement
 - dev:💻 Développement
     - R4-01:[S4] Automatisation et Test en Programmation
-        + CM:CM
-            - CM1:1 - ?
-            - CM2:2 - ?
-            - CM3:3 - ?
-            - CM4:4 - ?
-        + TP:TP
-            - TP3:3 - ?
-            - TP4:4 - ?
+        + W1:1. Gestionnaire de version (git)
+            - CM
+        + W2:2. Environnement de développement
+            - CM
+        + W3:3. Shell avancé
+            - CM
+            - TP
+        + W4:4. Validation et reproductibilité
+            - CM
+        --
         - cheat:Cheat Sheet
-        + DS:DS
+        + annales:Annales
             - cur:cur
     - R5-06-VCOD-A:[S5-VCOD] UML et bonnes pratiques
         + W1:1. Analyse
@@ -92,76 +97,73 @@
         + annales:Annales
             - cur:2024-2024
     - R5-06-VCOD-B:[S5-VCOD] Gestion de projet
-        + CM:CM
-            - CM1:CM1 - ?
-            - CM2:CM2 - ?
-            - CM3:CM3 - ?
-        + TP:TP
-            - TP1:1 - ?
-            - TP2:2 - ?
-            - TP3:3 - ?
-        + DS:DS
+        + W0:0. Git
+        + W1:1. CdC + Kick off
+            - CM
+        + W2:2. Cycle de vie logiciel + agile
+            - CM
+        + W3:3. Gestion et suivi de projets
+            - CM
+        --
+        + annales:Annales
             - cur:2024-2024
-    + R6-01-VCOD:[S6-VCOD] Optimisation
-        + CM:CM
-            - CM1:1 - ?
+    - R6-01-VCOD:[S6-VCOD] Optimisation
+        - CM:CM
 --
 - https://github.com/denis-migdal-ShellTools:🛠️ Outils Shell
 --
 - bdd:🗃️ [OLD] Bases de données
     - R1-01:Tableur et Reporting
-        + CM:CM
-            - CM1:1 - Prise en main
-            - CM2:2 - Mise en forme
-        + TP:TP
-            - TP1:1 - Prise en main
-            - TP2:2 - Mise en forme
+        + W1:1. Prise en main
+            - CM
+            - TP
+        + W2:2. Mise en forme
+            - CM
+            - TP
     - R1-02:Bases de Données Relationnelles 1
-        + CM:CM
-            - CM1:1 - Requêter une base de données
-            - CM2:2 - Manipuler des entrées
-            - CM3:3 - Tables et contraintes
-            - CM4:4 - Fusions et jointures
-        + Slides:Slides
-            - CM1:1 - Requêter une base de données
-            - CM2:2 - Manipuler des entrées
-            - CM3:3 - Tables et contraintes
-            - CM4:4 - Fusions et jointures
-        + TD:TD
-            - TD1:1 - Requêter une base de données
-            - TD2:2 - Manipuler des entrées
-            - TD3:3 - Tables et contraintes
-            - TD4:4 - Fusions et jointures
-        + TP:TP
-            - TP1:1 - Requêter une base de données
-            - TP2:2 - Manipuler des entrées
-            - TP3:3 - Tables et contraintes
-            - TP4:4 - Fusions et jointures
-            - TP5:5 - Interface graphique
+        + W1:1. Requêter une base de données
+            - CM
+            - Slides
+            - TD
+            - TP
+        + W2:2. Manipuler des entrées
+            - CM
+            - Slides
+            - TD
+            - TP
+        + W3:3. Tables et contraintes
+            - CM
+            - Slides
+            - TD
+            - TP
+        + W4:4. Fusions et jointures
+            - CM
+            - Slides
+            - TD
+            - TP
+        + W5:5. Interface graphique
+            - TP
+        --
         - cheat:Cheat Sheet
         + DS:DS
 - web:🌐 [OLD] Web
-    - R3-03:S3 Technologies Web
-        + CM:CM
-            - CM1:1 - HTML5
-            - CM2:2 - CSS3
-            - CM3:3 - Code côté client
-            - CM4:4 - Architecture client/serveur
-            - CM5:5 -  Formulaires ?
-        + TP:TP
-            - TP1:1 - HTML5
-            - TP2:2 - CSS3
-            - TP3-4:3-4 - 
-        - cheat-html5:Cheat sheet HTML5
-        - cheat-css3:Cheat sheet CSS3
-    - R4-09-VCOD:S4 Programmation Web
-        + CM:CM
-            - CM1:1 - 
-        + DS:DS
-            - cur:cur
-    + SAE4-02-VCOD:S4 [SAÉ] Collecte Automatisée de données Web
-    - R5-07-VCOD:S5-VCOD Programmation Web pour la Visualisation
-        + CM:CM
-            - CM1:1 - 
-        + DS:DS
-            - cur:2024-2024
+    - R3-03:[S3-VCOD] Technologies Web
+        + W1:1. HTML5
+            - CM
+            - TP
+        + W2:2. CSS3
+            - CM
+            - TP
+        + W3:3. Code côté client
+            - CM
+            - TP
+        + W4:4. Architecture client-serveur
+            - CM
+            - TP
+        --
+        + cheat:Cheat sheet
+            - html5:HTML5
+            - css3:CSS3
+    - R4-09-VCOD:[S4-VCOD] Programmation Web
+    - SAE4-02-VCOD:[S4-VCOD] SAÉ Collecte Automatisée de données Web
+    - R5-07-VCOD:[S5-VCOD] Programmation Web pour la Visualisation

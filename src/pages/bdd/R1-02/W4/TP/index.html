@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>TP4 (BDR)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/TPSubject@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/TPSubject@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>Fusions et jointures</h1>
+
+<h2>Consignes</h2>
+
+<tp-consignes></tp-consignes>
+
+<div>Dans le cadre de ce TP, vous utiliserez la base "chimie" disponible via <a href="/assets/sql/chimie.sqlite">ce lien</a>.</div>
+
+<h2>Sous-requêtes</h2>
+
+<ol>
+   <li><q-file @accept=".png,.svg">Déterminez la structure de la base de donnée et de ses tables.</q-file></li>
+   <li>Écrivez les requêtes SQL permettant d'obtenir les chimistes ayant au moins un résultat d'expérience.
+      <ol>
+         <lo><q-text @lang="sql">En utilisant une sous-requête non-corrélée.</q-text></lo>
+         <li><q-text @lang="sql">En utilisant une sous-requête corrélée.</q-text></li>
+      </ol>
+   </li>
+</ol>
+
+<h2>JOIN</h2>
+
+<ol>
+   <li><q-text @lang="sql">Pour chaque résultats, affichez le numéro d'expérience et le nom, prénom du chimiste l'ayant réalisé.</q-text></li>
+   <li><q-text @lang="sql">Sans modifier la jointure, adaptez la requête précédente afin d'afficher le nom, prénom des chimistes suivis des numéro, concaténés, des expériences qu'ils ont réalisés (colonne <script type="c-text">exps</script>).</q-text></li>
+   <li><q-text @lang="sql">Modifiez la requête précédente afin d'afficher le nom, prénom des chimistes suivis du nombre d'expériences <i>différentes</i> qu'ils ont réalisés.  (colonne <script type="c-text">nb_exps</script>)</q-text></li>
+   <li><q-text @lang="sql">Sans modifier la jointure, adaptez la requête précédente afin de n'afficher que ceux qui n'ont pas effectué d'expérience.</q-text></li>
+   <li><q-text>Vous remarquerez que la requête ne retourne aucun résultats, pourquoi ?</q-text></li>
+   <li><q-text @lang="sql">Modifiez la requête précédente pour afficher <i>tous</i> les chimistes avec leur nombre d'expériences distinctes.</q-text></li>
+   <li><q-text @lang="sql">Modifiez la requête précédente pour afficher les chimistes avec leur moyenne des températures des expériences qu'ils ont réalisés (colonne <script type="c-text">avg_temp</script>).</q-text></li>
+   <li><q-text>Pourquoi utiliser <script type="c-text">LEFT JOIN</script> pour la seconde jointure ?</q-text></li>
+   <li><q-text @lang="sql">En repartant de la requête 6, et en utilisant la structure ci-dessous, affichez le nom, prénom des chimistes suivis de leur taux de réussite :
+   <script type="c-sql">AVG( CASE WHEN <h>$COND</h> THEN 1 ELSE 0 END ) as taux</script></q-text></li>
+</ol>
+
+<h2>Mesurer la performance des sous-requêtes et jointures</h2>
+
+<div class="danger">Pour des raisons de performances, vous devrez utiliser une base de données "in memory". Pour cela, lancez une nouvelle instance de SQLite sans préciser ni ouvrir de fichiers.</div>
+
+<ol>
+   <li>Activez <script type="c-text">.timer on</script> et <script type="c-text">.eqp on</script>.</li>
+   <li>Re-créez les tables <script type="c-text">U_NC</script>, <script type="c-text">U_PK</script>, et <script type="c-text">D</script> du TP3, mais cette fois avec <script type="c-sql"><h>$NB</h></script> = <script type="c-text">1000000</script>, et sans manuellement créer d'index.</li>
+</ol>
+
+<h3>Sous-requêtes</h3>
+
+<ol>
+   <li>Exécutez la requête suivante (sous-requête avec clef primaire) :
+   <script type="c-sql">
+   SELECT SUM(ID) FROM U_PK WHERE ID IN (SELECT ID FROM D);
+   </script></li>
+   <li>Exécutez la requête suivante (sous-requête corrélée avec <script type="c-text">IN</script>) :
+   <script type="c-sql">
+SELECT ID FROM U_PK
+ WHERE ID IN ( SELECT ID FROM D WHERE ID == U_PK.ID )
+ LIMIT 100;
+   </script></li>
+   <li><q-text>La requête précédente limite le résultat aux 100 premières entrées, calculez le temps qu'il faudrait sans cette limite.</q-text></li>
+   <li><q-text @lang="sql">Transformez cette requête pour utiliser <script type="c-sql">EXISTS</script>.</q-text></li>
+   <li><q-text>Calculez son temps d'exécution sans limite, expliquer l'avantage de <script type="c-sql">EXISTS</script>.</q-text></li>
+</ol>
+
+<h3>JOIN</h3>
+
+<ol>
+   <li>Exécutez, une à une, les requêtes suivantes (JOIN avec clef primaire) :
+   <script type="c-sql">
+   SELECT SUM(U_PK.ID) FROM U_PK INNER JOIN D    USING(ID);
+   SELECT SUM(U_PK.ID) FROM D    INNER JOIN U_PK USING(ID);
+   </script></li>
+   <li><q-text>D'après l'explication de la requête, l'ordre des tables dans une jointure <script type="c-sql">INNER</script> a-t-il un impact sur l'exécution ?</q-text></li>
+   <li><q-text @lang="sql">Testez la même jointure avec <script type="c-text">NATURAL</script>, puis avec <script type="c-text">ON</script>.</q-text></li>
+   <li><q-text>Cela impacte-t-il l'exécution ?</q-text></li>
+   <li>Exécutez unes à unes les requêtes suivantes :
+   <script type="c-sql">
+   SELECT SUM(U_NC.ID) FROM U_NC INNER JOIN D    USING(ID);
+   SELECT SUM(U_NC.ID) FROM D    INNER JOIN U_NC USING(ID);
+   </script></li>
+   <li><q-text>Comment expliquer le <script type="c-sql">USING AUTOMATIC COVERING INDEX</script> dans l'explication de la requête, bien qu'aucune de ces 2 tables n'ont d'index ?</q-text></li>
+</ol>
+
+<h3>Produit cartésien</h3>
+
+<ol>
+   <li>Exécutez la requête suivante (produit cartésien avec clef primaire) :
+   <script type="c-sql">
+   SELECT SUM(U_PK.ID) FROM U_PK, D WHERE U_PK.ID == D.ID;
+   </script></li>
+   <li><q-text>Comment expliquer qu'une telle requête soit aussi rapide ?</q-text></li>
+   <li>Exécutez la requête ci-dessous, puis calculez son temps d'exécution sans limites.
+   <script type="c-sql">
+      SELECT U_PK.ID FROM U_PK, D
+                    WHERE U_PK.ID - D.ID == 0 LIMIT 100;
+   </script></li>
+</ol>
+
+<h3>Sous-requêtes vs jointures</h3>
+
+<script type="c-sql">
+SELECT <h>$FCT</h>(ID)      FROM U_PK WHERE ID IN (SELECT ID FROM D);
+SELECT <h>$FCT</h>(U_PK.ID) FROM U_PK INNER JOIN D USING(ID);
+</script>
+
+<ol>
+   <li>Exécutez une à une les requêtes ci-dessus avec :
+      <ol class="flex-3">
+         <li><script type="c-sql">SUM()</script></li>
+         <li><script type="c-sql">MAX()</script></li>
+         <li><script type="c-sql">COUNT(DISTINCT )</script></li>
+      </ol>
+   </li>
+   <li><q-text>Pourquoi <script type="c-text">DISTINCT</script> n'est pas nécessaire pour la requête avec sous-requête ?</q-text></li>
+   <li><q-text>Pourquoi des différence dans les explications de requêtes des jointures ?</q-text></li>
+   <li><q-text>Vaut-il mieux utiliser des sous-requêtes ou des jointures ? Argumentez.</q-text></li>
+</ol>
+
+</main>
+    </body>
+</html>

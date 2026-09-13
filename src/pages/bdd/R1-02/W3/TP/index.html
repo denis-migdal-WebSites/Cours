@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>TP3 (BDR)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/TPSubject@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/TPSubject@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>Tables et contraintes</h1>
+
+<h2>Consignes</h2>
+
+<tp-consignes></tp-consignes>
+
+<h2>Création d'une table et contraintes de colonnes</h2>
+
+<ol>
+   <li><q-text @lang="sql">Créez une table <script type="c-text">T_PK</script> ayant pour colonnes :
+      <ul class="flex-2">
+         <li><script type="c-text">ID</script> : une clef primaire auto-increment.</li>
+         <li><script type="c-text">A</script>  : un texte dont la valeur par défaut sera <script type="c-text">N/A</script>.</li>
+         <li><script type="c-text">B</script>  : un entier qui ne peut être <script type="c-text">NULL</script>.</li>
+         <li><script type="c-text">C</script>  : un entier impair (utilisez <script type="c-text">CHECK</script>).</q-text></li></li>
+      </ul>
+   <li><q-text @lang="sql">Via une requête SQL affichez le schéma de la table <script type="c-text">T_PK</script></q-text></li>
+   <li><q-text @lang="sql">Via une requête SQL affichez la requête SQL de création de la table <script type="c-text">T_PK</script></q-text></li>
+   <li><q-text @lang="sql">Insérez 3 entrées dans la table <script type="c-text">T_PK</script> en ne renseignant que les colonnes <script type="c-text">B</script> et <script type="c-text">C</script>.</q-text></li>
+   <li>Affichez les entrées de la table <script type="c-text">T_PK</script>.</li>
+</ol>
+
+<h2>Contraintes de tables</h2>
+
+<ol>
+   <li><q-text @lang="sql">Créez une table <script type="c-text">T_TCSTR</script> ayant pour colonnes :
+      <ul>
+         <li><script type="c-text">A</script>  : un entier qui ne peut être <script type="c-text">NULL</script>.</li>
+         <li><script type="c-text">B</script>  : un entier qui doit être supérieur à <script type="c-text">A</script></q-text></li>
+      </ul>
+   </li>
+</ol>
+
+<h2>Clefs étrangères</h2>
+
+<div class="danger">Vous devrez activer les clefs étrangères via la commande <script type="c-sql">PRAGMA foreign_keys = ON;</script></div>
+
+<ol>
+   <li><q-text @lang="sql">Créez une table <script type="c-text">T_FK</script> ayant pour colonnes :
+      <ul>
+         <li><script type="c-text">A</script>  : une clef étrangère non-nulle vers la table <script type="c-text">T_PK</script>.</q-text></li>
+      </ul>
+   </li>
+   <li><q-text @lang="sql">Insérez une entrée dans <script type="c-text">T_FK</script> référençant la dernière entrée de <script type="c-text">T_PK</script>.</q-text></li>
+   <li><q-text>Incrémentez la colonne <script type="c-text">ID</script> de l'entrée référencée. Que se passe-t-il ? Pourquoi ?</q-text></li>
+   <li><q-text>Supprimez l'entrée référencée. Que se passe-t-il ? Pourquoi ?</q-text></li>
+   <li><q-text @lang="sql">Supprimez la table <script type="c-text">T_FK</script>.</q-text></li>
+   <li>Recommencez les opérations précédentes, cette fois de sorte à ce que la clef étrangères soit supprimée/modifiée lors de la suppression/modification de la clef primaire.
+      <ol>
+         <li><q-text @lang="sql">Création de <script type="c-text">T_FK</script></q-text></li>
+         <li><q-text>Que se passe-t-il lors de la modification ? Pourquoi ?</q-text></li>
+         <li><q-text>Que se passe-t-il lors de la suppression ? Pourquoi ?</q-text></li>
+      </ol>
+   </li>
+   <li>Recommencez les opérations précédentes, cette fois de sorte à ce que la clef étrangères soit mise à <script type="c-text">NULL</script> lors de la suppression de la clef primaire, et modifiée lors de la modification de la clef primaire.
+      <ol>
+         <li><q-text @lang="sql">Création de <script type="c-text">T_FK</script></q-text></li>
+         <li><q-text>Que se passe-t-il lors de la suppression ? Pourquoi ?</q-text></li>
+      </ol>
+   </li>
+</ol>
+
+<h2>Mesurer la performance des index</h2>
+
+<div class="danger">Pour des raisons de performances, vous devrez utiliser une base de données "in memory". Pour cela, lancez une nouvelle instance de SQLite sans préciser ni ouvrir de fichiers.</div>
+
+<div>Nous allons désormais voir à quel point les index sont vitaux lors de requêtes SQL sur de très larges tables. Pour cela nous suivrons le protocole suivant :
+   <ul>
+      <li>créer 3 tables (<script type="c-sql">ID INTEGER NOT NULL, Data TEXT</script>) :
+         <ul>
+            <li>table <script type="c-text">U_NC</script> : <script type="c-sql">ID</script> sans contraintes supplémentaires.</li>
+            <li>table <script type="c-text">U_PK</script> : <script type="c-sql">ID</script> <script type="c-text">PRIMARY KEY</script>.</li>
+            <li>table <script type="c-text">U_UN</script> : <script type="c-sql">ID</script> <script type="c-text">UNIQUE</script>.</li>
+         </ul>
+      </li>
+      <li>remplir ces tables de manière identique, avec <script type="c-sql"><h>$NB</h></script> = <script type="c-text">10000000</script> entrées unique.</li>
+      <li>pour chaque, mesurer la durée de recherche de l'entrée où <script type="c-sql">ID == 42</script>.</li>
+   </ul>
+</div>
+
+<h3>Création et remplissage des tables</h3>
+
+<div>Dans un premier temps, nous créons une table contenant nos <script type="c-text">10 000 000</script> entrées :
+   <script type="c-text">
+      CREATE TABLE U_NC (ID INTEGER NOT NULL, Data TEXT);
+      WITH gen(rowid) AS (
+      VALUES (0)
+      UNION ALL
+         SELECT rowid+1 FROM gen
+      LIMIT <h>$NB</h>)
+      INSERT INTO U_NC SELECT rowid, '('||rowid||')' FROM gen ORDER BY RANDOM();
+   </script>
+</div>
+
+<div class="hint">On ne vous demandera pas de comprendre le fonctionnement de <script type="c-sql">gen</script>.</div>
+
+<ol>
+   <li><q-text @lang="sql">Créez les tables <script type="c-text">U_PK</script> et <script type="c-text">U_UN</script> que vous remplirez ensuite à partir de <script type="c-text">U_NC</script>.</q-text></li>
+</ol>
+
+<h3>Mesurer la durée d'exécution d'une requête</h3>
+
+<ol>
+   <li>Activez la mesure de la durée d'exécution des requêtes via <script type="c-text">.timer on</script>.</li>
+   <li>Activez l'explication des requêtes via <script type="c-text">.eqp on</script>.
+      <ul>
+         <li><script type="c-sql">SCAN <h>$T</h></script> : lis les lignes de la table <script type="c-text"><h>$T</h></script> unes à unes ;</li>
+         <li><script type="c-sql">SEARCH <h>$T</h> USING</script> : recherche des entrées dans la table <script type="c-sql"><h>$T</h></script> via un index,</li>
+      </ul>
+   </li>
+   <li><q-text>Sur <script type="c-text">U_NC</script>, <script type="c-text">U_PK</script>, et <script type="c-text">U_UN</script>, mesurez la durée d'exécution de la requête suivante : <script type="c-sql">SELECT * FROM <h>$T</h> WHERE ID == 42;</script></q-text></li>
+   <li><q-text>Comment expliquez-vous la différence de résultats entre <script type="c-text">U_NC</script>, et <script type="c-text">U_PK</script>/<script type="c-text">U_UN</script> ?</q-text></li>
+   <li><q-text>Exécutez <script type="c-sql">SELECT * FROM <h>$T</h> LIMIT 20;</script> sur <script type="c-text">U_PK</script> et <script type="c-text">U_UN</script>, qu'observez-vous ?</q-text></li>
+   <li>Exécutez la requête suivante sur <script type="c-text">U_PK</script> et <script type="c-text">U_UN</script> :
+   <script type="c-sql">
+   SELECT COUNT(Data) FROM <h>$T</h> WHERE ID BETWEEN 200000 AND 400000;
+   </script></li>
+   <li><q-text>Comment pourriez-vous expliquer la différence sur les temps d'exécution ?</q-text></li>
+</ol>
+
+<div class="hint">Préfixer une requête SQL par <script type="c-sql">EXPLAIN QUERY PLAN </script> permet de l'expliquer sans l'exécuter.</div>
+
+<h3>Créer un INDEX</h3>
+
+<div>Comme nous l'avons vu en CM, les SGBD ajoutent un index sur les contraintes <script type="c-sql">UNIQUE</script>. Cela s'explique par le fait qu'à chaque insertions, le SGBD doit vérifier la contrainte, et donc rechercher si la valeur existe déjà dans la(les) colonne(s).</div>
+
+<div class="hint">La commande <script type="c-text">.indexes <h>$T</h></script> permet d'afficher la liste des index de la table <script type="c-text"><h>$T</h></script>.</div>
+
+<ol>
+   <li>Vérifiez que <script type="c-text">U_UN</script> possède bien un index, et que <script type="c-text">U_NC</script> n'en possède pas.</li>
+   <li><q-text @lang="sql">Créez un index sur <script type="c-text">U_NC</script> via <script type="c-sql">CREATE INDEX _<h>$T</h>_<h>$COL</h> ON <h>$T</h>(<h>$COL</h>);</script>.</q-text></li>
+   <li>Listez les index de <script type="c-text">U_NC</script>, puis exécutez la requête <script type="c-sql">SELECT</script> précédente.</li>
+   <li><q-text>Qu'observez-vous quant à la vitesse d'exécution ?</q-text></li>
+   <li><q-text @lang="sql">Créez une table <script type="c-sql">D(ID INTEGER NOT NULL)</script>.</q-text></li>
+   <li>Remplissez cette table via la requête SQL suivante (insère duplicats) :
+   <script type="c-sql">INSERT INTO D SELECT ABS(RANDOM())%<h>$NB</h> FROM U_NC;</script></li>
+   <li><q-text>Mesurez la vitesse d'execution de la requête <script type="c-sql">SELECT</script> sur cette table :</q-text></li>
+   <li><q-text @lang="sql">Créez un index sur cette table.</q-text></li>
+   <li><q-text>Mesurez à nouveau la vitesse d'execution, qu'observez-vous ?</q-text></li>
+</ol>
+
+<div class="danger">Les index ont un coût lors des <script type="c-sql">INSERT</script>/<script type="c-sql">UPDATE</script>/<script type="c-sql">DELETE</script>, il ne faut pas en abuser.</div>
+
+<div class="hint">En réalité, il est rare de devoir créer des index manuellement.</div>
+
+</main>
+    </body>
+</html>

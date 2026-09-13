@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>CM4 (ATP)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/page@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/page@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+            <h1>Validations et Reproductibilité</h1>
+
+<h2>Validations</h2>
+
+<h3>Motivation</h3>
+
+<div>Il ne suffit pas d'écrire un programme, il faut aussi <b>vérifier</b> (<i>action</i>) qu'il fonctionne "correctement", par le biais de <b>tests</b> et d'analyses (<i>outils</i>), afin de le <b>valider</b> (<i>décision</i>) i.e. le pousser en production, accepter sa livraison, etc. La vérification n'est pas une fin en soit, mais un moyen d'apporter des garanties de fiabilité. Elle va donc dépendre des exigences relatives au projet, qui sont fonctions, notamment, de sa criticité.</div>
+
+<div>Ainsi, un exercice de TP n'a pas besoin d'apporter le même niveau de garanti qu'un programme utilisé dans une centrale nucléaire. Les validations, vérifications, tests, mais surtout <i>le temps et les moyens investis dedans</i>, ne seront pas les mêmes dans ces deux contextes. Il convient ainsi d’employer ces outils de façon <b>appropriée</b> et <b>proportionnée</b> au contexte du projet.</div>
+
+<div>Il est important de détecter les problèmes potentiels au plus tôt, de sorte à pouvoir les corriger tant que cela est peu coûteux, avant qu'il ne soit trop intriqué dans le système. Pensez à une maison en construction, il est bien moins coûteux d'en refaire immédiatement les fondations, que de les refaire une fois le toit posé. Ainsi les mauvais choix présent ont un coût futur, c'est ce qu'on appelle la <b>dette technique</b>.</div>
+
+<div>Il est ainsi important, au début d'un projet, de prendre le temps de définir les procédures de validations, ainsi que d'installer l'environnement de test. Il est ensuite important de suivre ces procédures avec rigueur et constance, et d'<i>investir</i> le temps de (re-)faire les choses correctement (e.g. refactors), afin de ne pas en perdre encore plus par la suite. Cela est difficile lorsque le temps est contraint, mais reste nécessaire.</div>
+
+<div>⚠ Les tests ne permettent pas de prouver l'absence d'erreurs, mais d'en détecter la présence. Les analyses peuvent prouver l'absence de <i>certaines</i> erreurs, <i>sous l'hypothèse du modèle utilisé</i>.</div>
+
+<h3>Les types de validations</h3>
+
+<div>Les validations regroupent un ensemble très diversifié d'éléments qu'on peut découper en plusieurs catégories :
+    <ul class="flex-2">
+        <li><i>type</i> :
+            <ul>
+                <li><b>fonctionnel</b> : comportement du programme.</li>
+                <li><b>qualité</b> : performances, maintenabilité, etc.</li>
+            </ul>
+        </li>
+        <li><i>mode</i> :
+            <ul>
+                <li><b>static</b> : sans exécution.</li>
+                <li><b>automatique</b> : exécuté sans intervention humaine.</li>
+                <li><b>manuel</b> : exécuté avec intervention humaine.</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th style="visibility: hidden;"></th>
+                <th>Fonctionnel</th>
+                <th>Qualité</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>Static</th>
+                <td>
+                    - preuves formelles.<br/>
+                    - analyse de modèles.
+                </td><td>
+                    - vérification de la syntaxe.<br/>
+                    - vérification des types.<br/>
+                    - preuves formelles (e.g. sécurité).<br/>
+                    - métriques de code (e.g. couplage).
+                </td>
+            </tr>
+            <tr>
+                <th>Automatique</th>
+                <td>
+                    - <b>tests unitaires</b>.<br/>
+                    - <b>tests d'intégrations</b>.<br/>
+                    - <b>tests de non-regression</b>.<br/>
+                    - <b>tests de reproduction de bug</b>.
+                </td>
+                <td>
+                    - mesures des performances.<br/>
+                    - tests de compatibilité.
+                </td>
+            </tr>
+            <tr>
+                <th>Manuel</th>
+                <td>
+                    - <b>recette fonctionnelle</b>.<br/>
+                    - tests exploratoires.
+                </td>
+                <td>
+                    - recette utilisateur.<br/>
+                    - <b>tests de terrain</b>.<br/>
+                    - test d'accessibilité.<br/>
+                    - test de conformité / légalité.
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div>Les validations <b>statiques</b> sont usuellement effectuées, soit lors de l'édition (e.g. linters, type checkers, etc), soit lors de la (pré-)compilation du code. Des analyses plus poussées peuvent être effectuées en représentant le code sous la forme d'un graphe, et en calculant diverses métriques ou preuves mathématiques dessus.</div>
+
+<div>Les validations <b>automatiques</b> exécutent et vérifient le code sans requérir d'intervention humaine. Les <b>tests unitaires</b> visent à tester le comportement <i>propre</i> d'une fonction, i.e. <i>indépendamment</i> de ses dépendances, quand les <b>tests d'intégrations</b> visent à s'assurer du comportement <i>global</i> d'une fonction, i.e. <i>avec</i> ses dépendances. Les tests de reproduction de bug et de non-régression, sont, dans la forme, identiques aux tests unitaires et d'intégration.</div>
+
+<div>Les tests de <b>reproduction de bug</b> permettent de reproduire un bug connu afin de pouvoir le déboguer, et d'en valider la résolution. Ils deviennent ensuite des tests de <b>non-regression</b>, dont l'objectif est de détecter les regressions du projet, e.g. ré-introduction d'un bug déjà corrigé, altération du comportement d'une fonctionnalité existante, etc.</div>
+
+<div>Les validations <b>manuelles</b> nécessitent usuellement une intervention humaine, bien qu'elles puissent être automatisée en partie. Les tests de <b>recettes</b> consistent à valider les scénario des cas d'utilisations. Ils peuvent être <i>fonctionnel</i>, i.e. est-ce que le scénario s'exécute correctement, ou <i>utilisateur</i>, i.e. est-ce que le scénario et l'interface lui conviennent.</div>
+
+<div>Dans le cadre de ce module, nous nous intéresserons aux tests fonctionnels, et plus particulièrement à ceux indiqués en gras dans le tableau ci-dessus (unitaires, intégration, reproduction de bug, non-régression, recette fonctionnelle, tests de terrains).</div>
+
+<h3>Comment tester ?</h3>
+
+=> on ne peut pas tout tester
++ tests unitaire/intégration vs fonctionnel/system
+    => si je fais ça puis ci, puis ça
+            => combinatoire.
+            => transitions entre états = meilleur.
+    => tester ce qui peut échouer.
+    => tester trivial = inutile.
+
+=> tests indépendant, précédent ne doit pas influencer suivant.
+=> clean state => arrange (before) / act (do) / assert (verify) / teardown (after).
+
+=> pannel VSCode
+=> outils dédié : lib + VSCode (pytest)
+
+<h4>Tests de non-regressions</h4>
+
+- état précédente vs état actuel.
+    -> éviter revenir en arrière lors ajout feature ou correction bug.
+    -> refactor + important (forte chance de tout casser temporairement).
+        -> besoin de détecter.
+        -> revenir en arrière si trop de problèmes (Git).
+
+    - snapshots => première fois enregistrer puis stocker.
+    - peut être capture d'écran.
+
+
+Cas particuliers
+    - repro bug: minimal
+        -> puis devient non-regression.
+
+<h4>Tests de recettes fonctionnelles</h4>
+
+automatisation / simuer user action => puppeteer-like (instrumentalisation)
+=> pas toujours possible => Web : DOM, autres, peut pas sélectionner.
+
+<h4>Tests de terrain</h4>
+
+<div>Les tests de terrain correspondent à une utilisation en situation réelle du projet. Usuellement, on commence avec un public restreint (e.g. alpha test en interne), volontaire (e.g. bêta test publique), ou progressif (e.g. déploiement progressif). Le but étant d'avoir des retours utilisateurs sur les potentiels problèmes et améliorations possibles avant de le déployer sur l'ensemble.</div>
+
+<div>On n'est pas sur l'ordinateur utilisateur ou sur le serveur lors de l'exécution => besoin de l'observabilité, pour comprendre ce qu'il se passe et pouvoir agir.</div>
+
+<div>Pour cela il est nécessaire d'avoir des mécanismes de monitoring afin de détecter les problèmes rapidement (e.g. suivi de la charge serveur, cache miss, charge SQL, etc.), de logging (API - INPUT/OUTPUT si bien conçu - sans état = reproduire erreur / message d'erreur, stack, etc) afin de pouvoir comprendre ce qu'il s'est passé. Tracing (= ID) = suivre une requête ou une transaction.</div>
+
+<div>Détecter les problème au plus tôt = plus facile à identifier.
+    => prog par contrat / guards / asserts.
+        => peut être désactivé (généralement debug/dev vs prod).
+        => cas d'erreurs en premier (évite imbrications illisibles).
+        => Exception vs code d'Erreur
+            => Error = expected, exception exceptionnel.
+            => code de retour : on peut oublier de vérifier, mais si strong type + expected, forte change qu'on vérifie.
+
+    => verif inputs (e.g. formulaire) => regex.
+</div>
+
+=> éviter les if/else imbriqués.
+
+<h2>Écrire du code fiable et testable</h2>
+
+<div>Il ne suffit pas de tester son code, il faut aussi l'écrire de sorte à ce qu'il minimise la probabilité de bugs et soit facilement testable. Il doit être ainsi facile à maintenir, i.e. facile à corriger, modifier, et étendre tout en réduisant la dette technique, et minimisant l'introduction de nouvelles erreurs.</div>
+
+<div>En effet, cracher du code à toute vitesse, le nez dans le guidon, peut donner l'impression d'avancer rapidement. Cependant, vous produirez tout autant de dettes techniques, qui vous feront reculer d'autant plus. Au long terme, vous pourrez alors avoir une productivité nulle, voire négative. Il est ainsi bien plus efficace de prendre le temps de faire <i>mieux</i>. Ce qui ne signifie pas faire parfaitement dès le début.</div>
+
+<div>Dans les sections suivantes, nous verrons comment écrire du code fiable et maintenable. Nous approfondirons la question de la qualité logicielle dans le cours <a href="/R5-06-VCOD/"><i>R5-06-VCOD Développement Logiciel</i></a>.</div>
+
+<h3>Le TDD</h3>
+
+<div>Le TDD (<i>Test Driven Development</i>) consiste à écrire les tests avant d'écrire le code. On écrit alors un test de sorte à ce qu'il échoue, puis on modifie le code de sorte à ce qu'il passe le test, sans anticiper les autres tests futurs, et on recommence. Cela a plusieurs avantages :
+    <ul class="flex-2">
+        <li>le code écrit est testable et testé.</li>
+        <li>les interfaces sont conçues à partir de leur usage.</li>
+        <li>les tests documentent l'utilisation du code.</li>
+        <li>les modifications sont simples, sans régressions.</li>
+    </ul>
+</div>
+
+<div>Par exemple, si on veut écrire une fonction qui trie une liste, on écrit d'abord le test pour le cas nominal, puis le code pour le passer. On écrira ensuite un test pour un cas particulier/limite, e.g. trier une liste vide :
+    <div class="flex-2">
+        <script type="c-py">
+            def test_nominal():
+                assert bubble_sort([2,1,3]) == [1,2,3]
+        </script>
+        <script type="c-py">
+            def bubble_sort(a):
+              for i in range(0, len(a)):
+                for j in range(0, len(a) - i - 1):
+                  if t[j] > t[j+1]:
+                    t[j], t[j+1] = t[j+1], t[j]
+              return a
+        </script>
+    </div>
+    <div class="flex-2">
+        <script type="c-py">
+            def test_empty():
+                assert bubble_sort([]) == []
+        </script>
+        <script type="c-py">
+            def bubble_sort(a):
+                if len(a) == 0:
+                    return a
+                <h>...</h>
+        </script>
+    </div>
+</div>
+
+<div>Lorsqu'on développe, il est fréquent de vérifier ses résultats en les affichant (e.g. avec <script type="c-py">print()</script> ou <script type="c-ts">console.log()</script>). Avec TDD, le fait d'écrire les tests permet de pouvoir les re-exécuter, prévenant ainsi les régressions. Plus le projet est grand, plus ces tests deviennent important, car tester "à la main" en affichant les résultats montre alors très vite ses limites. Ces tests documentent aussi les choix de conceptions fonctionnelles effectués, i.e. comment le code doit se comporter.</div>
+
+<div>Lorsqu'on développe, il est difficile de prendre en considération tous les cas d'usages, cas limites, cas d'erreurs, etc. Le TDD permet de rester simple et d'avancer par itérations successives, permettant bien souvent de conserver un code simple, plutôt que de partir directement sur un code compliqué essayant de tout faire en même temps. Il évite aussi d'anticiper d'hypothétiques besoins futurs, ou de gérer des cas d'erreurs pas forcément nécessaires à supporter.</div>
+
+<div>⚠ Le TDD n'empêche pas d'avoir des étapes de conceptions, d'autant plus sur des systèmes potentiellement complexes. Le tout est de ne pas anticiper les besoins. Pour cela, on peut avoir un développement "<i>top-down</i>", i.e. partir du haut niveau (généralement l'interface graphique), et developer les fonctionnalités bas niveau dont on a besoin quand on en a besoin. Cela permet aussi d'avoir très rapidement <i>quelque chose</i> à montrer et sur lequel échanger. Attention cependant, l'interface doit être à un état de prototype, i.e. la mise en forme finale devra se faire une fois le logiciel stabilisé.</div>
+
+<div>Le TDD partant de l'écriture des tests, on part donc de l'usage. Ainsi, en sus de documenter l'usage (i.e. comment on utilise le code), cela permet de détecter rapidement si le code est peu ergonomique ou inconfortable à utiliser. Permettant ainsi de corriger le problème avant que ce code ne soit utilisé de part et d'autres du projet, rendant toutes modifications bien plus coûteuse. La présence des tests permet également d'effectuer des opérations de refactoring, tout en s'assurant de l'absence de regressions.</div>
+
+<div>Contrairement à ce qu'on pourrait croire, le TDD n'induit pas de coûts supplémentaires à court terme. Vous allez de toute manière tester votre code après l'avoir écrit, sauf qu'au lieu de prendre du temps <i>après</i> avoir écrit le code pour afficher et vérifier les résultats, vous prendrez du temps <i>avant</i> pour écrire les tests, constituant aussi une étape de conception. Bien évidemment, à moyen et long terme, le TDD devient d'autant plus intéressant grâce à la protection contre les régressions, la qualité du code, et la documentation des comportements.</div>
+
+<h3>Fonctions pures à responsabilité unique</h3>
+
+<div>Idéalement, on veut des fonctions pures à responsabilité unique afin de faciliter nos tests. Les fonctions pures sont des fonctions déterministes sans effets de bord.</div>
+
+<h4>Déterminisme</h4>
+
+<div>Une fonction déterministe est une fonction qui, pour une entrée donnée, produit toujours le même résultat. Une fonction non-déterministe n'aura pas forcément le même comportement d'une exécution à l'autre, ce qui compromet la fiabilité des tests, et complexifie la reproduction de bugs (e.g. bug à très faible probabilité d'occurrence).</div>
+
+<div>Le non-déterminisme d'une fonction peut provenir de la lecture d'une donnée externe non-constante dans son code. Cette donnée peut alors être vue comme un paramètre caché de la fonction, qui sera hérité en cascade par les fonctions qui l'appellent (directement ou indirectement). Il est ainsi préférable de passer une telle donnée en paramètre, explicitant la dépendance, et permettant de conserver une fonction pure.</div>
+
+
+<div>💡 Une méthode est une fonction spéciale dont le premier paramètre est l'objet sur laquelle elles ont été appelée. Cela n'est ainsi pas considéré comme étant un effet de bord :
+    <div class="flex-2">
+        <script type="c-py">
+            # Python
+            a.foo(<h>...</h>) # => A.foo(a, ...)
+        </script>
+        <script type="c-ts">
+            // JS
+            a.foo(<h>...</h>) // => foo.call(a, ...)
+        </script>
+    </div>
+</div>
+
+<div>⚠ En cas d'exécutions concurrentes, certaines données peuvent se retrouver modifiées lors de leurs traitements. Par exemple, pendant le parcours d'une liste, sa modification par l'extérieur peut provoquer des erreurs, <i>e.g. élément non-parcouru ou parcouru 2 fois</i>. On préfère ainsi, autant que possible, travailler sur des données constantes (ou des copies).</div>
+
+Pour des fonctions intégrant de l'aléa, il est d'usage de prévoir la possibilité de fournir une graine (<i>seed</i>), afin de la rendre déterministe pour les besoins des tests et des reproductions.
+
+<h4>Effets de bords</h4>
+
+<div>Un effet de bord est le fait d'<i>interagir</i> avec l'extérieur, e.g. écrire dans une variable globale. On peut voir les effets de bord comme un retour caché de la fonction, qui sera hérité en cascade par les fonctions qui l'appellent (directement ou indirectement). On préfère ainsi éviter les effets de bords, sauf pour les fonctions d'I/O, ou de logs, qu'on isolera autant que possible.</div>
+
+<div>💡 Un paramètre mutable est à la fois une donnée d'entrée (lecture), mais aussi de sortie (écriture). Marquer les données d'entrées comme immuables permet d'éviter (et de détecter) les effets de bords involontaires. Cela permet aussi de pouvoir appeler la fonction avec des données immuables :
+    <div class="flex-2">
+        <script type="c-py">
+            def foo(array: <h>List</h>[int]):
+                ... # modifications possibles.
+
+            foo( (1,2) ) # interdit
+        </script>
+        <script type="c-py">
+            def foo(array: <h>Sequence</h>[int]):
+                ... # modifications interdites.
+
+            foo( (1,2) ) # autorisé
+        </script>
+    </div>
+</div>
+
+<h4>La responsabilité unique (SRP)</h4>
+
+<div>La responsabilité unique signifie qu'une fonction/classe ne doit faire qu'une chose. Cela rend son écriture plus aisée, mais aussi plus facile à tester. Imaginons une fonction qui, à la fois, extrait des données (avec N configurations possibles), et les affiche (avec M configurations possibles). Cela signifie que la fonction aura M*N configurations à potentiellement tester. La complexité de la fonction est ainsi exponentielle à son nombre de responsabilités, faisant qu'il n'est pas toujours possible de tester toutes les combinaisons possibles.</div>
+
+<div>En revanche, si on sépare les responsabilités dans 2 fonctions distinctes, qu'on pourra tester individuellement, il n'y aura alors plus que M+N configurations à tester. De plus, cela permet de créer d'autres fonctions d'extractions et d'affichages, que l'on pourra combiner en fonction des besoins, au lieu d'avoir à modifier une fonction unique qui se complexifiera au fur et à mesure que des fonctionnalités lui seront ajoutées, avec de potentielles interactions fortuites entre les différents paramètres.</div>
+
+<div>Une des conséquences du SRP sur les classes, est que son interface doit être minimale, i.e. uniquement contenir les primitives permettant de manipuler les données internes et d'en garantir la cohérence. Les fonctions de convenances (<i>helpers</i>) manipulent la classe à travers ses primitives. Elles doivent être externes à la classe, afin d'empêcher qu'elles accèdent directement à l'état interne. Cela permet ainsi de :
+    <ul>
+        <li>réduire la surface de l'API, et ainsi le périmètre des tests.</li>
+        <li>pouvoir réimplementer l'interface plus facilement, car minimale.</li>
+        <li>réutiliser les fonctions de convenances pour d'autres objets possédant une interface compatible.</li>
+        <li>pouvoir ajouter/retirer des fonctions de convenances sans modifier l'API de la classe.</li>
+    </ul>
+</div>
+
+<div>Il convient aussi de privilégier, lorsque possible, les fonctions au méthodes protégées ou privées. Cela permet de séparer les accès à l'état interne, des calculs qui peuvent alors être testés séparément (et potentiellement réutilisés). En revanche, cela empêche de redéfinir le comportement de la fonction dans les classes filles.
+    <div class="flex-2">
+        <div><center><b>À éviter:</b></center>
+            <script type="c-py">
+                class Foo:
+                    def foo(self, a):
+                        self.calc(a)
+
+                    @protected
+                    def calc(self, a):
+                        self.data = self.k * a
+            </script>
+        </div><div><center><b>À privilégier:</b></center>
+            <script type="c-py">
+                class Foo:
+                    def foo(self, a):
+                        self.data = calc(a, self.k)
+
+
+                def calc(a, k):
+                    return k*a
+            </script>
+        </div>
+    </div>
+</div>
+
+<div>Dans le cas d'états internes complexes, on privilégiera l'utilisation de classes internes afin d'encapsuler des ensembles cohérents de sous états, ainsi que leur accès. Permettant, encore une fois, de les tester séparément et d'éventuellement les réutiliser. Cela permet de réduire la surface d'accès à ce sous état et ainsi de mieux en garantir la cohérence. Cela permet aussi de pouvoir facilement la remplacer par une implémentation alternative.
+    <div class="flex-2">
+        <div><center><b>À éviter:</b></center>
+            <script type="c-py">
+                class Foo:
+                    @private
+                    running: bool = False
+
+                    <h>...</h>
+
+                    def start(self):
+                        if self.running == True : return
+                        self.running = True
+                        <h>...</h>
+
+                    def stop(self):
+                        if self.running == False: return
+                        self.running = False
+                        <h>...</h>
+            </script>
+        </div><div><center><b>À privilégier:</b></center>
+            <script type="c-py">
+                class Foo:
+                    @private
+                    runningState = LockGuard()
+
+                    <h>...</h>
+
+                    def start(self):
+                        if ! self.runningState.enter():
+                            return
+                        <h>...</h>
+
+                    def stop(self):
+                        if ! self.runningState.leave():
+                            return
+                        <h>...</h>
+            </script>
+        </div>
+    </div>
+</div>
+
+<h3>Permettre l'exécution des tests</h3>
+
+<div>Dans les tests unitaires, on souhaite tester le comportement propre des fonctions, c'est à dire indépendamment de leur dépendances. Ainsi, on souhaite appeler les fonctions, avec un minimum de dépendances.</div>
+
+<h4>Inversion de contrôle</h4>
+
+<div>Imaginons un composant utilisant des valeurs issues d'un gestionnaire de paramètres/configurations. Si ce composant récupère de lui-même ces valeurs, alors il aura besoin d'un gestionnaire pour s'exécuter. Or un composant n'a pas à connaître l'origine des données qu'il manipule. Sa responsabilité est de traiter les données, pas de les récupérer. Le lien entre le composant et le gestionnaire doit donc être établi en dehors de la classe (<i>glue code</i>).</div>
+
+
+<div class="flex-2">
+    <div><center><b>À éviter:</b></center>
+        <script type="c-py">
+            class Foo:
+              @private
+              cfg: ConfigManager
+
+              def __init__(self, cfg):
+                self.cfg = cfg
+                cfg.listen( _: self.update(cfg.vals) )
+
+              @protected
+              def update(values):
+                <h>...</h>
+        </script>
+    </div><div><center><b>À privilégier:</b></center>
+        <script type="c-py">
+            class Foo:
+              def update(values):
+                <h>...</h>
+
+            # Un helper si créations fréquentes
+            def createFoo(cfg):
+              foo = Foo()
+              cfg.listen( _: foo.update(cfg.vals))
+              
+            cfg = ConfigManager()
+            createFoo(cfg)
+        </script>
+    </div>
+</div>
+
+<div>L'Inversion de Contrôle (IoC), évite cette dépendance superflue, permettant d'exécuter et de tester le composant sans le gestionnaire, e.g. avec d'autres sources de données. Lors d'opérations de refactor, certaines parties du code peuvent temporairement ne plus fonctionner. Or quand un système a de nombreuses dépendances de ce genre, l'ensemble du système est impacté, empêchant d'exécuter (et donc de tester) les différentes parties du code, tant que le refactor n'est pas terminé.</div>
+
+<h4>Doubles de test</h4>
+
+<div>Lorsqu'on test une fonction, on veut généralement en tester le comportement spécifique, pas le comportement de ses dépendances. Pour cela, on utilise des <i>doubles de tests</i> (<i>test doubles</i>), qui peuvent être de deux natures différentes :
+    <ul class="flex-3">
+        <li><i>Stub</i> : simule la dépendance.</li>
+        <li><i>Espion</i> : vérifie les accès à la dep.</li>
+        <li><i>Mock</i> : stub + spy</li>
+    </ul>
+</div>
+
+<div>Les stubs sont utilisés lorsque :
+    <ul>
+        <li>on veut éviter qu'un bug dans la dépendance fasse échouer le test.</li>
+        <li>la dépendance est peu adaptée aux tests, e.g. non-déterministe, lente, etc.</li>
+        <li>la dépendance n'est pas encore implémentée, e.g. en TDD.</li>
+    </ul>
+</div>
+
+<div>Les espions (<i>spy</i>) sont utilisés pour vérifier que la dépendance est correctement utilisée. Par exemple, une classe <script type="c-ts">TaskQueue</script> peut être responsable de recevoir des tâches afin d'en différer l'exécution <script type="c-ts">task.run()</script>. Ainsi, on souhaite vérifier que <script type="c-ts">task.run()</script> est exécuté au bon moment, avec les bons arguments. Pour cela, on va créer un proxy encapsulant une vraie tâche, et dont la méthode <script type="c-ts">run()</script> contiendra l'assertion du test.</div>
+
+<div>Les mocks, quant à eux, correspondent à une fusion entre un stub et un espion, i.e. simule la dépendance et en vérifie l'usage. Cela est utilisé lorsqu'on souhaite vérifier l'usage de la dépendance, mais que cette dernière est peu adaptée aux tests, e.g. lent.</div>
+
+<div>💡 Il est possible d'automatiser la création des doubles de tests par le biais d'une fonction <i>factory</i> ou d'un objet <i>builder</i>.</div>
+
+<h4>Interfaces graphiques</h4>
+
+<div>Les résultats graphiques, e.g. images, fenêtre, etc. sont difficiles à tester sans une vérification humaine. On peut cependant effectuer des tests de non-régression en effectuant une capture de l'interface, puis en la comparant avec une capture précédente, pixels par pixels. Cela indique un changement, sans savoir s'il est volontaire ou la manifestation d'un bug. Il est alors possible d'afficher les deux captures avec leurs différences mises en valeur. Il est aussi possible d'inclure un score de similarité afin d'identifier rapidement les plus gros changements.</div>
+
+<div>Cette méthode reste relativement peu fiable, l'image générée pouvant changer du fait d'un changement :
+    <ul>
+        <li>de la configuration de l'ordinateur, <i>e.g. thème, police, résolution écran</i>.</li>
+        <li>de la structure de l'interface, e.g. <i>l'ajout d'un élément, son déplacement, etc.</i></li>
+        <li>des données affichées.</li>
+        <li>de temps, <i>e.g. animations</i>.</li>
+    </ul>
+</div>
+
+<div>💡 Légèrement plus robuste, il est possible de comparer la structure de l'interface graphique au lieu de son rendu, e.g. le DOM en développement Web.</div>
+
+<div>Pour ce genre d'objets difficiles à tester, on souhaite séparer les comportements testables, des comportements réellement difficiles à tester. Pour cela on veut que l'objet devienne <i>humble</i>, i.e. soit réduit à son strict minimum, et délégue au maximum ses opérations à un contrôleur, qui sera plus facile à tester. Pour une interface graphique, on parlera de <i>vue passive</i> (<i>passive view</i>).</div>
+
+<div>Par exemple, cette vue passive aura pour rôle de convertir les événements bruts reçus (e.g. clic souris) en une action (e.g. <script type="c-ts">nextPage()</script>) envoyée au contrôleur. Le contrôleur enverra alors les données à afficher (e.g. <script type="c-ts">printPage(data)</script>). Il est ainsi aisé d'instrumentaliser le contrôleur par le biais de ses méthodes, et d'en observer l'état.</div>
+
+<todo>Schéma</todo>
+
+<div>💡 Cela facilite aussi les tests fonctionnels. En effet, au lieu de tester le résultat d'une série d'action, on peut alors préparer un état précis et en vérifier le rendu.</div>
+
+<h3>Réduire le nombre de cas</h3>
+
+<div>Une manière de faciliter les tests et de réduire le nombre de cas à tester. Par exemple, une mise à jour peut être :
+    <ul class="flex-2">
+        <li><b>Partielle</b> : rapide, plusieurs opérations possibles.</li>
+        <li><b>Complète</b> : plus coûteuse, une seule opération.</li>
+    </ul>
+</div>
+
+<div>Les mises à jours partielles ont beau être plus "optimisées", elles sont bien souvent inutiles au regard des besoins réels en performances. Or elles introduisent plusieurs niveaux de complexité :
+    <ul>
+        <li>il y aura N opérations à tester, pour un état possédant N propriétés indépendantes (une par propriété).</li>
+        <li>on introduit une notion d'état antérieur, avec des bugs pouvant dépendre des mises à jours passées et de leur ordre.</li>
+        <li>on peut risquer des désynchronisations, i.e. une mise à jour partielle ayant mal été appliquée.</li>
+    </ul>
+</div>
+
+<div>Il est ainsi préférable de n'avoir qu'un seul cas à implémenter et à tester, même si cela est moins "optimisé". Se ramener à un cas unique réduit le nombre de possibilités, la complexité, le risque d'erreur, et aussi de tests nécessaires.</div>
+
+<div>Cela implique aussi de réutiliser au maximum l'existant, pour n'avoir qu'une seule chose à tester, au lieu de devoir (re-)tester tous les doublons. De plus, lorsqu'un bug est détecté, il faudra le corriger dans tous les doublons, au risque d'en oublier un. L'existant, quant à lui, a déjà été testé et éprouvé, il sera donc <i>a priori</i> plus fiable qu'un code nouvellement (re-)écrit.</div>
+
+<div>Pour favoriser cette réutilisation, il convient aussi de distinguer la structure des données, de leur sémantique et utilisation. Par exemple, en fonction du contexte, une classe <script type="c-py">UserSessions</script> peut être une simple liste <script type="c-py">List[UserSession]</script>, un <script type="c-py">ComputationResult</script> peut être un simple dictionnaire, etc. quitte à utiliser des alias de type. Ainsi :
+    <ul>
+        <li>pas de classe à développer, moins de risques d'erreurs.</li>
+        <li>réutilisation des fonctions génériques existantes.</li>
+        <li>fonctions codées peuvent ensuite être réutilisées dans un contexte plus large.</li>
+        <li>interface standard, donc plus prévisible.</li>
+    </ul>
+</div>
+
+<div>💡 Vous pouvez aussi encapsuler une structure existante en vu de n'en exposer qu'une sous partie. Par exemple, une pile peut être une simple liste dont on ne permet que l'ajout et la suppression en tête. Cela ne nécessitera pas de tests supplémentaires si ses méthodes se contentent de rediriger leurs appels :
+    <script type="c-py">
+        class Stack:
+            @private
+            _list = List()
+
+            def append(self, *v, **kw): return self._list.append(*v, **kw)
+            def pop   (self, *v, **kw): return self._list.pop   (*v, **kw)
+    </script>
+</div>
+
+<div>💡 Les données (et leur structure) n'est pas là pour représenter le réel, mais pour permettre le stockage et le traitement d'informations en vu de produire un résultat. Il ne faut pas ainsi se laisser limiter par une volonté de réalisme excessive.</div>
+
+<div>⚠ Réduire le nombre de cas ne signifie pas concevoir une fonction générique qui se contente d'en masquer la diversité, soit via des configurations en entrée, soit en les discriminant elle-même en interne :
+    <div class="flex-2">
+        <div>
+            <center><b>À éviter</b></center>
+            <script type="c-py">
+                def foo(data, isSorted: boolean, <h>...</h>):
+                    if ! isSorted:
+                        data = data.sort()
+                    <h>...</h>
+            </script>
+        </div>
+        <div>
+            <center><b>À éviter</b></center>
+            <script type="c-py">
+                def play_call(animal):
+                    if isinstance(animal, Dog):
+                        animal.woof()
+                    <h>...</h>
+            </script>
+        </div>
+    </div>
+</div>
+
+<div>⚠ Aussi, une fonction générique doit être stable, i.e. ne pas devoir être adaptée à chaque nouvelle utilisation, au risque de potentielles régressions.</div>
+
+<h2>Reproductibilité</h2>
+
+<todo>Cf slides</todo>
+
+<h3>Motivation</h3>
+
+<div>Process e.g. build/installation (dont deps), etc. => scripts, reproduit aisément, mais, pas forcément fonctionnel, e.g. spécificité distribution, incompatibilités de versions de deps dans dépôt (trop récente/ancienne) ou conflits d'usages.</div>
+
+<div>Marche sur ma Machines = différences => testé sur nos machines, pas forcément reproduit sur autres machines / environnement de production.</div>
+
+<div>Conteneur, pour une uniformisation de l'environnement, marche ici, marche chez les autres.</div>
+
+<div>Reproduire/simuler env. target(s) ou distribuer conteneur.</div>
+
+<div>
+Machine virtuelle (1A AdmSys), simule jusqu'au matériel.
+
+- sécurité (e.g. untrusted ou unsafe/dangerous).
+
+- GUI mais aussi CLI manipulation, possibilité d'installer de manière automatisée (cf mon git) - créer sa propre iso = pas super pratique + lent.
+</div>
+
+<div>Docker favorisé car plus léger/rapide/pratiques, pas besoin d'émuler le matériel, besoin secu moindre.</div>
+
+<h3>Docker</h3>
+
+Docker file => versioning lignes (lié au FS)
+- image vs run.
+
+-> format dockerfile.
+
+-> CLI API
+-> volumes / bind mounts / tmp mounts
+-> interfaces réseaux -> bridge / port mapping
+-> variable d'env // secrets
+
+        </main>
+    </body>
+</html>

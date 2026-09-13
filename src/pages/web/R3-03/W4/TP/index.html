@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>TP3-4 (TW)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/page@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/page@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>Serveur</h1>
+
+<h2>Prise en main</h2>
+
+<div>Vous vous servirez de :
+    <ul>
+        <li>la documentation : https://denis-migdal.github.io/VSHS/dist/dev/pages/docs/fr/</li>
+        <li>du bac à sable : https://denis-migdal.github.io/VSHS/dist/dev/pages/playground/</li>
+    </ul>
+</div>
+
+<ol>
+    <li>Téléchargez la V2 de VSHS : https://github.com/denis-migdal/VSHS</li>
+    <li>En vous servant de la documentation, lancez le serveur en mode démonstration.</li>
+    <li>Testez quelques exemple de la documentation/bac à sable.</li>
+    <li>En vous servant de la documentation, exécutez quelques requête via <script type="c-text">curl</script> ou <script type="c-text">wget</script> sur le serveur.</li>
+</ol>
+
+<h2>Création des routes</h2>
+
+<ol>
+    <li>Créez une route <script type="c-text">/users</script> permettant d'accéder à la liste des utilisateurs (pour le moment un simple tableau global) ;</li>
+    <li>Lancez votre serveur en ligne de commande</li>
+    <li>Testez cette route via <script type="c-text">curl</script> ou <script type="c-text">wget</script>.</li>
+    <li>Créez une route <script type="c-text">/user/{ID}</script> permettant d'accéder aux données d'un utilisateur (pour le moment un simple dictionnaire associatif global) ;</li>
+    <li>Testez cette route via <script type="c-text">curl</script> ou <script type="c-text">wget</script>.</li>
+</ol>
+
+<h2>Création des requêtes</h2>
+
+<ol>
+    <li>Dans un fichier Brython que vous inclurez à une page Web, effectuez une requête <script type="c-text">fetch</script> permettant d'afficher dans la console la liste des utilisateurs ainsi qu'un utilisateur de votre choix.</li>
+    <li>Créez de nouvelles routes pour ajouter/supprimer/modifier un utilisateur (cf les 6 routes vues en cours). Vous testerez ces routes via <script type="c-text">curl</script>/<script type="c-text">wget</script>.</li>
+    <li>Créez des fonctions Brython permettant d'effectuer de telles requêtes auprès du serveur.</li>
+</ol>
+
+</main>
+    </body>
+</html>

@@ -1,0 +1,10 @@
+@import "../../TPSubject@2026/index.css";
+
+.sheet_answer {
+    display:flex;
+
+    & > ul {
+        flex: 1 1 0;
+        margin: 0;
+    }
+}

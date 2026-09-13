@@ -1,17 +1,17 @@
-- corrigés+DS disponibles sur Moodle 2024-2025
+<li>corrigés+DS disponibles sur Moodle 2024-2025</li>
 
-## Supports
+<h2>Supports</h2>
 
 -> regénérer les supports (attention aux marges pour versions impr.)
 
-- tous :
+<li>tous :</li>
   -> '' : string
   -> `` : nom de colonne
   -> éviter "".
 
 => les commentaires en SQL ? (--)
 
-- CM
+<li>CM</li>
   -> 1h/séance suffisant.
   -> améliorer les exemples, rédiger les détails non-rédigés.
   -> améliorer/ajouter les exemples interactifs/animations
@@ -32,7 +32,7 @@
         -> suivre les flèches
         -> commencer par les plus petites tables/résultats.
 
-- TP
+<li>TP</li>
   -> TP1
     -> ajouter des questions pour COALESCE pour mieux comprendre.
     -> reformuler COALESCE : a si non null sinon b.
@@ -40,28 +40,28 @@
   -> TP2
     -> on peut utiliser ORDER BY & LIMIT pour DELETE.
 
-## Organisation DS
+<h2>Organisation DS</h2>
 
-- imprimer le cheat sheet (attention aux marges).
-- mettre en place un serveur web en mode DS (pour le sujet).
+<li>imprimer le cheat sheet (attention aux marges).</li>
+<li>mettre en place un serveur web en mode DS (pour le sujet).</li>
 
-### TP5
+<h3>TP5</h3>
 
-- test postgres GUI (plateforme UCA BDD)
+<li>test postgres GUI (plateforme UCA BDD)</li>
 
-## Idées TD
+<h2>Idées TD</h2>
 
-### TD3
+<h3>TD3</h3>
 
 Comment bien choisir les clef primaires/étrangères
 Comment bien découper en tables (conception), dépendance fonctionnelle (?).
 
-### TP5
+<h3>TP5</h3>
 
-- interfaces pgAdmin / python bindings (injections) ?
-- PRAGMA optimize;  / OPTIMIZE => avant chaque fermeture de la database. (?)
+<li>interfaces pgAdmin / python bindings (injections) ?</li>
+<li>PRAGMA optimize;  / OPTIMIZE => avant chaque fermeture de la database. (?)</li>
 
-## Export/import
+<h2>Export/import</h2>
 
 Fréquent CSV (e.g. tableur)
 
@@ -83,7 +83,7 @@ Contenu:
     -> exec op for cmp
     - result table.
 
-- ss-rq visu (?)
+<li>ss-rq visu (?)</li>
   - normale : calculée une seule fois.
 
   - animation : < [P/=] >

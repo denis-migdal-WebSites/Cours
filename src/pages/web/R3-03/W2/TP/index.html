@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>TP2 (TW)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/TPSubject@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/TPSubject@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>CSS</h1>
+
+<div>En vous servant du cours, de la cheat sheet CSS, et de la documentation, MDN, effectuez les opérations suivantes.</div>
+
+<h2>Le cadre</h2>
+
+
+<ol>
+    <li>Créez un nouveau composant Web <script type="c-text">user-card</script> contenant le nom, prénom et rôle d'un utilisateur.</li>
+    <li>Dans ce composant Web ajoutez un fichier <script type="c-text">index.css</script> :
+        <script type="c-css">
+        :host {
+            display   : block;
+            max-width : 200px;
+            background: lightblue;
+        }
+        </script>
+    </li>
+    <li>Ajoutez-lui une bordure (<i>border</i>) de <script type="c-text">4px</script>, avec le style <script type="c-text">solid</script> et de couleur <script type="c-text">grey</script>.</li>
+    <li>Ajoutez lui des coins arrondis avec <script type="c-text">border-radius: 5px</script>.</li>
+    <li>Ajoutez <script type="c-text">overflow: hidden</script> pour cacher les éléments qui dépassent.</li>
+    <li>Forcez un affichage en 4/3 avec <script type="c-text">aspect-ratio</script>.</li>
+    <li>Donnez lui une marge interne (<i>padding</i>) de <script type="c-text">1em</script>.</li>
+</ol>
+
+<h2>Événements utilisateurs</h2>
+
+<ol>
+    <li>Lorsque le curseur (<i>cursor</i>) passe dessus, il doit indiquer que l'élément est clickable (<i>pointer</i>) ;</li>
+    <li>Empêchez la sélection des textes avec <script type="c-text">user-select: none</script>.</li>
+</ol>
+
+<div>Vous indiquerez les règles suivantes via des <i>règles imbriquées</i> (<i>nested rules</i>), i.e. dans :
+    <script type="c-css">
+    :host(:hover) {
+        /* ... */
+    }
+    </script>
+</div>
+
+<div class="hint"><script type="c-text">:hover</script> est une pseudo-classe (<i>pseudo-class</i>) servant à indiquer des règles CSS à appliquer lorsque l'élément est survolé par la souris.</div>
+
+<ol start="3">
+    <li>Au survol, l'élément doit devenir opaque (<i>opacity</i>) à <script type="c-css">50%</script>.</li>
+    <li>Utilisez <script type="c-css">transition: 2s opacity, 1s outline-size</script> pour animer cette transition, testez.</li>
+    <li>Au survol, ajoutez un contour (<i>outline</i>) de <script type="c-css">4px solid</script> jaune.</li>
+    <li>Créez l'animation <script type="c-css">focusin</script> avec <script type="c-css">@keyframes</script> qui commence à <script type="c-css">0%</script> avec <script type="c-css">transform: scale(1);</script> et se termine à <script type="c-css">100%</script> avec <script type="c-css">transform: scale(1.2);</script></li>
+    <li>Au survol, ajoutez une animation bidirectionelle infinie via <script type="c-css">animation: 2s focusin infinity alternate</script>.</li>
+</ol>
+
+<div>Nous allons afficher un petit tooltip personnalisé au survol de l'élément en ajoutant des règles CSS au pseudo-élément (<i>pseudo-element</i>) <script type="c-text">&:hover ::after</script> :
+    <ol start="8">
+        <li>le contenu sera <script type="c-css">content: "Cliquez pour visualiser l'utilisateur"</script>.</li>
+        <li>donnez lui un fond noir et une couleur blanche, ainsi qu'une border d'un pixel blanc.</li>
+    </ol>
+</div>
+
+<h2>Style du texte</h2>
+
+<div class="hint"><script type="c-css">&</script> est équivalente au sélecteur parent, i.e. <script type="c-css">&:hover</script> est équivalent à <script type="c-css">:host:hover</script>.<br/></div>
+
+<ol>
+    <li>Via CSS, mettez le nom en majuscule (<i>uppercase</i>) et le prénom capitalisé (<i>capitalize</i>).</li>
+    <li>Mettez le nom en gras (<i>bold</i>), et le prénom en italique (<i>italic</i>).</li>
+    <li>Le nom et le prénom auront une taille de police (<i>font size</i>) de <script type="c-css">1.2em</script>.</li>
+    <li>Le nom et prénom seront sur la même ligne sans retour à la ligne (<script type="c-css">white-space: nowrap</script>).</li>
+    <li>Si le nom/prénom dépasse de la ligne (<script type="c-css">text overflow</script>), on utilisera une ellipse (<script type="c-css">ellipsis</script>).</li>
+</ol>
+
+<h2>Positionnement</h2>
+
+<ol>
+    <li>Ajoutez un composant Web <script type="c-text">user-list</script> contenant une dizaine de <script type="c-text">user-card</script>.</li>
+    <li><script type="c-text">user-list</script> sera affichée (<i>display</i>) en mode <script type="c-text">flex</script>.</li>
+    <li><script type="c-text">user-list</script> affiche les éléments en colonnes (<i>column</i>) et autorise les retours à la ligne (<i>wrap</i>).</li>
+    <li>Les éléments seront séparés par un écart (<i>gap</i>) de <script type="c-css">10px</script>.</li>
+    <li><script type="c-text">user-card</script> sera positionné en mode <script type="c-text">relatif</script>.</li>
+    <li>le rôle sera positionné de manière absolue (<i>absolute</i>) à <script type="c-css">0px</script> du haut (<i>top</i>) et de la droite (<i>right</i>).</li>
+</ol>
+
+<div>Bonus: afficher en mode grille au lieu de flex et/ou jouer avec les <script type="c-text">place-</script>.</div>
+
+<h2>Responsive</h2>
+
+<div>Redimensionnez la fenêtre du navigateur pour voir comment le site se comporte (+ outils navigateurs).</div>
+
+<ol>
+    <li>Créez un nouveau conteneur (<i>container</i>) nommé <script type="c-text">parent</script> de type <script type="c-css">size</script> dans <script type="c-text">user-card</script>.</li>
+    <li>Si le conteneur a une largeur inférieure à <script type="c-css">100px</script> (i.e. <script type="c-css">@container ( width < 100px )</script>), ne pas afficher le prénom (<script type="c-css">display:none</script>).</li>
+</ol>
+
+<h2>Bonus : color scheme</h2>
+
+</main>
+    </body>
+</html>

@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>CM4 (TW)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/page@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/page@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>Architecture client/serveur</h1>
+
+<div>Un site Web est généralement constitué d'au moins 2 parties :
+    <ul>
+    <li><i>le côté client</i> (<i>front-end</i>) : dans le navigateur, affiche la page Web et gère les interactions avec l'utilisateur. Il est usuellement défini par un ensemble de fichiers HTML, CSS, JS, WASM, etc.</li>
+    <li><i>le côté serveur</i> (<i>back-end</i>) : sur le serveur, répond aux requêtes du navigateur afin de distribuer les fichiers nécessaires à la page Web.</li>
+    </ul>
+</div>
+
+<div>Les échanges entre le client et le serveur Web utilisent le protocole HTTP(S) :
+    <ul>
+        <li>le client demande une ressource via une <i>requête HTTP</i> ;</li>
+        <li>le serveur retourne la ressource demandée via une <i>réponse HTTP</i>.</li>
+    </ul>
+</div>
+
+<div>Les requêtes et réponses HTTP contiennent :
+    <ul>
+        <li>une <i>en-tête</i> : contenant des méta-données ;</li>
+        <li>un <i>corps</i> (facultatif) : contenant les données transférées.</li>
+    </ul>
+</div>
+
+<h2>Contenus dynamiques</h2>
+
+<div>Afin de tester nos pages Web en TP, nous utilisions jusqu'à présent <i>Live Server</i> comme serveur Web. Son fonctionnement est très simple : la racine du site Web est associée à un dossier <script type="c-bash"><h>$ROOT</h></script> du serveur. Chaque URL est alors associée à un fichier du serveur. 
+<i>Live Server</i> est ainsi un serveur web <i>statique</i> (<i>static web server</i>) distribuant des fichiers/ressources statiques (<i>static files/assets</i>). Ainsi, lorsqu'il reçoit une requête HTTP, il retourne le fichier demandé, e.g. :<br/>
+<script type="c-bash">http://localhost:5000/<h>$PATHNAME</h></script> est associé au fichier <script type="c-bash"><h>$ROOT</h>/<h>$PATHNAME</h></script>.
+</div>
+
+<div>Il est cependant possible d'avoir des serveurs <i>dynamiques</i> (<i>dynamic server</i>) générant le contenu renvoyé en fonction de la requête HTTP reçue. Imaginez un site vendant 5,000 produits différents. Il est évident qu'on ne va pas s'amuser à créer 5,000 pages Web à la main. À la place, on voudrait générer dynamiquement les pages Web à partir :
+    <ul>
+        <li>de l'<b>identifiant</b> du produit (i.e. quel produit afficher) ;</li>
+        <li>des <b>données</b> du produit, stockées dans une base de données ;</li>
+        <li>d'un <b>modèle</b> (<i>template</i>) indiquant comment structurer et afficher ces données.</li>
+    </ul>
+</div>
+
+<div>Il serait alors très aisé d'ajouter un nouveau produit en ajoutant une entrée dans la base de donnée, ou de modifier l'affichage des pages produits en modifiant le modèle. On aurait ainsi deux parties :
+    <ul>
+        <li><i>statique</i> : le modèle commun à tous les produits (HTML/CSS/JS/Brython/etc) ;</li>
+        <li><i>dynamique</i> : les données spécifiques à chaque produit.</li>
+    </ul>
+</div>
+
+<div>Les données ne sont cependant pas directement accessibles à partir de la page Web. En effet, si les accès à la base de données (e.g. SQL) étaient effectués sur la page Web, i.e. sur le navigateur/côté client, n'importe quel visiteur pourrait alors arbitrairement modifier les requêtes effectuées, ou récupérer/réutiliser les identifiants utilisés pour se connecter à la base de données.</div>
+
+<div>Il convient alors envoyer des requêtes au serveur Web, qui se chargera de manipuler la base de données côté serveur, puis en retournera les résultats. Le serveur Web fournira ainsi une <i>API</i>.</div>
+
+<h3>Les API REST</h3>
+
+<div>REST (<i><u>RE</u>presentational <u>S</u>tate <u>T</u>ransfer</i>) est un ensemble de principes permettant d'architecturer proprement une API Web de sorte à éviter qu'elle devienne chaotique :
+    <ul class="flex-2">
+        <li>URL uniformes ;</li>
+        <li>sémantique des requêtes HTTP ;</li>
+        <li>données structurées ;</li>
+        <li>sans états.</li>
+    </ul>
+</div>
+
+<h4>Uniformiser les URL</h4>
+
+<div>Comme vous le savez déjà, les URL identifient les ressources de manière unique.</div>
+
+<div>Afin d'éviter les collisions, et rendre les URL plus explicites/lisibles, il convient de les uniformiser en suivant un format unique. Pour cela on conserve une logique d'arborescence avec des <i>collections</i>, qui sont des ressources contenant elles-mêmes d'autres ressources (≈dossiers).</div>
+
+<div>Par exemple, un produit sera identifié par (et manipulé via) l'URL <script type="c-text">/produits/{$ID_PRODUIT}</script>. L'ensemble des URL correspondant à ce format est appelé <b>route</b> et sera alors traité par la même fonction (<i>handler</i>), avec <script type="c-text">$ID_PRODUIT</script> comme paramètre. La collection <script type="c-text">/produits/</script> est alors la liste des produits, et permettra des manipulations d'ensemble.</div>
+
+<div class="hint">Il est fréquent de préfixer les chemins par <script type="c-text">/api/v1/</script> et <script type="c-text">/static/</script> afin d'aisément distinguer l'API REST, des ressources statiques. Le numéro de version permet d'assurer la rétro-compatibilité pour les applications utilisant d'anciennes versions de l'API.</div>
+
+<div class="hint">La structuration des URL en routes permet d'aisément visualiser les ressources accessibles via l'API, ainsi que de gérer plus facilement les droits d'accès aux données, en autorisant/interdisant l'accès à certaines routes.</div>
+
+<h4>Uniformiser les requêtes</h4>
+
+<div>Les API REST utilisent 5 <i>méthodes HTTP</i> :
+    <ul>
+        <li><i>GET :</i> lire une ressource.</li>
+        <li><i>POST :</i> ajouter une ressource à une collection.</li>
+        <li><i>PUT :</i> créer une ressource ou la remplacer si elle existe.</li>
+        <li><i>PATCH :</i> modifier partiellement une ressource.</li>
+        <li><i>DELETE :</i> supprimer une ressource.</li>
+    </ul>
+</div>
+
+<div>Il est ainsi d'usage d'utiliser les requêtes suivantes afin d'indiquer le type d'opération effectué sur la ressource :
+    <ul>
+        <li><script type="c-ts">GET    /<h>$COLLECTION</h>/</script> : obtenir la liste des ressources de la collection.</li>
+        <li><script type="c-ts">POST   /<h>$COLLECTION</h>/</script> : créer une nouvelle ressource dans la collection.</li>
+        <li><script type="c-ts">GET    /<h>$COLLECTION</h>/<h>$ID</h></script> : obtenir la ressource d'identifiant <script type="c-ts"><h>$ID</h></script>.</li>
+        <li><script type="c-ts">PUT    /<h>$COLLECTION</h>/<h>$ID</h></script> : créer ou remplacer la ressource d'identifiant <script type="c-ts"><h>$ID</h></script>.</li>
+        <li><script type="c-ts">PATCH  /<h>$COLLECTION</h>/<h>$ID</h></script> : modifier la ressource d'identifiant <script type="c-ts"><h>$ID</h></script>.</li>
+        <li><script type="c-ts">DELETE /<h>$COLLECTION</h>/<h>$ID</h></script> : supprimer la ressource d'identifiant <script type="c-ts"><h>$ID</h></script>.</li>
+    </ul>
+</div>
+
+<div class="danger">Les requêtes <script type="c-text">GET</script> et <script type="c-text">DELETE</script> ne peuvent contenir de corps (<i>body</i>).</div>
+
+<h4>Query strings</h4>
+
+<div>Les URL peuvent aussi être suffixées par une <i>chaîne de requête</i> (<i>query string</i>), indiquée par un <script type="c-text">?</script>. Les query strings sont des paires <script type="c-text">clefs=valeurs</script> séparées par un <script type="c-text">&</script>, e.g. : <script type="c-text">?limit=10&export=csv</script>. </div>
+
+<div>Elles sont principalement utilisées sur les requêtes <script type="c-text">GET</script> afin de :
+    <ul>
+        <li>indiquer le format des données souhaité ;</li>
+        <li>filtrer les champs/informations ;</li>
+        <li>sur une collection, filtrer les entrées.</li>
+    </ul>
+</div>
+
+<div class="danger">Il est fréquent que les serveurs Web loggent les URL demandées. Il est ainsi important de ne pas inclure d'informations sensibles dans les query strings.</div>
+
+<div>Les query strings sont manipulées via la classe <script type="c-text">URLSearchParams</script> :
+<center>
+<table>
+    <thead>
+        <tr>
+            <th>
+                Opération
+            </th>
+            <th>
+                URLSearchParams
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><i>Créer</i></td>
+            <td><script type="c-ts">new URLSearchParams(<h>$URL</h>.search)</script></td>
+        </tr>
+        <tr>
+            <td><i>Générer</i></td>
+            <td><script type="c-ts">.toString()</script></td>
+        </tr>
+        <tr>
+            <td><i>Lister</i></td>
+            <td><script type="c-ts">.entries()/.keys()/.values()</script></td>
+        </tr>
+        <tr>
+            <td><i>Obtenir</i></td>
+            <td><script type="c-ts">.get[All](<h>$N</h>)</script></td>
+        </tr>
+        <tr>
+            <td><i>Ajouter</i></td>
+            <td><script type="c-ts">.set(<h>$N</h>, <h>$V</h>)/.append(<h>$N</h>, <h>$V</h>)</script></td>
+        </tr>
+        <tr>
+            <td><i>Supprimer</i></td>
+            <td><script type="c-ts">.delete(<h>$N</h>)</script></td>
+        </tr>
+        <tr>
+            <td><i>Contient ?</i></td>
+            <td><script type="c-ts">.has(<h>$N</h>)</script></td>
+        </tr>
+    </tbody>
+</table>
+</center>
+</div>
+
+<div class="hint">L'URL de la page est stockée dans <script type="c-ts">document.location</script>.</div>
+
+<h4>Données structurées</h4>
+
+<div>Le corps des requêtes/réponses REST sont usuellement au format JSON, mais peuvent utiliser n'importe quel format, e.g. :
+    <ul class="flex-3">
+        <li>texte brut ;</li>
+        <li>données binaires ;</li>
+        <li>URLSearchParams/FormData ;</li>
+        <li>XML ;</li>
+        <li>CSV ;</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<div>Le format utilisé/à utiliser est potentiellement indiqué par la requête REST. Il est cependant important de conserver des données structurées (i.e. éviter des réponses au format HTML) afin de permettre leur réutilisation pour d'autres usages (et potentiellement leur mise en cache).</div>
+
+<div>Notamment, il est fréquent d'offrir la possibilité aux développeurs tiers d'exploiter les données du site via une API REST (e.g. <i>Open Data</i> avec stats INSEE, données météo, etc). Bien évidemment, certaines API peuvent être payantes, e.g. en fonction du nombre de requêtes autorisées à la seconde.</div>
+
+<h4>Sans États</h4>
+
+<div>Les API REST se doivent d'être <i>sans état</i> (<i>stateless</i>), cela signifie que :
+    <ol>
+        <li>le serveur ne stocke aucun état de la connexion/session HTTP actuelle ;</li>
+        <li>une requête contient toutes les données nécessaires à sa réponse ;</li>
+        <li>une requête ne dépend pas d'autres requêtes ;</li>
+        <li>les requêtes identiques produisent des réponses identiques <i>(sauf si les données ont été modifiées)</i>.</li>
+    </ol>
+</div>
+
+<div>Cela comporte de nombreux avantages :
+    <ul>
+        <li><i>sécurité</i> : l'absence d'état côté serveur (1) évite des attaques par <i>déni de services</i> (DoS).</li>
+        <li><i>performance</i> : les requêtes ne dépendant pas d'un état (2), il aisé de répartir les charges (<i>load balancing</i>).</li>
+        <li><i>clarté</i> : les requêtes ne dépendant pas d'autres requêtes (3), les échanges sont plus simples à comprendre.</li>
+        <li><i>tests</i> : les réponses étant déterministes et reproductibles (4), on peut écrire des tests unitaires.</li>
+    </ul>
+</div>
+
+<h2>API JS</h2>
+
+<h3>Fetch</h3>
+
+<div>Une requête HTTP peut être effectuée au sein de la page Web via <script type="c-text">fetch()</script>:
+<script type="c-ts">
+const response = await fetch(<h>$URL</h>, {
+    method: <h>$HTTP_METHOD</h>,
+    body  : <h>$BODY</h>
+});
+</script>
+</div>
+
+<div>Le corps peut être de différent type :
+    <ul class="flex-3">
+        <li><script type="c-ts">string</script></li>
+        <li><script type="c-ts">Blob</script>/<script type="c-ts">File</script></li>
+        <li><script type="c-ts">Uint8Array</script>/<script type="c-ts">ReadableStream</script></li>
+        <li><script type="c-ts">URLSearchParams</script>/<script type="c-ts">FormData</script></li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<div class="hint">Pour envoyer des données au format, JSON, il convient de les convertir en <script type="c-ts">string</script> :
+<script type="c-ts">
+const response = await fetch(<h>$URL</h>, {
+    body: JSON.stringify(<h>$DATA</h>)
+    headers: {
+        "Content-Type": "application/json"
+    }
+});
+</script>
+</div>
+
+<div class="hint"><script type="c-ts">"Content-Type"</script> indique le type des données contenu dans le corps de la requête :
+    <ul>
+        <li><script type="c-ts">"text/plain"</script> : texte ;</li>
+        <li><script type="c-ts">"application/json"</script> : JSON ;</li>
+        <li><script type="c-ts">"application/octet-stream"</script> : données binaires.</li>
+        <li><script type="c-ts">"application/x-www-form-urlencoded"</script> : <script type="c-ts">URLSearchParams</script>/<script type="c-ts">FormData</script> ;</li>
+    </ul>
+</div>
+
+<div><script type="c-text">fetch()` retourne un `Response</script>, dont le contenu peut être lu via :
+    <ul class="flex-2">
+        <li><script type="c-ts">await response.text()</script></li>
+        <li><script type="c-ts">await response.json()</script></li>
+        <li><script type="c-ts">await response.bytes()</script> : Uint8Array</li>
+        <li><script type="c-ts">await response.formData()</script> : FormData</li>
+    </ul>
+</div>
+
+<div class="danger">Le corps d'une réponse ne peut être lue qu'une seule fois.
+    <ul>
+        <li><script type="c-ts">.bodyUsed</script> : indique si le corps a été lu.</li>
+        <li><script type="c-ts">.clone()</script> : clone la réponse (permet ainsi plusieurs lectures).</li>
+    </ul>
+</div>
+
+<h4>Status</h4>
+
+<div><script type="c-text">Response</script> indique aussi si la requête s'est bien effectuée :
+    <ul class="flex-2">
+        <li><script type="c-text">.ok</script> : pas d'erreurs ;</li>
+        <li><script type="c-text">.status</script> : code de status HTTP ;</li>
+        <li><script type="c-text">.statusText</script> : message précisant l'erreur.</li>
+    </ul>
+</div>
+
+<div>Les codes de status HTTP se divisent en 5 catégories :
+    <ul class="flex-3">
+        <li>1XX : requête en cours</li>
+        <li>2XX : succès</li>
+        <li>3XX : redirection</li>
+        <li>4XX : erreur du client</li>
+        <li>5XX : erreur du serveur.</li>
+    </ul>
+</div>
+
++ cors
++ cache
+
+🚩 [TODO] : outils network
+
+<h3>SSE</h3>
+
+<div>Contrairement aux WebSockets, les <i>Server Send Events</i> ne permettent qu'une communication unidirectionnelle du serveur vers le client. Il est utilisé lorsque le serveur doit régulièrement envoyer des informations au client, sans attendre de réponses, e.g. envoyer des logs en temps réel.</div>
+
+<div>Le principe est très simple, il s'agit d'une requête et d'une réponse HTTP normales, à l'exception que la réponse HTTP est maintenue en vie (<script type="c-text">keep-alive</script>) et est écrite petit à petit (<script type="c-text">text/event-stream</script>). Le corps de la réponse suit le format suivant :
+<script type="c-text">
+event: $EVENT_NAME
+data: $DATA
+
+event: $EVENT_NAME
+data: $DATA
+
+event: $EVENT_NAME
+data: $DATA
+</script>
+</div>
+
+<div>Côté client, l'utilisation est très simple, il suffit d'écouter des événements d'un <script type="c-text">EventSource</script>.
+
+<script type="c-ts">
+// [JS] JavaScript
+
+// Client
+const servEvent = new EventSource($URL);
+servEvent.addEventListener($EVENT_NAME, function(ev) {
+    console.log(ev.data)
+});
+servEvent.close(); // termine la communication.
+
+
+// Serveur (helper)
+class SSE {
+    constructor(res) {
+        this.res = res;
+        this.#setHeaders
+    }
+    #setHeaders() {
+        this.res.set({
+            'Cache-Control': 'no-cache',
+            'Content-Type' : 'text/event-stream',
+            'Connection'   : 'keep-alive'
+        });
+        this.res.flushHeaders();
+    }
+    dispatchEvent(name, data) {
+        this.res.write(`event: ${name}\n${data}\n\n`);
+    }
+}
+
+// Serveur
+app.get($URL, async function(req, res) {
+
+    const sse = new SSE(res);
+
+    sse.dispatchEvent($EVENT_NAME, $DATA); // Envoyer un événement.
+});
+</script>
+</div>
+
+<h3>Upload/Download</h3>
+
+=> qu'est-ce qu'un Blob/File ?
+=> decode/encode
+
+<h3>Websockets</h3>
+
+https://developer.mozilla.org/en-US/docs/Web/API/WebSocket
+
+<h2>Les formulaires</h2>
+
+-> form
+    -> input
+    -> FormData / URLSearchParams.
+    -> clear
+    
+-> validation + CSS
+
+/!\ vérifier les donnés côté serveur.
+
+<div class="danger">Vous ne devez <b><i><u>JAMAIS</u></i></b> faire confiance client. En effet, il est très aisé d'envoyer des données arbitraires au serveur. Vous devez ainsi <b><i><u>SYSTÉMATIQUEMENT</b></u></i> vérifier la validité des données envoyées par le client (format, valeurs, autorisations, etc).</div>
+
+
+<h2>Gestion des données</h2>
+
+Localstorage/sessionStorage/FileSystem API/cache.
+
+<h2>Les différents type de serveurs Web</h2>
+
+<div>La distribution du contenu statique est relativement simple, le serveur lit les fichiers, puis les envoie au client. Bien évidemment, peut gérer des fonctionnalités plus avancées comme mettre les fichiers en RAM pour les distribuer plus rapidement, vérifier les droits d'accès aux fichiers (dont authentifications), réécrire les URL, transmettre la requête à un autre serveur, personnaliser l'en-tête de la réponse HTTP, etc.</div>
+
+<div>On utilise alors des serveurs Web, e.g. Apache, Nginx, qui offrent de nombreuses fonctionnalités et possibilités de configurations :
+    <ul class="flex-2">
+        <li>réécritures d'URL/redirections ;</li>
+        <li>transfert du flux / reverse proxy ;</li>
+        <li>vérification des droits d'accès / authentification ;</li>
+        <li>gestion des caches ;</li>
+        <li>cgi/fastcgi ;</li>
+        <li>etc.</li>
+    </ul>
+</div>
+
+<div>Pour du contenu dynamique, i.e. généré sur demande par le serveur, il existe plusieurs façons de procéder :
+    <ul>
+        <li><i>CGI :</i> le serveur Web execute le fichier au lieu de transmettre son contenu au client. Il écrit sur l'entrée standard le corps de la requête, et transmet la sortie standard au client. Cette technique est simple mais peu performante.</li>
+
+        <li><i>fastCGI :</i> analogue au CGI, mais plus performant. Un ou plusieurs processus s'executent en contenu et communiquent avec le serveur Web via des sockets IPC, des sockets TCP, ou via des tubes nommés. C'est notamment ce qui est communément utilisé pour PHP, Ruby on rails, etc.</li>
+
+        <li><i>implémenter son propre serveur</i> qui répondra aux requêtes des clients. Le serveur peut alors supporter plusieurs protocoles en sus de HTTP, e.g. des WebSockets, des sockets TCP, etc. Il peut être implémenté dans n'importe quel langage (e.g. Python, JavaScript,  shell), et a donc accès à toutes leurs fonctionnalités et bibliothèques.</li>
+
+        <li><i>rediriger le flux</i> vers un autre serveur (reverse proxy). Quasi-identique à la solution précédente, il a l'avantage de pouvoir bénéficier des fonctionnalités du serveur Web (authentification, cache, etc), ainsi que d'éviter des problèmes de <i>Same Origin Policy</i> (SOP). Il peut aussi permettre de simplifier l'implémentation du serveur, en déléguant la sécurisation de la communication au reverse proxy, i.e. le serveur  envoie et reçoit des données en clair, et le reverse proxy les chiffre et les déchiffre.</li>
+    </ul>
+</div>
+
+<div>Contrôle d'accès :
+    <ul>
+        <li>soit au niveau du serveur REST ;</li>
+        <li>soit via un reverse Proxy se plaçant entre le client et le serveur REST (e.g. apache, nginx).</li>
+    </ul>
+</div>
+
+
+<div>Afin de rendre le code plus lisible, il est fréquent que les frameworks représentent les routes par une arborescence de fichiers. Au démarrage, le framework va ainsi lire de manière récursive un dossier e.g. <script type="c-text">/routes/</script> et ajouter les différents gestionnaires en fonction des fichiers qui s'y trouvent. Ainsi, le fichiers/dossier <script type="c-text">/routes/dir/{PARAMS}/foo</script> contiendra le gestionnaire à utiliser pour la route <script type="c-text">/dir/$PARAM/foo</script>.</div>
+
+-> BDD
+-> execute shell commands
+-> redirections
+
+-> 403/gestion authentification/.htaccess
+
+<h2>Opti (CM5 ?)</h2>
+
+<h3>Architecture client/serveur</h3>
+
+<div>L'affichage d'une page Web se déroule usuellement de la sorte :
+
+<script type="c-html">
+    <!DOCTYPE>
+    <html>
+        <head>
+            <script src='...' defer><xscript>
+            <link rel='stylesheet' href='...'></link>
+        </head>
+        <body>
+
+        <xbody>
+    </html>
+</script>
+</div>
+
+<ol>
+    <li>Le navigateur demande au serveur le fichier HTML correspondant à la page Web à afficher.</li>
+    <li>Le navigateur commence à lire et à interpréter le fichier HTML reçu.</li>
+    <li>Le navigateur lit la balise <script type="c-text"><script></script> et commence à télécharger le fichier correspondant. Comme la balise a l'attribut <script type="c-text">defer</script>, le navigateur continue de lire et interpréter le fichier HTML.</li>
+    <li>Le navigateur lit la balise <script type="c-text"><link></script> et commence à télécharger le fichier CSS correspondant.</li>
+    <li>Le navigateur commence à construire l'arbre DOM à partir du contenu de <script type="c-text"><body></script>.</li>
+    <li>Une fois l'arbre DOM construit, il execute le script qui était <script type="c-text">defer</script>.</li>
+    <li>Une fois l'exécution du script fini, le navigateur dessine la page Web pour la première fois.</li>
+</ol>
+
+<h3>Optimisations</h3>
+
+-> séparer static/dynamique pour cache
+-> cache : client storage / RAM (dont sqlite)
+-> pré-générer vs on demand vs lazy
+-> calculs
+-> async
+-> webworker
+-> img
+
+-> profiler / lighthouse
+-> hoist/+ les 2 autres trucs
+-> page parsing
+-> HTTP1vs2vs3
+
+<div>L'un des objectifs des développeur Web est de dessiner la page Web le plus tôt possible. Pour cela, il va user de diverses techniques :
+<ul>
+<li><i>Compresser les fichiers</i> avant de les transmettre, réduisant le temps de téléchargement des ressources nécessaires.</li>
+
+<li><i>Réduire la taille des fichiers</i> en
+    <ul>
+        <li>supprimant le code inutilisé</li>
+        <li>le minifiant (supprime les espaces et retours à la ligne)</li>
+        <li>en l'uglifiant (réduit la taille du code au prix de sa lisibilité, e.g. en renommant les variables).</li>
+        <li>pour les images, en réduisant sa résolution/qualité, ou en utilisant des formats vectoriels (SVG).</li>
+        <li>pour les images, afficher un <i>placeholder</i> ou version en basse résolution puis progressivement <a href="https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Tutorials/js13kGames/Loading#images">la remplacer une version de plus haute résolution</a>.</li>
+    </ul>
+</li>
+<li><i>Télécharger ou exécuter plus tard</i> les ressources non-nécessaires à l'affichage, via :
+    <ul>
+        <li>du <i>lazy load</i>, e.g. ne télécharger les images que lorsqu'elles apparaissent à l'écran.</li>
+        <li>de la <i>pagination</i>, e.g. sur un tableau ne télécharger/afficher que les X premières entrées et proposer des boutons pour afficher les entrées suivantes.</li>
+        <li>en reportant l'execution de certains bouts de codes à plus tard.</li>
+    </ul>
+</li>
+<li><i>Réduire le nombre de fichiers téléchargés</i> (on vise généralement 3-4 fichiers par page) :
+    <ul>
+        <li>remplacer l'URL d'une image par <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/Data_URLs">une chaîne de charactère en base64</a>.</li>
+        <li>fusionner les fichiers CSS en un seul.</li>
+        <li>fusionner les fichiers JS en un seul.</li>
+        <li>intégrer certaines ressources (e.g. JSON) dans le fichier JS.</li>
+        <li>intégrer le JS et/ou le CSS dans le fichier HTML.</li>
+    </ul>
+</li>
+<li><i>Utiliser des caches</i> pour éviter de re-télécharger à chaque fois certaines ressources :
+    <ul>
+        <li>un cache basé le protocole HTTP (cf <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Caching">Cache-Control</a>).</li>
+        <li>un cache local basé sur <script type="c-text">localStorage</script>, <script type="c-text">sessionStorage</script>, ou <script type="c-text">indexDB</script></li>
+        <li>un cache côté serveur en enregistrant des données dans la RAM afin de pouvoir répondre plus rapidement aux requêtes qui s'il fallait aller les lire directement sur le disque.</li>
+    </ul>
+</li>
+<li><i>Pré-télécharger les ressources</i>, en commençant à les télécharger le plus tôt possible :
+    <ul>
+        <li>dans les balises <script type="c-text"><script></script>, l'attribut <script type="c-text">defer</script>.</li>
+        <li>pour d'autres ressources utilisées plus tard, cf <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/rel/preload"><script type="c-html"><link rel=preload href='<h>...</h>' as='<h>...</h>'/></script></a>.</li>
+        <li></li>
+    </ul>
+</li>
+<li>Pour les site Web massivement visités :
+    <ul>
+        <li><i>distribuer la charge</i> (load balancing) entre plusieurs serveurs (⚠ engendre des problématiques de synchronisations).</li>
+        <li><i>rapprocher le serveur du client</i>, <i>edge computing</i> (contenu dynamique), <i>content delivery network</i> (contenu statique).</li>
+        <li>découper son site Web en plusieurs modules/services indépendants hébergés sur plusieurs serveurs (⚠ si les services doivent fréquemment communiquer entre eux cela peut s'avérer contre-productif).</li>
+    </ul>
+</li>
+  </ul>
+</div>
+
+<div class="danger">L'optimisation prématurée est diabolique. Vous n'avez, à votre niveau, pas besoin d'optimiser vos sites Web. Vous n'avez pas non plus à implémenter vous-mêmes ces optimisations, de nombreux outils le font déjà pour vous (e.g. Webpack).</div>
+
+<div>🚩 [TODO] : outils navigateur pour network / load performances (lighthouse)</div>
+
+<div>🚩 [TODO] : archi projet dev vs prod.</div>
+
+</main>
+    </body>
+</html>

@@ -5,34 +5,18 @@
         <title>PW</title>
         <meta name="color-scheme" content="dark light">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link   href="/skeleton/index.css"  rel="stylesheet">
-        <script  src="/skeleton/index.js"  type="module"     blocking="render" async></script>
+        <link   href="/templates/syllabus@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/syllabus@2026/index.js"  type="module"></script>
     </head>
     <body>
         <main>
-            <div>⚠ Je n'ai plus responsabilité de ce module, les supports ne sont ainsi plus maintenus.<br/>
-            ⚠ Les supports ci-présent sont un amalgame rapide et incomplet d'anciens supports.</div>
-
-            <p>TS+CSS avancé (x2) + Serveur (notion client/serveurs + HTTP + API REST) + formulaire et validations des données (dont test API REST) + Interactions avancées (-> lazy loading / ?) </p>
-
-            <p>SAE : Requêter API REST + Web scrapping + stocker les données (cache & reprise & en BDD/fichier) + vérifier données avant de stocker (deno & web & python) + tokens auth & quotats</p>
+            <div class="danger">Je n'ai plus responsabilité de ce module, les supports ne sont ainsi plus maintenus.</div>
+            <div class="danger">Les supports ci-présent sont un amalgame rapide et incomplet d'anciens supports.
+            </div>
 
             <a style="float:right" href="https://www.enseignementsup-recherche.gouv.fr/sites/default/files/2023-12/science-des-donn-es-30879.pdf#page=110" target="_blank"><i>Lien vers le PN</i></a><br/><br/>
 
             <table>
-                <style scoped>
-                    table {
-                        width: 100%;
-
-                        & th + td {
-                            width: 100%;
-                        }
-
-                        & td + td {
-                            white-space: nowrap;
-                        }
-                    }
-                </style>
                 <thead>
                     <tr>
                         <th></th>
@@ -44,39 +28,40 @@
                 <tbody>
                     <tr>
                         <th>W1</th>
-                        <td><i><b>?</b></i></td>
+                        <td><i><b>Rappels et notions avancées</b></i></td>
                         <td>2h CMTD + 2h TP</td>
-                        <td><a href="./CM/CM1/">PDF</a>, <a href="./TP/TP1/">TP</a></td>
+                        <td><a href="./CM/CM1/" disabled>PDF</a>, <a href="./TP/TP1/" disabled>TP</a></td>
                     </tr>
                     <tr>
-                        <td colspan="4">[desc]</td>
+                        <td colspan="4">CSS + TS</td>
                     </tr>
                     <tr>
                         <th>W2</th>
-                        <td><i><b>?</b></i></td>
+                        <td><i><b>Serveurs</b></i></td>
                         <td>2h CMTD + 2h TP</td>
-                        <td><a href="./CM/CM2/">PDF</a>, <a href="./TP/TP2/">TP</a></td>
+                        <td><a href="./CM/CM2/" disabled>PDF</a>, <a href="./TP/TP2/" disabled>TP</a></td>
                     </tr>
                     <tr>
-                        <td colspan="4">[desc]</td>
+                        <td colspan="4">Notion client/serveurs, HTTP (1v2v3), API REST<br/>
+                        - HTTP1 vs 2 vs 3 : https://www.youtube.com/watch?v=UMwQjFzTQXw</td>
                     </tr>
                     <tr>
                         <th>W3</th>
-                        <td><i><b>?</b></i></td>
+                        <td><i><b>Formulaires et validations de données</b></i></td>
                         <td>2h CMTD + 2h TP</td>
-                        <td><a href="./CM/CM3/">PDF</a>, <a href="./TP/TP3-4/">TP</a></td>
+                        <td><a href="./CM/CM3/" disabled>PDF</a>, <a href="./TP/TP3-4/" disabled>TP</a></td>
                     </tr>
                     <tr>
-                        <td colspan="4"></td>
+                        <td colspan="4">Dont test unitaire API REST, Zod,Regex</td>
                     </tr>
                     <tr>
                         <th>W4</th>
-                        <td><i><b>?</b></i></td>
+                        <td><i><b>Interactions avancées ?</b></i></td>
                         <td>2h CMTD + 2h TP</td>
-                        <td><a href="./CM/CM4/">PDF</a>, <a href="./TP/TP3-4/">TP</a></td>
+                        <td><a href="./CM/CM4/" disabled>PDF</a>, <a href="./TP/TP3-4/" disabled>TP</a></td>
                     </tr>
                     <tr>
-                        <td colspan="4"></td>
+                        <td colspan="4">E.g. lazy loading</td>
                     </tr>
                     <tr>
                         <th colspan="4">Annales DS</th>

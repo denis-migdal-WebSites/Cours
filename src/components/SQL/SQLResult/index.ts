@@ -1,6 +1,6 @@
 import {LISS, WithBare, WithContent, WithInput} from "@LISS/src/extensions"
 import define from "@LISS/src/define";
-import { keepSpaces } from "@LISS/components/code/code-script";
+import { keepSpaces } from "@LISS/components/code/legacy-code-script";
 
 export type SelectResult = Record<string, any>[];
 export type Result = null|string|SelectResult;

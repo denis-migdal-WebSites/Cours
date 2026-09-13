@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>TP1 (TW)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/TPSubject@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/TPSubject@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>HTML5</h1>
+
+<h2>Consignes</h2>
+
+<tp-consignes></tp-consignes>
+
+<h2>Visual Studio Code</h2>
+
+<div>Dans le cadre des modules de Web, nous utiliserons l'IDE <i>Visual Studio Code</i>.</div>
+
+<h3>Installation de Visual Studio Code</h3>
+
+<div>Visual Studio Code est déjà installé sur vos postes de travail UCA.</div>
+
+<div>Si vous utilisez un poste de travail personnel, suivez les instructions ci-dessous :
+   <ul>
+
+<li><i>Si vous bénéficiez des droits d’administration sur votre poste de travail :</i>
+   <ol>
+      <li><a href="https://code.visualstudio.com/download">Téléchargez l’installateur</a> (.deb pour Linux).</li>
+      <li>Installez le paquet (<script type="c-bash">dpkg -i code_*.deb</script>).</li>
+      <li>S’il manque des dépendances, installez-les (<script type="c-bash">apt -f install</script>).</li>
+   </ol>
+</li>
+<li><i>Sinon :</i>
+   <ol>
+      <li><a href="https://code.visualstudio.com/download">Téléchargez le .tar.gz</a> (64bits) pour Linux.</li>
+      <li>Décompressez le .tar.gz dans un dossier <script type="c-text"><h>$DIR</h></script>.</li>
+      <li>Ajoutez le dossier <script type="c-text"><h>$DIR</h>/VSCode-linux-arm64/bin/</script> à votre <script type="c-text"><h>$PATH</h></script>.</li>
+   </ol>
+</li>
+   </ul>
+</div>
+
+<h3>Configuration de Visual Studio Code</h3>
+
+<ol>
+   <li>Dans un terminal, lancez Visual Studio Code via la commande <script type="c-bash">code</script>.
+      <div class="danger">Sur les postes de travail UCA, vous ne pourrez pas installer les extensions si vous lancez Visual Studio Code via l’interface graphique <i>(problèmes de variables d’environnements mal non-définies)</i>.</div>
+   </li>
+   <li>Ouvrez la barre latérale des extensions via <key-shortcut>Ctrl+⇧+X</key-shortcut></li>
+   <li>Recherchez, puis installez les extensions suivantes :
+      <ol>
+         <li><i>HTMLHint</i> : améliore l’affichage du code HTML dans l’éditeur.</li>
+         <li><i>Live server</i> : permet de visualiser votre site en temps réel.</li>
+      </ol>
+   </li>
+</ol>
+
+<h3>Utilisation de Visual Studio Code</h3>
+
+<div>Vous pouvez alors ouvrir un dossier dans Visual Studio Code :
+   <ol>
+      <li><i>à partir de Visual Studio Code</i> :<br/>
+   <script type="c-text">Fichier -> Ouvrir le dossier</script>.</li>
+      <li><i>à partir d'un explorateur de fichier</i> en cliquant-droit sur le dossier puis :<br/>
+  <script type="c-text">Ouvrir avec -> Visual Studio Code</script>.</li>
+   </ol>
+</div>
+
+<div>Vous pouvez alors visualiser et manipuler l'arborescence de votre projet via la barre latérale gauche.</div>
+
+<div class="hint">Pour lancer votre projet dans un navigateur, cliquez sur "Go live" en bas à droite.</div>
+
+<div>Visual Studio Code offre aussi les fonctionnalités suivantes :
+   <ul>
+      <li>Auto-complétion.</li>
+      <li>Un accès à la documentation MDN au survol d’une balise.</li>
+      <li>Réduire/ouvrir les balises <i>(via les petits triangles à gauche des n° de lignes)</i>.</li>
+      <li>Navigation dans l'arborescence d'un fichier via la barre au-dessus de l'éditeur.</li>
+   </ul>
+</div>
+
+<div>Il vous est recommandé d’organiser votre espace de travail de la sorte :
+   <ul>
+      <li><i>Bureau 1</i> :</li>
+         <ul class="flex-2">
+            <li>à gauche, Visual Studio Code</li>
+            <li>à droite, votre site Web.</li>
+         </ul>
+      <li><i>Bureau(x) 2+</i> : Le sujet de TP, la documentation, votre cours, etc.</li>
+   </ul>
+</div>
+
+<h2>Votre premier composant Web</h2>
+
+<h3>Ouvrir le projet</h3>
+
+<ol>
+   <li>Téléchargez, puis décompressez l'archive <a href="/assets/web/W1-TP1.zip">Site Web</a>.</li>
+   <li>Ouvrez le dossier dans Visual Studio Code, puis lancez <script type="c-text">Go Live</script>.</li>
+   <li>Vous devriez alors voir un texte s'afficher dans la page Web.</li>
+</ol>
+
+<div class="hint">Le dossier ainsi ouvert est alors la racine (<i>root dir</i>) <script type="c-bash">$ROOT</script> de votre site Web.<br/></div>
+Dans le navigateur, il correspondra à l'URL <script type="c-text">http://localhost:5000/</script>.
+
+<div>Pour rappel, une URL suit la forme suivante : <script type="c-bash"><h>$PROTO</h>//<h>$HOST</h>/<h>$PATHNAME</h></script> :
+   <ul>
+      <li><script type="c-bash"><h>$PROTO</h></script> : le protocole, ici <script type="c-bash">http:</script>.</li>
+      <li><script type="c-bash"><h>$HOST</h></script> : l'hôte, indique l'adresse du serveur Web (où le joindre).</li>
+      <li><script type="c-bash"><h>$PATHNAME</h></script> : le chemin (<i>path</i>), indique le fichier demandé.</li>
+   </ul>
+</div>
+
+<div class="hint">Dans votre projet, une telle URL correspondra au fichier <script type="c-bash"><h>$ROOT</h>/<h>$PATHNAME</h></script>.</div>
+
+<div class="hint">Si l'URL correspond à un dossier, par défaut, son fichier <script type="c-text">index.html</script> sera affiché.</div>
+
+<h3>L'inspecteur</h3>
+
+<ol>
+   <li>Ouvrez l'inspecteur en cliquant-droit sur le texte puis sur <script type="c-text">Inspecter</script>.</li>
+</ol>
+
+<div>Vous pouvez alors visualiser et manipuler le DOM de votre page Web.
+   <ul>
+      <li>En haut, la barre de recherche 🔍 recherche des éléments à partir d'un sélecteur.</li>
+      <li>En bas, vous pouvez naviguer parmi les ancêtres de l'élément sélectionné.</li>
+      <li>Vous pouvez déplier et replier les éléments en via le triangle à leur gauche.</li>
+   </ul>
+</div>
+
+<div class="hint">Vous remarquerez alors que l'élément personnalisé <script type="c-html"><hello-world></script> contient un "#shadow-root" incluant le contenu affiché du composant Web.</div>
+
+<div class="danger">Toutes modifications du DOM via l'inspecteur sont locales et temporaires.</div>
+
+<h3>LISS</h3>
+
+<div>Afin de créer des composants Web simplement, en HTML uniquement, nous utiliserons LISS en mode automatique. LISS offre une <a href="https://github.com/denis-migdal/LISS/blob/V2/doc/fr/auto.md">documentation en français</a> ainsi qu'un <a href="https://denis-migdal.github.io/LISS/dist/dev/pages/playground/?example=auto-html">bac à sable</a> contenant divers exemples.</div> 
+
+<div>Dans le cadre de ce projet, chaque composant Web est défini par un dossier : <script type="c-text"><h>$ROOT</h>/components/<h>$NAME</h>/</script>
+</div>
+
+<div>Dans ce dossier, le contenu du composant Web est défini par le fichier <script type="text">index.html</script>.</div>
+
+<div class="danger">Respectez la casse et la convention <script type="c-text"><h>$ROOT</h>/components/<h>$NAME</h>/index.html</script> sinon votre composant ne fonctionnera pas !</div>
+
+<ol>
+   <li>Lisez la documentation de LISS et visualisez ses examples dans le bac à sable.</li>
+   <li>Modifiez le contenu de <script type="c-html"><hello-world></script> afin d'afficher <script type="c-text">Bonjour le monde ;)</script>.</li>
+   <li>Créez un nouveau composant Web <script type="c-html"><my-hello></script> affichant <script type="c-text">Bonjour ;)</script>.</li>
+   <li>Ajoutez ce nouveau composant Web à la page Web.</li>
+   <li>Vérifiez que <script type="c-text">Bonjour ;)</script> s'affiche bien dans la page Web.</li>
+</ol>
+
+<h2>Créer des composants Web plus avancés.</h2>
+
+<h3>Contenu dynamique dépendant des attributs de l'élément</h3>
+
+<div>LISS permet d'insérer la valeur d'un attribut de l'élément personnalisé dans son contenu. Plus concrètement, <script type="c-html">${<h>$ATTR_NAME</h>}</script> sera remplacé par la valeur de l'attribut <script type="c-html"><h>$ATTR_NAME</h></script>.</div>
+
+<ol>
+   <li>Créer un nouveau composant web <script type="c-html"><user-desc></script> contenant :
+      <ul>
+         <li>un titre de niveau 2 dont le texte est <script type="c-html">User ${user-id}</script>.</li>
+         <li>un texte <script type="c-html">Nom : ${user-name}</script> suivi d'un retour à la ligne (<i>line <u>br</u>eak</i>).</li>
+         <li>un texte <script type="c-html">Prénom : ${user-surname}</script> suivi d'un retour à la ligne (<i>line <u>br</u>eak</i>).</li>
+         <li>un texte <script type="c-html">Âge : ${user-age}</script> suivi d'un retour à la ligne (<i>line <u>br</u>eak</i>).</li>
+      </ul>
+   </li>
+   <li>En vous inspirant de <script type="c-text">/index.html</script>, créez une nouvelle page <script type="c-text">/user/</script> via un fichier <script type="c-text">/user/index.html</script> affichant la description d'un utilisateur John Doe de 42 ans.</li>
+   <li>Vérifiez que la page <script type="c-text">/user/</script> affiche bien la description de l'utilisateur.</li>
+</ol>
+
+<div class="hint">Une telle fonctionnalité est usuellement implémentée en JavaScript, mais LISS permet de cacher cette complexité. Ici, l'attribut n'est pas synchronisé avec le contenu, c'est à dire que si vous modifiez l'attribut via l'inspecteur, sa valeur ne sera pas mise à jour dans le contenu de l'élément personnalisé.</div>
+
+<div class="hint">De nombreux framework web fournissent des fonctionnalités équivalentes et bien plus avancées.</div>
+
+<h3>Répéter un élément personnalisé.</h3>
+
+<ol>
+   <li>À la fin de la page <script type="c-text">/user/</script> ajoutez un titre de niveau 3 <script type="c-text">Dernières connexions</script></li>
+   <li>Ajoutez une liste ordonnée (<i><u>o</u>rdered <u>l</u>ist</i>) contenant 10 éléments (<i><u>l</u>ist <u>i</u>tem</i>) :<br/>
+   <script type="c-html">[2020-02-23] <b>localhost</b> <em>1h30</em></script></li>
+   <li>Créez un composant personnalisé <script type="c-html"><user-connexion></script> pour <b>remplacer</b> les éléments de cette liste. Ses attributs seront <script type="c-html">date</script>, <script type="c-html">host</script>, et <script type="c-html">duration</script>.</li>
+   <li>Vérifiez que la page <script type="c-text">/user/</script> affiche bien la liste des dernières connexions.</li>
+   <li>Quel est l'un des intérêts des composants personnalisés exploité ici ?
+   <pre contenteditable></pre></li>
+</ol>
+
+<h3>Hériter d'un élément existant</h3>
+
+<ol>
+   <li>Créez une nouvelle page Web <script type="c-text">/users/</script> contenant un tableau dont la première colonne de l'en-tête sera vide, et les suivantes seront <script type="c-text">ID</script>, <script type="c-text">Nom</script>, <script type="c-text">Prénom</script>, <script type="c-text">Âge</script>.</li>
+   <li>Créez un nouveau composant Web <script type="c-html"><user-line></script> qui correspondra à une ligne du tableau et qui contiendra 5 cellules (<u>t</u>able <u>d</u>ata) :
+      <ul>
+         <li>une <u>im</u>a<u>g</u>e dont la <u>s</u>ou<u>rc</u>e sera <script type="c-html">/assets/img/roles/${user-role}.jpg</script> ;</li>
+         <li>l'identifiant (attribut <script type="c-html">user-id</script>) ;</li>
+         <li>le prénom (attribut <script type="c-html">user-surname</script>) ;</li>
+         <li>le nom (attribut <script type="c-html">user-name</script>) ;</li>
+         <li>l'âge (attribut <script type="c-html">user-age</script>) ;</li>
+      </ul>
+   </li>
+   <li>Vérifiez que la page <script type="c-text">/users/</script> affiche bien un tableau vide.</li>
+   <li>Ajoutez 5 lignes au tableau de <script type="c-text">/users/</script> en utilisant une balise :
+   <script type="c-html"><tr is="user-line"></script><br/>
+   💡 3 rôles sont définis : <script type="c-text">admin</script>, <script type="c-text">user</script>, et <script type="c-text">disabled</script>.</li>
+   <li>Vérifiez que la page <script type="c-text">/users/</script> affiche bien 5 utilisateurs.</li>
+   <li>Observez une ligne via l'inspecteur. Vous remarquerez que cet élément n'a pas de <script type="c-text">#shadow-root</script>.</li>
+   <li>Intervertissez les colonnes <script type="c-text">Nom</script> et <script type="c-text">Prénom</script>.</li>
+   <li>Transformez le contenu de la cellule <script type="c-text">ID</script> en un lien hypertexte renvoyant sur <script type="c-html">/user/?id=${user-id}</script>.</li>
+   <li>Vérifiez que le lien hypertexte fonctionne bien en cliquant dessus.</li>
+   <li>Quel est l'un des intérêts des composants personnalisés exploité ici ?
+   <pre contenteditable></pre></li>
+</ol>
+
+<div class="hint">Pour le moment, <script type="c-text">/user/?id=${user-id}</script> affichera toujours le même utilisateur. Nous verrons par la suite comment générer dynamiquement son contenu en fonction de données locales ou externes.</div>
+
+</main>
+    </body>
+</html>

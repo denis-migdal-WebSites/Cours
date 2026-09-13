@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>TP2 (BDR)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/TPSubject@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/TPSubject@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>Manipuler des entrées</h1>
+
+<div class="hint">Ce TP est inspiré de sources en partie inconnues.</div>
+
+<h2>Consignes</h2>
+
+<tp-consignes></tp-consignes>
+
+<div class="hint">Dans ce TP, vous reprendrez la base <script type="c-text">chimiste.sqlite</script> utilisée au TP précédent.</div>
+
+<div class="danger">Vous activerez l'option <script type="c-text">.changes on</script> afin d'afficher le nombre de lignes modifiées lors des insertions/modifications/suppressions.</div>
+
+
+<h2>Modification des entrées de la table</h2>
+
+<ol>
+   <li><q-text @lang="sql">En une seule requête SQL, insérez les chimistes suivant dans table <script type="c-text">chimiste</script> :</q-text>
+   <script type="c-text">
+   ┌────┬─────────────┬─────────┬─────────────────┬────────────┬────────────────┐
+   │ id │     nom     │ prenom  │ annee_naissance │ annee_mort │ pays_naissance │
+   ├────┼─────────────┼─────────┼─────────────────┼────────────┼────────────────┤
+   │ 35 │ Markov      │ Andrei  │ 1856            │ 1922       │ Russie         │
+   │ 34 │ van 't Hoff │ Jacobus │ 1852            │ 1911       │ Pays-Bas       │
+   │ 33 │ Kekule      │ August  │ 1896            │ 1829       │ Allemagne      │
+   └────┴─────────────┴─────────┴─────────────────┴────────────┴────────────────┘
+   </script></li>
+   <li><q-text @lang="sql">Affichez les chimistes que vous venez d'insérer (leurs <script type="c-text">id</script> sont les plus grands).</q-text></li>
+   <li><q-text @lang="sql">Vous remarquerez que August Kekule (<script type="c-text">id=33</script>) est mort avant d'être né...<br/>
+   En une seule requête, échangez ses années de naissance et de mort.</q-text></li>
+   <li><q-text>Pourquoi, dans les requêtes <script type="c-text">UPDATE</script>/<script type="c-text">DELETE</script>, utiliser <script type="c-text">id</script> au lieu de nom/prénom ?</q-text></li>
+   <li><q-text @lang="sql">Andrei Markov est un mathématicien, pas un chimiste, supprimez-le (de la table).</q-text></li>
+</ol>
+
+<h2>Quelques prétraitements</h2>
+
+<div>Comme vu dans le CM, il est possible de pré-traiter les données avant de les afficher ou de les manipuler. Pour rappel, lorsqu'une API est utilisée, il est souvent préférable de faire les prétraitements côté langage de programmation que côté SQL.</div>
+
+<h3>Concaténations</h3>
+
+<ol>
+   <li><q-text @lang="sql">Affichez les nom (en majuscules) et prénom des chercheurs.</script>
+      <div class="hint">L'opérateur de concaténation <script type="c-sql">||</script> permet de concaténer des valeurs.<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Par exemple <script type="c-sql">'a'||'b'</script> retournera <script type="c-sql">'ab'</script>.</div>
+   </li>
+   <li><q-text @lang="sql">Affichez, dans une colonne "nom complet", le nom (en majuscules) et le prénom, séparés par un espace.</q-text></li>
+</ol>
+
+<h3>Assigner des valeurs à une catégorie (conditions)</h3>
+
+<div>Un pré-traitement possible est d'assigner une catégorie à un ensemble de valeurs.<br/>Par exemple, associer à chaque chercheur une "époque", en :
+   <ul>
+      <li>ajoutant 25 à son année de naissance ;</li>
+      <li>effectuant la division entière du résultat par 100 ;</li>
+      <li>re-multipliant le résultat par 100.</li>
+   </ul>
+</div>
+
+<ol>
+   <li><q-text @lang="sql">Affichez le nom, prénom, et époque, des chercheurs.</q-text></li>
+</ol>
+
+<div>Lorsque la catégorie ne peut être calculée numériquement, il convient alors d'utiliser des <b>conditions</b>. Ces dernières s'écrivent sous la forme suivante :
+   <script type="c-sql">
+      CASE
+         WHEN <h>$COND</h> THEN <h>$VAL_SI_COND_VRAI</h>
+                  ELSE <h>$VAL_SI_COND_FAUX</h>
+      END
+   </script>
+</div>
+
+<ol start="2">
+   <li><q-text @lang="sql">Affichez le nom, prénom, et status (vivant ou mort), des chercheurs.</q-text></li>
+</ol>
+
+<h3>Formatter des dates</h3>
+
+<div>Il est fréquent qu'on souhaite extraire des informations d'une date, ou l'afficher différemment. Pour cela, on utilise la fonction <script type="c-sql">DATE_FORMAT(<h>$FORMAT</h>, <h>$DATE</h>)</script> (<script type="c-sql">STRFTIME</script> pour SQLite). Comme en Python, le format est une chaîne de caractère qui défini les éléments à afficher :
+   <ul>
+      <li><script type="c-text">%F</script> : la date, équivalant à <script type="c-text">%Y-%m-%d</script>.
+         <ul class="flex-3">
+            <li><script type="c-text">%Y</script> : l'année</li>
+            <li><script type="c-text">%m</script> : le mois</li>
+            <li><script type="c-text">%d</script> : le jour</li></li>
+         </ul>
+      <li><script type="c-text">%T</script> : l'heure, équivalent à <script type="c-text">%H:%M:%S</script>.
+         <ul class="flex-3">
+            <li><script type="c-text">%H</script> : l'heure</li>
+            <li><script type="c-text">%M</script> : les minutes</li>
+            <li><script type="c-text">%S</script> : les secondes</li>
+         </ul>
+      </li>
+   </ul>
+</div>
+
+<ol>
+   <li><q-text pts="1">Exécutez la requête ci-dessous, puis décrivez le résultat.
+      <script type="c-sql">
+         SELECT STRFTIME('%d/%m', DATE());
+      </script>
+   </q-text></li>
+</ol>
+
+<div>Au TP précédent, pour calculer l'âge des chimistes encore vivant, nous avions noté l'année courante en dur. L'âge retourné ne sera ainsi plus correct l'année prochaine.</div>
+
+<ol start="2">
+   <li><q-text @lang="sql">Utilisez <script type="c-sql">STRFTIME</script> pour obtenir l'année actuelle.</q-text></li>
+   <li><q-text @lang="sql">Affichez le nom, prénom, et âge des chimistes, calculé avec l'année actuelle.</q-text></li>
+</ol>
+
+<div class="hint">Vous constatez que l'expression permettant d'obtenir l'âge des chimistes est complexe. Vous verrez plus tard des manières permettant d'améliorer la lisibilité de telles requêtes, et d'éviter la recopie cette expression d'une requête à une autre :
+   <ul class="flex-2">
+      <li>via des colonnes générées (Cf CM3).</li>
+      <li>via des vues (cf BDR2).</li>
+      <li>via des fonctions (cf BDR2?).</li>
+   </ul>
+</div>
+
+<h3>Formatter des nombres</h3>
+
+<div>Comme vous le remarquez, toutes les colonnes sont alignées à gauche, ce qui rend les nombres peu lisibles. Pour corriger cela, on peut formater les nombres via la fonction <script type="c-sql">FORMAT(<h>$FORMAT</h>, <h>$VAL</h>)</script> (<script type="c-sql">PRINTF</script> pour SQLite < 3.38), qui s'utilise de manière analogue à <script type="c-sql">DATE_FORMAT()</script>.</div>
+
+<ol>
+   <li>Exécutez les exemples suivants :
+   <script type="c-sql">
+    SELECT PRINTF('(%d)'    , 2.3)  as nb;
+    SELECT PRINTF('(%4d)'   , 2.3)  as nb;
+    SELECT PRINTF('(%4.2f)' , 2.3)  as nb;
+    SELECT PRINTF( '%4.2f'  , 2.3)  as nb;
+   </script></li>
+</ol>
+
+<div>Le format suit la structure suivante : <script type="c-text">%<h>[$len]</h><h>[.$prec]</h><h>$T</h></script>
+   <ul>
+      <li><script type="c-text"><h>$T</h></script> est le format d'affichage :
+         <ul class="flex-3">
+            <li><script type="c-text">d</script> : entier.</li>
+            <li><script type="c-text">x</script> : entier en hexadécimal.</li>
+            <li><script type="c-text">f</script> : réel.</li>
+            <li><script type="c-text">e</script> : réel en notation exponentielle.</li>
+            <li><script type="c-text">s</script> : chaîne de caractères.</li>
+         </ul>
+      </li>
+      <li><script type="c-text"><h>$len</h></script> est la longueur minimale (facultatif). Ajoute des espaces en début de chaîne.</li>
+      <li><script type="c-text"><h>.$prec</h></script> est le nombre de chiffres après la virgule à afficher (facultatif).</li>
+   </ul>
+</div>
+
+<ol start="2">
+   <li><q-text @lang="sql">Affichez l'âge des chimistes avec une précision de deux chiffres après la virgule, et une longueur minimale telle que les âges soient correctement alignés.</q-text></li>
+</ol>
+
+<h2>Agrégat sur une colonne</h2>
+
+<div>Pour rappel, il est possible d'agréger plusieurs entrées au sein d'une même ligne grâce à la clause <script type="c-sql">GROUP BY <h>$COL[,...]</h></script>. Si une fonction d'agrégat est utilisée sans clause <script type="c-sql">GROUP BY</script>, toutes les entrées seront regroupées au sein d'une même ligne.</div>
+
+<ol>
+   <li>Exécutez la requête suivante :
+   <script type="c-sql">
+   SELECT MIN(annee_naissance) as min,
+          MAX(annee_naissance) as max
+        FROM chimiste;
+   </script></li>
+   <li><q-text @lang="sql">Affichez le nombre de chimistes dans la table (i.e. compter le nombre d'entrées).</q-text></li>
+   <li><q-text @lang="sql">Affichez chaque pays avec son nombre de chimistes (colonne "nb").</q-text></li>
+   <li><q-text @lang="sql">Ordonnez le résultat par nombre de chimistes décroissant.</q-text></li>
+   <li><q-text>Pourquoi ajouter la clause <script type="c-sql">WHERE nb >= 5</script> produira une erreur ?</q-text></li>
+   <li><q-text @lang="sql">Ajoutez une clause pour n'afficher que les pays ayant au moins 5 chimistes.</q-text></li>
+</ol>
+
+<h2>Fonction d'agrégat sur une expression</h2>
+
+<div>Les fonctions d'agrégats peuvent prendre en paramètre une colonne, mais aussi des expressions. Dans ce cas, il évaluera l'expression pour chaque lignes, avant d'exécuter la fonction d'agrégation.</div>
+
+<ol>
+   <li><q-text @lang="sql">En repartant de la requête effectuée dans la section "Formatter des nombres", calculez l'âge moyen des chimistes dans la base dans une colonne "m(age)".</q-text></li>
+   <li><q-text @lang="sql">En ajoutant les clauses une à une, modifiez cette requête pour afficher le pays et l'âge moyen des ses chimistes, classés par ordre croissant d'âge moyen.</q-text></li>
+   <li><q-text @lang="sql">Reprenez la requête précédente, mais n'affichez que les lignes correspondant aux pays ayant un âge moyen supérieur à 65 ans.</q-text></li>
+</ol>
+
+</main>
+    </body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf8"/>
+        <title>TP1 (BDR)</title>
+        <meta name="color-scheme" content="dark light">
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <link   href="/templates/TPSubject@2026/index.css"  rel="stylesheet">
+        <script  src="/templates/TPSubject@2026/index.js"  type="module"></script>
+    </head>
+    <body>
+        <main>
+
+<h1>Requêter une base de données</h1>
+
+<div class="hint">Ce TP est inspiré de sources en partie inconnues.</div>
+
+<h2>Consignes</h2>
+
+<tp-consignes></tp-consignes>
+
+<h2>SQLite</h2>
+
+<div>SQLite est un SGBD très léger dont chaque base de données est stockée sous la forme d'un fichier <script type="c-text">.sqlite</script>. Comme de nombreux SGDB, il permet de manipuler une base de données via plusieurs types d'interfaces :
+    <ul>
+        <li>interface en lignes de commandes.</li>
+        <li>interface graphique.</li>
+        <li>interface de programmation <i>(e.g. pour manipuler une base à partir de Python)</i>.</li>
+    </ul>
+</div>
+
+<div class="hint">Dans le cadre de ce TP, nous utiliserons SQLite via son interface CLI.</div>
+
+<h3>Usage de SQLite</h3>
+
+<div>SQLite se lance dans le terminal via la commande suivante :
+
+<script type="c-bash">
+sqlite3 <h>$FILE</h> <h>[$OPTS]</h>
+</script>
+</div>
+
+<div>Une fois lancé, vous pourrez ensuite écrire vos requêtes SQL après l'invite (<script type="c-text">sqlite></script>), appuyer sur entrée pour les exécuter, puis visualiser les résultats.</div>
+
+<div class="hint">Vous pouvez aussi entrer des commandes préfixées par un <script type="c-text">.</script> :
+    <ul class="flex-2">
+        <li><script type="c-text">.quit</script> : quitter SQLite.</li>
+        <li><script type="c-text">.help <h>[$CMD]</h></script> : afficher l'aide de SQLite.</li>
+    </ul>
+</div>
+
+<h3>Explorer la base de données</h3>
+
+<ol>
+    <li>Téléchargez la base de données "chimiste" via <a href="/assets/sql/chimiste.sqlite">ce lien</a>.</li>
+    <li>Dans un terminal, exécutez <script type="c-bash">sqlite3 <h>$FILE</h></script> afin d'ouvrir le fichier téléchargé.</li>
+    <li>Exécutez la commande <script type="c-text">.tables</script> pour afficher la liste des tables de la base.</li>
+    <li>Affichez le contenu de la table <script type="c-text">chimiste</script> grâce à la requête SQL suivante : <script type="c-sql">SELECT * FROM chimiste;</script></li>
+</ol>
+
+<h3>Formatter le résultat</h3>
+
+<div>Comme vous pouvez le constater, l'affichage des résultats est, par défaut, un peu austère. Plusieurs commandes SQLite (ou arguments de la commande <script type="c-bash">sqlite3</script>) permettent d'améliorer l'affichage :
+    <ul>
+        <li><script type="c-text">.headers ON</script> (ou <script type="c-text">--header</script>) : dans les résultats, affiche les noms des colonnes.</li>
+        <li><script type="c-text">.mode <h>$MODE</h></script> (ou <script type="c-text">--<h>$MODE</h></script>) : change le format d'affichage des résultats :
+            <ul class="flex-2">
+                <li>pour des humains : <script type="c-text">box</script>, <script type="c-text">table</script>, <script type="c-text">column</script>.</li>
+                <li>pour un ordinateur : <script type="c-text">csv</script>, <script type="c-text">json</script>, <script type="c-text">tabs</script>, <script type="c-text">list</script>.</li>
+                <li>pour les pages Web : <script type="c-text">html</script>, <script type="c-text">markdown</script>.</li>
+            </ul>
+        </li>
+    </ul>
+</div>
+
+<ol>
+    <li>Activez l'affichage des noms des colonnes, puis re-exécutez la requête SQL.</li>
+    <li>Testez les formats <script type="c-text">box</script>, <script type="c-text">table</script>, et <script type="c-text">column</script> sur la requête SQL précédente.</li>
+</ol>
+
+<h2>Sélection des colonnes</h2>
+
+<div>Les tables SQL peuvent contenir de nombreuses colonnes. Afin de conserver des résultats succins et lisibles, il convient de n'afficher que celles qui nous intéressent.</div>
+
+<ol>
+    <li><q-text @lang="sql">Affichez uniquement les pays de naissance.</q-text></li>
+    <li><q-text @lang="sql">Affichez les pays de naissance, cette fois en supprimant les doublons.</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom et le prénom de chaque chimistes.</q-text></li>
+    <li><q-text @lang="sql">À cette requête, ajoutez les années de naissance que vous nommerez "naissance".</q-text></li>
+</ol>
+
+<h2>Sélectionner des lignes</h2>
+
+<div>De la même manière que les tables SQL peuvent contenir de très nombreuses colonnes, elle peuvent aussi contenir de très nombreuses lignes. Ainsi, comme pour les colonnes, il convient de sélectionner les lignes qui nous intéressent.</div>
+
+<ol>
+    <li><q-text @lang="sql">Affichez le nom, prénom, et pays de naissance des chimistes nés en France.</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom, prénom des chimistes dont le nom commence par "A".</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom, prénom des chimistes encore vivant (i.e. sans année de mort).</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom, prénom des chimistes morts (i.e. ayant une année de mort), avec leur date de mort.</q-text></li>
+</ol>
+
+<h2>Opérations mathématiques sur les colonnes.</h2>
+
+<div>Il est fréquent que certaines informations soient calculées à partir d'une ou plusieurs colonnes. Par exemple, l'âge est calculée comme la différence entre l'année de mort et l'année de naissance :
+    <script type="c-sql">
+        SELECT annee_naissance, annee_mort, annee_mort - annee_naissance FROM chimiste;
+    </script>
+</div>
+
+<ol>
+    <li><q-text @lang="sql">Exécutez la requête ci-dessus en nommant la 3ème colonne "age".</q-text></li>
+    <li><q-text>Pourquoi, dans la requête précédente, certains chimistes n'ont pas d'âge ?</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom, prenom, année de naissance, et âge des chimistes encore vivants.</q-text></li>
+    <li><q-text @lang="sql">En vous aidant de <script type="c-text">COALESCE(a,b)</script>, qui retourne <script type="c-text">b</script> si <script type="c-text">a</script> est nul, sinon <script type="c-text">a</script>, affichez le nom, prenom, et âge de tous les chimistes.</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom, prenom, et âge des chimistes dont l'âge est supérieur à 100 ans.</q-text></li>
+</ol>
+
+<h2>Trier et limiter les entrées</h2>
+
+<div>Parfois, les entrées qui nous intéressent sont les e.g. 5 produits les plus chers/moins chers. Pour cela on va d'abord trier les lignes sur leur prix, puis limiter le nombre de lignes retournées.</div>
+
+
+<ol>
+    <li><q-text @lang="sql">Ordonnez le nom, prénom, et âge des chimistes par leur âge croissant.</q-text></li>
+    <li><q-text @lang="sql">Ordonnez le nom, prénom, et âge des chimistes par leur âge décroissant.</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom, prénom, et âge des 5 chimistes les plus vieux.</q-text></li>
+    <li><q-text @lang="sql">Affichez le nom, prénom, et âge des 5 chimistes les plus jeunes.</q-text></li>
+</ol>
+
+</main>
+    </body>
+</html>

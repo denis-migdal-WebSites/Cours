@@ -1,6 +1,0 @@
-[submodule "build/WebpackFramework"]
-	path = build/WebpackFramework
-	url = git@github.com:denis-migdal/Webpack-Framework.git
-[submodule "libs/LISS"]
-	path = libs/LISS
-	url = https://github.com/denis-migdal/LISS.git
