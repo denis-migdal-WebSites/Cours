@@ -10,24 +10,72 @@
     </head>
     <body>
         <main>
-            <h1>TP2 : Conception (2h)</h1>
+            <h1>Conception (2h TD + 2h TP)</h1>
 
 <div><i>Ce TP est fortement inspiré des planches de TD de Clément JACQ.</i></div>
 
-<div>💡 Nous vous fournissons des <a href="https://github.com/denis-migdal/DrawIO-UML-Shape-Libraries">bibliothèques de formes UML</a> que vous pouvez importer dans DrawIO.</div>
+<div class="danger">Afin de vous exercer sur les différents types de diagrammes, pensez à bien alterner les exercices.</div>
 
-<h2>Déploiement</h2>
+<div class="hint">Pour rappel, nous vous fournissons des <a href="https://github.com/denis-migdal/DrawIO-UML-Shape-Libraries">bibliothèques de formes UML</a> que vous pouvez importer dans draw.io.</div>
 
-<div>Créez les diagrammes de déploiement pour les contextes suivants.</div>
+<h2>Déploiement et composants</h2>
+
+<div>Créez les diagrammes de déploiement ou de composants pour les contextes suivants.</div>
 
 <h3>Démineur</h3>
 
-<div>Le démineur est un jeu dont le but est de trouver le plus rapidement possible toutes les cases du plateau contenant des mines sans les toucher.
-Le jeu est composé d’un plateau rectangulaire, d’un chronomètre et d’un compteur de mines. Le plateau est un quadrillage de cases. Au début du jeu, toutes les cases du plateau sont couvertes, le compteur de mines indiquant le nombre de mines restant à localiser. Le chronomètre compte le nombre de secondes écoulées depuis le début de la partie. La partie commence lorsque la première case est découverte. Le joueur peut interagir en découvrant une case, ou en la marquant d’un symbole (sans influence sur le déroulement du jeu).</div>
+<div class="context">Le démineur est un jeu dont le but est de trouver le plus rapidement possible toutes les cases du plateau contenant des mines sans les toucher.<br/>
+Le jeu est composé d’un plateau rectangulaire, d’un chronomètre et d’un compteur de mines. Le plateau est un quadrillage de cases. Au début du jeu, toutes les cases du plateau sont couvertes, le compteur de mines indiquant le nombre de mines restant à localiser. Le chronomètre compte le nombre de secondes écoulées depuis le début de la partie. La partie commence lorsque la première case est découverte. Le joueur peut interagir en découvrant une case, ou en la marquant d’un symbole (sans influence sur le déroulement du jeu).<br/>
+L'application comporte aussi un menu permettant d'enregistrer, de reprendre, ou de générer une partie.</div>
 
-<q-file ext=".svg"></q-file>
+<div class="flex-2">
+    <q-file @qid="#70e50a4f" @accept=".svg"><b>Diagramme de composants (bas niveau) :</b></q-file>
+    <q-file @qid="#d5a61569" @accept=".svg"><b>Diagramme de déploiement (haut niveau) :</b></q-file>
+</div>
 
-<todo>TP3.5 ex2 + TP4 ex 1 à 3.</todo>
+<h3>Système de gestion de formations</h3>
+
+<div class="context">Les employés souhaitant suivre des formations complémentaires peuvent consulter un catalogue de formations
+et faire une demande. La demande est traitée par un responsable de l’entreprise, qui peut consulter le dossier RH de l’employé et le contenu de la formation pour prendre sa décision. Le catalogue de formations est proposé et maintenu par un prestataire extérieur. Employés et Responsables disposent d’une interface spécifique pour interagir avec le système, nécessitant de s’authentifier sur l’intranet de l’entreprise.</div>
+
+<q-file @qid="#64dc6486" @accept=".svg"><b>Diagramme de déploiement :</b></q-file>
+
+<h3>Autres :</h3>
+
+<ol>
+    <li><q-file @qid="#c0ad453b" @accept=".svg">Diagramme de déploiement pour un système de sécurité d’ouverture de porte par carte magnétique :</q-file></li>
+    <li><q-file @qid="#b6b34ce1" @accept=".svg">Diagramme de de déploiement pour un site de vente en ligne :</q-file></li>
+</ol>
+
+<h2>Séquence et communication</h2>
+
+<div class="exo">Créez les diagrammes de séquence ou de communication pour les contextes suivants.</div>
+
+<h3>Télécommande</h3>
+
+<div class="context">Une télécommande permet de contrôler un téléviseur. Ce téléviseur possède des hauts parleurs, un mécanisme de mise sous tension (<i>alimentation</i>), un mécanisme de changement de de chaîne (<i>turner</i>), un mécanisme de réglage du son par augmentation ou diminution (<i>ampli</i>), un écran associé à un mécanisme de réglage du contraste et de la couleur des images par augmentation ou diminution.</div>
+
+<q-file @qid="#48f54b4b" @accept=".svg"></q-file>
+
+<h3>Systèmes</h3>
+
+<ol>
+    <li><q-file @qid="#c9084d16" @accept=".svg">
+        Un distributeur de billets automatique :
+    </q-file></li>
+    <li><q-file @qid="#908d32e2" @accept=".svg">
+        Un distributeur automatique proposant boissons et friandises :
+    </q-file></li>
+    <li><q-file @qid="#e948eeaa" @accept=".svg">
+        Un système de gestion de bibliothèque :
+    </q-file></li>
+</ol>
+
+<h3>Entreprise</h3>
+
+<div class="context">L'entreprise Poule Emploi propose un service de mise en relation entre employeurs potentiels et demandeurs d'emplois, permettant à l'un comme l'autre de consulter un catalogue (d'offres ou de CV). L'accès à ces catalogues, ainsi que l'ajout d'une offre ou d'un CV, nécessite un compte client payant créé par un employé de l'entreprise Poule Emploi. Le management a accès aux données client pour des raisons de reporting.</div>
+
+<q-file @qid="#89523f6a" @accept=".svg"></q-file>
 
         </main>
     </body>

@@ -47,7 +47,9 @@
         <li>Bons patrons de conceptions : <a href="https://fr.wikipedia.org/wiki/Patron_de_conception">design pattern</a>.</li>
         <li>Mauvais patrons de conceptions : <a href="https://fr.wikipedia.org/wiki/Antipattern">anti-pattern</a>.</li>
     </ul>
-</div> 
+</div>
+
+<div class="hint">Un <b>patron de conception</b> (<i>design pattern</i>), est un modèle générique et éprouvé, permettant de répondre à un problème récurrent en conception logicielle.</div>
 
 <p>Cependant, il ne faut pas perdre de vu que l'objectif principal est que le projet soit fonctionnel. Les recommandations ne sont pas des règles absolues, et ne sont que des moyens pour faciliter le développement et la maintenance du projet. Moyens qu'il faut bien évidemment mettre en regard avec les besoins et contraintes du projet.</p>
 
@@ -55,35 +57,59 @@
 
 <!-- <img src="./assets/Erysichthon.png" />-->
 
+
+<h3>KISS</h3>
+
+<div>Chaque outils répondent à des besoins spécifiques, et ne sont pas nécessairement adaptés à tous les projets. Il est ainsi important de ne pas complexifier inutilement son projet en utilisant certains outils alors qu'ils ne sont pas nécessaires/utiles dans le cadre du projet. La règle générale est, autant que possible, de garder les choses le plus simple possible (<b>KISS</b> - <i>Keep it Simple, Stupide</i>).</div>
+
+<TODO>Ne pas anticiper complexité technique => à l'usage moindre besoin, autre solution plus simple à partir de l'existant, etc.</TODO>
+
+<TODO>(below later)</TODO>
+
+<div>Par exemple, pour système où les composants communiquent à travers le réseau, commencer d'abord par une version où ils communiquent directement entre eux. Ce qui en facilite le développement et les tests. Puis, lorsqu'on implémente le réseau, faire en sorte de rester simple en isolant cette complexité (e.g. via un proxy + broker). Il est ainsi nécessaire <b>d'anticiper, sans complexifier</b>.</div>
+
+<div>Idéalement, on fera en sorte de pouvoir construire différentes versions (e.g. sans communications réseau, avec communications textuelles, avec communication compressées et chiffrées, etc.). Pour cela, il faut que le composant en charge des communications puisse être soit facilement configuré (e.g. en (des)activant certaines fonctionnalités), soit aisément substitué par une autre implémentation (e.g. pour le remplacer par une implémentation triviale).</div>
+
 <h2>Les composants</h2>
 
 <p>La <b>Programmation Orientée Composant</b> (<i>POC</i>) consiste à découper le projet en un ensemble de blocs indépendants appelés <b>composants</b>. Ce découpage en composants permet de réduire la complexité globale du projet, transformant un problème complexe, en plusieurs sous-problèmes plus simples à résoudre individuellement. Leur indépendance fait que, <i>en théorie</i>, la modification d'un composant ne se propage pas aux autres, limitant ainsi le coût des modifications.</p>
 
 <p class="danger">Attention à ne pas confontre POC (<i>Programmation Orienté Composant</i>) avec PoC (<i>preuves de concepts</i>).</p>
 
-<h3>UML</h3>
+<h3>Diagramme de déploiement (UML)</h3>
 
-<todo>Usage vs communication (i.e. fort couplage).</todo>
+<div>Le diagramme de <b>déploiement</b> représente les différents composants, leurs relations, ainsi que les cibles sur lesquelles ils seront déployés. Il permet ainsi de représenter l'architecture globale du projet.</div>
 
-<div>Il est possible de représenter les différents composants via un diagramme de <b>déploiement</b>, décrivant aussi les matériels sur lesquels les composants seront déployés.</div>
+<div class="flex-3 gap">
+    <img style="width:100%;align-self:center" src="./assets/Deployment.svg" />
+    <div class="span-2">
+        <div class="flex-4 gap">
+            <div class="span-3">Chaque composant est représenté par un rectangle avec 2 petits onglets sur le côté gauche. Une représentation alternative est toutefois utilisée lorsqu'un composant en contient d'autres (cf figure à gauche).</div>
+            <img style="width:100%;align-self:center" src="./assets/Deployment-bigcompo.svg"/>
+        </div>
+        <div>Les liens entre les composants peuvent être représentés par une flèche :
+            <ul>
+                <li><i>pleine :</i> pour les communications/interactions entre composants.</li>
+                <li><i>en pointillée :</i> pour une dépendance, traduisant une relation plus forte.</li>
+            </ul>
+            <div class="hint">Vous pouvez spécifier les protocoles de communications sur les flèches.</div>
+        </div>
+    </div>
+</div>
 
-<img src="./assets/Deployment.svg" />
+<div class="hint">Il est aussi possible de préciser les caractéristiques des matériels (e.g. mémoire, processeur, etc.).</div>
 
-<div>💡 Il est possible de préciser les caractéristiques (mémoire, processeur, etc.) des matériels.</div>
-
-<div>💡 Il est aussi possible d'utiliser des diagrammes de <b>composants</b> ou des diagrammes de <b>package</b>. En pratique, le diagramme de déploiement suffit.</div>
-
-<h2>Comment bien découper en composants ?</h2>
+<h2>Découper le projet en composants</h2>
 
 <p>On souhaite découper le projet en composants qui soient le plus indépendants possibles, i.e. qui aient un <b>faible couplage</b>. C'est à dire qu'un composant doit pouvoir évoluer sans impacter les autres composants. On va ainsi tenter de regrouper "ce qui évolue ensemble" au sein d'un même composant.</p>
 
 <h3>En couches d'abstractions</h3>
 
-<div>L'<b>abstraction</b> part du principe que le code doit communiquer l'<b>intention</b>, sans dévoiler les détails et la complexité technique. Le code est alors bien plus intuitif, lisible et compréhensible.</div>
+<div>L'<b>abstraction</b> part du principe que le code doit communiquer l'<b>intention</b>, sans dévoiler les détails et la complexité technique. Le code est alors bien plus intuitif, lisible et compréhensible. Il permet, entres autres, de retirer le <b>boilerplate</b>, i.e. une structure récurrente imposée par l'utilisation d'une fonctionnalité.</div>
 
 <div>Par exemple, <script type="c-ts">readText(<h>$READABLE</h>)</script> indique qu'on souhaite lire une source, sans dévoiler la nature de la source (fichier, flux, socket, etc), ou la complexité technique (vérification des permissions, ouverture d'un descripteur de fichier, décodage, etc). </div>
 
-<div>Un autre exemple, <script type="c-ts">on(<h>$TARGET</h>, REDO, <h>$CALLBACK</h>)</script> indique qu'on souhaite réagir un à événement <script type="c-text">REDO</script>. Nous n'avons ainsi pas besoin de savoir qu'un tel événement est déclenché par <script type="c-text">^+y</script> ou <script type="c-text">^+Z</script>. En centralisant la définition de l'événement, on garanti ainsi son uniformité au sein du projet, et facilite ses modifications futures.</div>
+<div>Un autre exemple, <script type="c-ts">on(<h>$TARGET</h>, REDO, <h>$CALLBACK</h>)</script> indique qu'on souhaite réagir un à événement <script type="c-text">REDO</script>. Nous n'avons ainsi pas besoin de savoir que cet événement est déclenché par <script type="c-text">^+y</script> ou <script type="c-text">^+Z</script>. En centralisant la définition de l'événement, on garanti ainsi son uniformité au sein du projet, et facilite ses modifications futures.</div>
 
 <h4>Un exemple d'abstraction : le DP itérateur</h4>
 
@@ -92,19 +118,15 @@
         <li>récupérer le prochain élément.</li>
         <li>vérifier si le parcours est terminé.</li>
     </ul>
-    <div class="flex-2">
-        <script type="c-ts">
-            interface Iterator<T> {
-                next(): T;
-                readonly isDone: boolean;
-            }
-        </script>
-        <script type="c-ts">
-            const it = getIterator(<h>$collection</h>);
-            while( ! it.isDone )
-                const elem = it.next();
-        </script>
-    </div>
+    <script type="c-ts">
+        interface Iterator<T> { next(): T; readonly isDone: boolean; }
+
+        const it = getIterator(<h>$collection</h>);
+        while( ! it.isDone ) {
+            const elem = it.next();
+            <h>...</h>
+        }
+    </script>
     </div>
 
 <div>On peut alors écrire des algorithmes génériques (e.g. filter, map, copy, foreach, find, sort, etc) acceptant tous types de collections, indépendamment de leur nature (liste, tableau, ensemble, arbre, etc) ou de leur implémentation. Ces algorithmes n'ont besoin d'être implémenté qu'une seule fois, au lieu de devoir les réécrire pour chaque collection différente. Cela implique aussi qu'on peut changer la structure d'une collection (e.g. transformer un tableau en liste), sans impacter le code l'utilisant.
@@ -128,9 +150,9 @@
 
 <h4>Couches d'abstraction</h4>
 
-<p>Au niveau de la conception, on utilise des <b>couches d'abstraction</b>, i.e. l'application du principe d'abstraction à l'échelle des composants. Les couches les plus basses (de <i>bas niveau</i>) sont les couches les plus techniques, quand les couches les plus hautes (de <i>haut niveau</i>) sont les plus abstraites :</p>
+<div>Lors de la conception, on applique le principe d'abstraction à l'échelle des composants, on parle alors de <b>couches d'abstraction</b>, i.e. l'application du principe d'abstraction à l'échelle des composants. Les couches les plus basses (de <i>bas niveau</i>) sont les couches les plus techniques, quand les couches les plus hautes (de <i>haut niveau</i>) sont les plus abstraites.</div>
 
-<div class="flex-3" style="gap:10px">
+<div class="flex-3 gap">
     <img style="width:50%" src="./assets/couches.svg">
     <div style="grid-column: span 2;"><p>Les <b>DAO</b> (<i>Data Access Object</i>) abstraient l'accès à des données persistantes, indépendamment de leur support de stockage (e.g. fichiers, base SQL, etc.). On manipule alors les données par le biais de classes qui se chargent d'effectuer les opérations demandées.</p>
     <script type="c-ts">
@@ -194,18 +216,18 @@
 
 <div>De même, une interface ne doit pas dépendre de l'usage concret qui en est fait, i.e. elle ne doit pas évoluer lorsque les besoins de ses clients évoluent. Par exemple, un client souhaite filtrer et afficher une liste de produits :
     <div class="flex-2">
-        <div><div style="text-align: center;"><b>DON'T</b></div>
-            <script type="c-ts">
-                store.printExpiredProducts();
-            </script>
-        </div>
-        <div><div style="text-align: center;"><b>DO</b>
-            <script type="c-ts">
-                let products = store.getProducts();
-                products = expiredProducts(products);
-                printProducts( products );
-            </script>
-        </div>
+        <div style="text-align: center;"><b>DON'T</b></div>
+        <div style="text-align: center;"><b>DO</b></div>
+    </div>
+    <div class="flex-2">
+        <script type="c-ts">
+            store.printExpiredProducts();
+        </script>
+        <script type="c-ts">
+            let products = store.getProducts();
+            products = expiredProducts(products);
+            printProducts( products );
+        </script>
     </div>
 </div>
 
@@ -222,6 +244,40 @@
 </div>
 
 <div class="danger">Attention cependant à ne pas anticiper des besoins futurs qui ne se manifesteront peut-être pas, ou qui finalement trouveront une meilleure alternative lorsque le projet sera plus avancé. Ajouter de la généricité ne doit se faire que s'il y a un besoin <i>actuel</i>.</div>
+
+<h3>Diagramme de composants (UML)</h3>
+
+<!-- ports useless -->
+
+<div>Le diagramme de composants représente les composants avec les interfaces qu'elles fournissent ou dont elles ont besoin :
+    <div class="flex-3 gap">
+        <img style="width:100%" src="./assets/component.svg" />
+        <div class="span-2">Les interfaces sont représentées par une ligne avec un :
+            <ul>
+                <li><i>cercle :</i> interface <b>fournie</b> par le composant.</li>
+                <li><i>demi-cercle :</i> interface <b>requise</b> par le composant.</li>
+            </ul>
+            <div>L'association des deux traduit une interaction entre composants, via l'interface.</div>
+        </div>
+    </div>
+</div>
+
+<div class="flex-3 gap">
+    <div class="span-2">
+        <div>L'interface peut aussi être représentée par un rectangle subdivisé en 3 compartiments, permettant de décrire l'interface :
+            <ol class="flex-3">
+                <li>nom</li>
+                <li>attributs</li>
+                <li>méthodes</li>
+            </ol>
+        </div>
+        <div>On dit alors que le composant <b>implémente</b> l'interface, qu'on représente par le biais d'une flèche de <i>réalisation</i> (trait pointillé, tête triangle blanc).</div>
+        <div class="hint">La notation exacte sera vue au CM3 avec le diagramme de classes.</div>
+    </div>
+    <img style="width:100%" src="./assets/component-alt.svg"/>
+</div>
+
+<div class="hint">Bien que ce ne soit pas standard, il est tout à fait possible de fusionner le diagramme de composants avec le diagramme de déploiement.</div>
 
 <h3>Conseils</h3>
 
@@ -305,6 +361,12 @@
     </ul>
 </div>
 
+<h3>Diagramme de Communication</h3>
+
+<div>Lorsqu'il y a trop d'entités, et peut de messages entre deux entités, il est possible d'utiliser un diagramme de communication pour plus de lisibilité :</div>
+
+<img src="./assets/Communication.svg"/>
+
 <h3>Diagramme de séquence</h3>
 
 <todo>XXX</todo>
@@ -316,20 +378,53 @@
 <todo>msg : fct / REST query / etc.</todo>
 <todo>Ref + Alt + par (parallel) opt (p 635 ) + crit + break + loop.</todo>
 
-<h3>Diagramme de Communication</h3>
-
-<div>Lorsqu'il y a trop d'entités, et peut de messages entre deux entités, il est possible d'utiliser un diagramme de communication pour plus de lisibilité :</div>
-
-<img src="./assets/Communication.svg"/>
-
 <h3>Autres diagrammes</h3>
 
-- Global d'interaction (er gros un diagramme d'activité dont les noeuds sont d'autres diagrammes).
-- Temps.
+<h4>Diagramme Global d'Interaction</h4>
+
+<div>Le diagramme Global d'Interaction est un diagramme d'activité où chaque noeud est un diagramme d'interaction (usuellement diagramme de séquence). Il est peu utilisé en pratique.</div>
+
+<h4>Diagramme de temps</h4>
+
+<div>Le diagramme de temps décrit l'évolution de l'état de plusieurs acteurs au cours du temps. Un acteur est représenté sous la forme d'un couloir horizontal, et une ligne décrivant l'évolution de son état. Le temps est représenté sur l'axe des abscisses, et les états sur l'axe des ordonnés.</div>
+
+<div>Hors contextes spécifiques, il est peu utilisé en pratique. On peut le voir comme un diagramme de séquence horizontal où l'échelle de temps est explicite, et les changements d'états mis en évidence.</div>
 
 <h2>Communication entre composants</h2>
 
-<h3>Obtenir une référence vers le destinataire</h3>
+
+<h3>La forme des messages</h3>
+
+<h4>Architecture monolithique</h4>
+
+<div>Dans une architecture <b>monolithique</b> les composants sont regroupés au sein d'un même exécutable. Les messages sont usuellement implémentés sous la forme d'appels de fonctions.</div>
+
+<h4>Service Oriented Architecture (SOA)</h4>
+
+<div>Dans une architecture SOA, les services (composants) sont distribués au sein de différents exécutables/processus. Il est alors nécessaire d'utiliser des techniques de <b>communications inter-processus</b> (IPC) :
+    <ul class="flex-2">
+        <li><b>fichiers FIFO</b> : <i>pipes</i>, <i>sockets</i>.</li>
+        <li><b>événements</b> : <i>message queue</i>, <i>signaux unix</i>.</li>
+        <li><b>données</b> : <i>sémaphores</i>, <i>mémoire partagée</i>.</li>
+    </ul>
+</div>
+
+<div class="danger">Seuls les messages binaires/textuels (e.g. JSON) peuvent être transmis. Pour transmettre un objet, il faudra ainsi : 
+    <ol>
+        <li>le <b>sérialiser</b>, <i>i.e. le transformer en données binaires</i>.</li>
+        <li>puis le <b>désérialiser</b> à la réception, <i>i.e. le récréer à partir des données binaires</i>.</li>
+    </ol>
+</div>
+
+<h4>Micro-services</h4>
+
+<div>Dans une architecture de <b>micro-services</b>, chaque service a son propre exécutable/processus. Son principal intérêt réside dans leur déploiement indépendant, et leur réplication sur plusieurs serveurs en fonction de la charge. Cette architecture est ainsi utilisée lorsqu'on traite un volume <b>très massif</b> de requêtes et de données.</div>
+
+<div>Les services pouvant se trouver sur différents serveurs, les <b>sockets</b> sont alors utilisées avec un protocole réseau adapté aux besoins du système. Par défaut, on utilisera généralement une <b>API REST</b>.</div>
+
+<div class="danger">Envoyer une requête réseau est bien plus coûteux qu'un simple appel de fonction. Le découpage en services doit ainsi éviter des communications excessives, en regroupant ensemble les composants qui communiquent fréquemment entre eux.</div>
+
+<h3>Identifier le destinataire</h3>
 
 <div>Pour pouvoir envoyer un message, le composant expéditeur doit pouvoir joindre le composant destinataire, i.e. qu'il ai une référence vers le composant ciblé.</div>
 
@@ -388,7 +483,7 @@
             services.init();
         </script>
     </div>
-    <div class="danger">Il convient toutefois de continuer d'utiliser l'injection de dépendances afin de faciliter les tests, et d'éviter de coupler l'implémentation de l'interface avec le Service Locator.</div>
+    <div class="danger">Il convient toutefois de continuer d'utiliser l'injection de dépendances afin de faciliter les tests, et d'éviter de coupler l'implémentation de l'interface avec le Service Locator. Le Service Locator intègre donc aussi du glue code.</div>
 </div>
 
 <h4>Event Bus</h4>
@@ -406,7 +501,9 @@
     </div>
 </div>
 
-<h3>Transférer le message</h3>
+<todo>Figure ?</todo>
+
+<h3>Acheminer le message</h3>
 
 <div>Idéalement, les composants sont indépendants du moyen de communication utilisé (e.g. appel de fonction, requête REST, requête SQL, etc). Pour cela on peut utiliser un <i>broker</i> qui reçoit les requêtes, puis les transmet. Il abstrait ainsi la communication entre les composants :
     <div class="flex-2">
@@ -469,7 +566,7 @@
     </ul>
 </div>
 
-<h3>Compatibilité</h3>
+<h3>Les incompatibilités d'interfaces</h3>
 
 <div>Pour que des composants puissent échanger entre eux, ils doivent utiliser les mêmes interfaces. Cependant, le fait que les interfaces doivent être stables n'empêche pas des évolutions ponctuelles. Or, on souhaite éviter de casser l'ensemble du projet tant que les composants n'auront pas été adaptés à la nouvelle interface.</div>
 
@@ -495,64 +592,21 @@
         <li>découpler l'interface locale, des interfaces dont elle dépend (DP <i>Bridge</i>).</li>
         <li>éventuellement coordonner les appels aux différentes dépendances (DP <i>mediator</i>).</li>
     </ul>
+    <div class="flex-2">
+        <script type="c-ts">
+            class Gateway {
 
-    <script type="c-ts">
-        class Gateway {
-
-            <h>...</h>
-            
-            addUser() {
-                this.users.add();
+                <h>...</h>
+                
+                addUser   () { this.users.add();    }
+                addProduct() { this.products.add(); }
             }
-            addProduct() {
-                this.products.add();
-            }
-        }
-    </script>
+        </script>
+        <todo>Figure</todo>
+    </div>
 </div>
 
 <div>Ainsi, il est possible de simplifier l'implémentation du composant tout en le rendant plus explicite. Le fait d'isoler les dépendances au même endroit permet à la fois d'identifier ce que le composant a réellement besoin, et de limiter les modifications en cas de modifications des dépendances.</div>
-
-
-<h3>Architectures</h3>
-
-<h4>Architecture monolithique</h4>
-
-<div>Dans une architecture <b>monolithique</b> les composants sont regroupés au sein d'un même exécutable. Les messages sont usuellement implémentés sous la forme d'appels de fonctions.</div>
-
-<h4>Service Oriented Architecture (SOA)</h4>
-
-<div>Dans une architecture SOA, les services (composants) sont distribués au sein de différents exécutables/processus. Il est alors nécessaire d'utiliser alors des techniques de <b>communications inter-processus</b> (IPC) :
-    <ul class="flex-2">
-        <li><b>Fichiers FIFO</b> : <i>pipes</i>, <i>sockets</i>.</li>
-        <li><b>Événements</b> : <i>message queue</i>, <i>signaux unix</i>.</li>
-        <li><b>Données</b> : <i>sémaphores</i>, <i>mémoire partagée</i>.</li>
-    </ul>
-</div>
-
-<div class="danger">Le message doit alors être converti en données binaires afin de pouvoir être transmis (e.g. JSON). Pour transmettre un objet, il faudra alors : 
-    <ol>
-        <li>le <b>sérialiser</b>, i.e. le transformer en données binaires.</li>
-        <li>puis le <b>désérialiser</b> à la réception, i.e. le récréer à partir des données binaires.</li>
-    </ol>
-</div>
-
-<h4>Micro-services</h4>
-
-<div>Dans une architecture de <b>micro-services</b>, chaque service a son propre exécutable/processus. Son principal intérêt réside dans leur déploiement indépendant, et leur réplication sur plusieurs serveurs en fonction de la charge. Cette architecture est ainsi utilisée lorsqu'on traite un volume <b>très massif</b> de requêtes et de données.</div>
-
-<div>Les services pouvant se trouver sur différents serveurs, les <b>sockets</b> sont alors utilisées avec un protocole réseau adapté aux besoins du système. Par défaut, on utilisera généralement une <b>API REST</b>.</div>
-
-<div class="danger">Envoyer une requête réseau est bien plus coûteux qu'un simple appel de fonction. Le découpage en services doit ainsi éviter des communications excessives, en regroupant ensemble les composants qui communiquent fréquemment entre eux.</div>
-
-<h3>KISS</h3>
-
-<div>Ces différents outils répondent à des besoins spécifiques, et ne sont pas nécessairement adaptés à tous les projets. Il est ainsi important de ne pas complexifier inutilement son projet en utilisant certains outils alors qu'ils ne sont pas nécessaires/utiles dans le cadre du projet. La règle générale est, autant que possible, de garder les choses le plus simple possible (<b>KISS</b> - <i>Keep it Simple, Stupide</i>).</div>
-
-<div>Par exemple, pour système où les composants communiquent à travers le réseau, commencer d'abord par une version où ils communiquent directement entre eux. Ce qui en facilite le développement et les tests. Puis, lorsqu'on implémente le réseau, faire en sorte de rester simple en isolant cette complexité (e.g. via un proxy + broker). Il est ainsi nécessaire <b>d'anticiper, sans complexifier</b>.</div>
-
-<div>Idéalement, on fera en sorte de pouvoir construire différentes versions (e.g. sans communications réseau, avec communications textuelles, avec communication compressées et chiffrées, etc.). Pour cela, il faut que le composant en charge des communications puisse être soit facilement configuré (e.g. en (des)activant certaines fonctionnalités), soit aisément substitué par une autre implémentation (e.g. pour le remplacer par une implémentation triviale).</div>
-
 
         </main>
     </body>
