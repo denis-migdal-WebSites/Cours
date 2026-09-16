@@ -60,7 +60,7 @@
 
 <h3>KISS</h3>
 
-<div>Chaque outils répondent à des besoins spécifiques, et ne sont pas nécessairement adaptés à tous les projets. Il est ainsi important de ne pas complexifier inutilement son projet en utilisant certains outils alors qu'ils ne sont pas nécessaires/utiles dans le cadre du projet. La règle générale est, autant que possible, de garder les choses le plus simple possible (<b>KISS</b> - <i>Keep it Simple, Stupide</i>).</div>
+<div>Chaque outils répondent à des besoins spécifiques, et ne sont pas nécessairement adaptés à tous les projets. Il est ainsi important de ne pas complexifier inutilement son projet en utilisant certains outils alors qu'ils ne sont pas nécessaires/utiles dans le cadre du projet. La règle générale est, autant que possible, de garder les choses le plus simple possible (<b>KISS</b> - <i>Keep it Simple, Stupid</i>).</div>
 
 <TODO>Ne pas anticiper complexité technique => à l'usage moindre besoin, autre solution plus simple à partir de l'existant, etc.</TODO>
 
@@ -283,9 +283,13 @@
 
 <h4>Stabilité</h4>
 
+<todo>déplacer où ?</todo>
+
 <div>Un composant ne dépend ainsi pas d'implémentations, mais d'interfaces tierces. L'interface se doit d'être stable, mais cela ne préjuge rien quant à l'implémentation qu'il y a derrière. Il est ainsi possible d'isoler une implémentation "sale" et instable derrière une interface propre et stable. En revanche, un composant stable/difficile à modifier ne doit pas dépendre d'une interface instable. En effet, tout changement de l'interface nécessite d'adapter l'implémentation et les usages.</div>
 
 <h4>Nommage</h4>
+
+<todo>MSG ?</todo>
 
 <div>Les noms doivent révéler l'intention et être explicites, sans pour autant être trop longs. Certains termes proches se distinguent par des nuances implicites, qui sont cruciales à la bonne comprehension intuitive des concepts sous-jacent, e.g.:
     <ul class="flex-4">
@@ -324,10 +328,11 @@
         <li><i>watch</i> : listen + vérification des valeurs.</li>
         <li><i>bind</i> : déclaration d'un watch auprès d'un système.</li>
     </ul>
-
 </div>
 
 <h4>Exportation</h4>
+
+<todo>ATP ?</todo>
 
 <p>Je vous recommande d'exporter vos interfaces par le biais d'un dossier <script type="c-text">/exports/</script> séparé de l'implémentation. Chaque interface est alors exportée dans un sous-dossier qui se contente de réexporter des symboles de l'implémentation. Cela permet ainsi d'avoir des références stables, indépendantes des restructurations qui peuvent être effectuées dans l'implémentation.</p>
 
@@ -337,22 +342,19 @@
 
 <h2>Protocole de communication</h2>
 
-<p>Les interfaces décrivent ce que les composants sont capables de faire, mais pas la manière dont ils échangent entre eux dans le cadre d'un scénario donné. Par exemple, pour acheter un produit, quels messages sont envoyés à qui, dans quel ordre ?</p>
+<p>Les interfaces décrivent ce que les composants sont capables de faire, mais pas la manière dont ils échangent entre eux dans le cadre d'un scénario donné. Par exemple, pour acheter un produit, quels messages sont envoyés à qui, et dans quel ordre ?</p>
 
-<div>Pour cela on utilise principalement 2 diagrammes UML :
-    <div class="flex-2">
-        <div>
-            <div style="text-align: center;"><b>Diagramme de séquence :</b> <i>si beaucoup de messages.</i></div>
-            <img style="width:100%" src="./assets/Sequence.svg"/>
-        </div>
-        <div>
-            <div style="text-align: center;"><b>Diagramme de communication :</b> <i>si beaucoup d'acteurs.</i></div>
-            <img src="./assets/Communication.svg"/>
-        </div>
-    </div>
-</div>
+<h3>Les messages</h3>
 
 <todo>Stateless + DP orchestrator</todo>
+<todo>Éviter boucles (e.g. DOM .remove()) -> décider d'un responsable + séparer la demande du traitement.
+    <ul>
+        <li>ask : request/x</li>
+        <li>do : execute/perform</li>
+        <li>process</li>
+        <li>event/hooks : on/before/after</li>
+    </ul>
+</todo>
 
 <div>Les appels de fonctions peuvent être <b>synchrone</b> (<i>j'attends la réponse</i>) ou <b>asynchrone</b> (<i>je continue l'exécution sans attendre la réponse</i>). Les appels asynchrones peuvent être implémentés par :
     <ul>
@@ -363,9 +365,12 @@
 
 <h3>Diagramme de Communication</h3>
 
-<div>Lorsqu'il y a trop d'entités, et peut de messages entre deux entités, il est possible d'utiliser un diagramme de communication pour plus de lisibilité :</div>
+- quand simple, et peu de messages entre deux entités.
 
 <img src="./assets/Communication.svg"/>
+
+- nom
+- numéroter msg.
 
 <h3>Diagramme de séquence</h3>
 
@@ -375,8 +380,28 @@
 
 <img src="./assets/Sequence.svg"/>
 
-<todo>msg : fct / REST query / etc.</todo>
-<todo>Ref + Alt + par (parallel) opt (p 635 ) + crit + break + loop.</todo>
+<todo>ligne + activité</todo>
+<todo>4 types de messages (synchrone/asynchrone/réponse/sef).</todo>
+<todo>Cadres :
+    <ul>
+        <li>Ref</li>
+        <li>break : quitte le bloc</li>
+        <li>opt/alt (condition)</li>
+        <li>loop</li>
+        <li>par (parallèle)</li>
+        <li>crit : atomique</li>
+        <li>neg : interdit / assert : obligatoire</li>
+        <li>seq/strict</li>
+    </ul>
+</todo>
+
+<todo>Aussi possible :
+    <ul>
+        <li>indications temporelles.</li>
+        <li>creation/destruction d'objet (cycle de vie).</li>
+        <li>message trouvé et perdu.</li>
+    </ul>
+</todo>
 
 <h3>Autres diagrammes</h3>
 
