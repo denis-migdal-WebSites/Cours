@@ -206,7 +206,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM <h>$TABLE</h>;
             SELECT <h>$COLS</h> FROM <h>$TABLE</h>;
@@ -243,7 +243,7 @@
       <div>
         <div class="hint"> <script type="c-sql">as</script> : donner (temporairement) un alias à une colonne :</div>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT Nom <h>$COL_AS1</h>, Age FROM Users;
               SELECT Nom <h>$COL_AS2</h>, Age FROM Users;
@@ -279,7 +279,7 @@
         </ul>
       </div><div>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT * FROM Users ORDER BY <h>$ORDER_BY</h>;
             </script>
@@ -328,7 +328,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM Users;
             SELECT * FROM Users
@@ -387,7 +387,7 @@
           </ul>
           <br/>
           <sql-interactive>
-            <sql-selector class="hidden">
+            <sql-selector hidden>
               <script type="c-sql">
                 SELECT * FROM Users
                     WHERE <h>$LCOND</h> <h>$RCOND</h>;
@@ -446,7 +446,7 @@
         </ul>
         <br/>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT <h>$DISTINCT_1</h> Age FROM Users;
             SELECT <h>$DISTINCT_2</h> Age FROM Users;
@@ -478,7 +478,7 @@
             <ul><li onslide="2">💡 Avec la clause <script type="c-sql">ORDER BY</script> génère des tops.</li></ul></li>
           </ul>
           <sql-interactive>
-            <sql-selector class="hidden">
+            <sql-selector hidden>
               <script type="c-sql">
                 SELECT * FROM Users <h>$ORDER_BY</h>;
                 SELECT * FROM Users <h>$ORDER_BY</h> LIMIT <h>$N</h>;
@@ -524,7 +524,7 @@
         </ul>
         </div>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT * FROM Users;
               SELECT * FROM Users LIMIT <h>$N</h> OFFSET <h>$O</h>;

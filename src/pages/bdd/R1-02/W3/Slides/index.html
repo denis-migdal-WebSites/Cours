@@ -21,7 +21,7 @@
     <div>
       <b>Schémas de table :</b> entre autres, nom et type de chaque colonne.
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM pragma_table_xinfo('<h>$TABLE1</h>');
           </script>
@@ -81,7 +81,7 @@
         </li>
       </ul>
       <sql-interactive>
-        <sql-selector class="hidden" print-schema="false">
+        <sql-selector hidden print-schema="false">
           <script type="c-sql">
             CREATE TABLE <h>$IFEXISTS1</h> T(<h>$COLS</h>);
             INSERT INTO T VALUES ('Crayon', 4);
@@ -132,7 +132,7 @@
           </li>
         </ul>
         <sql-interactive>
-          <sql-selector class="hidden" print-schema="false">
+          <sql-selector hidden print-schema="false">
             <script type="c-sql">
               CREATE TABLE T AS
               <h>$VALUES_OR_SELECT</h>;
@@ -173,7 +173,7 @@
           </ul>
           <br/>
           <sql-interactive>
-            <sql-selector class="hidden">
+            <sql-selector hidden>
               <script type="c-sql">
                 SELECT sql FROM sqlite_schema WHERE name IN (<h>$TABLES</h>);
               </script>
@@ -202,7 +202,7 @@
         <div>
           <ul><li><b>Supprimer une table :</b></li></ul>
           <sql-interactive full-reset="true">
-            <sql-selector class="hidden">
+            <sql-selector hidden>
               <script type="c-sql">
                 DROP TABLE <h>$IFEXISTS</h> <h>$TABLE</h>;
                 SELECT COUNT(*) FROM <h>$TABLE</h>;
@@ -229,7 +229,7 @@
         <div>
           <ul><li><b>Supprimer les entrées :</b></li></ul>
           <sql-interactive>
-            <sql-selector class="hidden">
+            <sql-selector hidden>
               <script type="c-sql">
                 DELETE FROM <h>$TABLE</h>;
                 SELECT COUNT(*) FROM <h>$TABLE</h>;
@@ -271,7 +271,7 @@
         </ul>
       </div>
       <sql-interactive full-reset="true" onslide="0-3">
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM pragma_table_xinfo('Produits');
             ALTER TABLE Produits <h>$COMMAND</h> COLUMN <h>$OPTS</h>;
@@ -329,7 +329,7 @@
       </ul>
     </div>
     <sql-interactive>
-      <sql-selector class="hidden">
+      <sql-selector hidden>
         <script type="c-sql">
           CREATE TABLE T (Prod TEXT, Q INT) STRICT;
           INSERT INTO T VALUES (4, 'Crayon');
@@ -359,7 +359,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden" print-schema="false">
+        <sql-selector hidden print-schema="false">
           <script type="c-sql">
             CREATE TABLE T (ID INT <h>$CSTRNT1</h>, A TEXT <h>$CSTRNT2</h>) STRICT;
             SELECT * FROM pragma_table_xinfo('T');
@@ -417,7 +417,7 @@
       <div class="hint">Les <b>contraintes de tables</b> sont des contraintes sur plusieurs colonnes :<br/>
       <div class="center">
         <sql-interactive>
-          <sql-selector class="hidden" print-schema="false">
+          <sql-selector hidden print-schema="false">
             <script type="c-sql">
               CREATE TABLE T (A INT, B INT, <h>$CSTR</h>) STRICT;
               INSERT INTO  T VALUES <h>$VALS</h>;
@@ -435,7 +435,7 @@
         </sql-interactive>
         <br/>
         <sql-interactive>
-          <sql-selector class="hidden" print-schema="false">
+          <sql-selector hidden print-schema="false">
             <script type="c-sql">
               CREATE TABLE T (A INT, B INT, <h>$CSTR</h>) STRICT;
               INSERT INTO  T VALUES <h>$VALS</h>;
@@ -453,7 +453,7 @@
         </sql-interactive>
         <br/>
         <sql-interactive>
-          <sql-selector class="hidden" print-schema="false">
+          <sql-selector hidden print-schema="false">
             <script type="c-sql">
               CREATE TABLE T (A INT, B INT, <h>$CSTR</h>) STRICT;
               INSERT INTO  T VALUES <h>$VALS</h>;
@@ -503,7 +503,7 @@
         </li>
       </ul>
       <sql-interactive class="center">
-        <sql-selector class="hidden" print-schema="false">
+        <sql-selector hidden print-schema="false">
           <script type="c-sql">
             CREATE TABLE T (<h>$PK</h>) STRICT;
             SELECT * FROM pragma_table_xinfo('T');
@@ -574,7 +574,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             CREATE TABLE T (ID INT <h>$FK</h>) STRICT;
             INSERT INTO  T VALUES <h>$VALS</h>;
@@ -665,7 +665,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden" print-schema="false">
+        <sql-selector hidden print-schema="false">
           <script type="c-sql">
             CREATE TABLE T ( ID INT, A TEXT,
                             FOREIGN KEY(ID) REFERENCES Users

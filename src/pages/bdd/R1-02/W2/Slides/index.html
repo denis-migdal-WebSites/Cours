@@ -43,7 +43,7 @@
       </ul>
     </div>
     <sql-interactive>
-      <sql-selector class="hidden">
+      <sql-selector hidden>
         <script type="c-sql">
           VALUES <h>$VALUES1</h>;
           VALUES <h>$VALUES2</h>;
@@ -82,7 +82,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM Users;
             INSERT INTO Users <h>$COLS</h>
@@ -141,7 +141,7 @@
       </div>
 
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM Users;
             UPDATE Users
@@ -208,7 +208,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM Users;
             DELETE FROM Users
@@ -281,7 +281,7 @@
     </ul>
     </div>
     <sql-interactive>
-      <sql-selector class="hidden">
+      <sql-selector hidden>
         <script type="c-sql">
           SELECT <h>$COL1</h>,
                  <h>$COL2</h>
@@ -339,7 +339,7 @@
         </ul>
         <br/>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT <h>$COLS</h>;
             </script>
@@ -390,7 +390,7 @@
           </i></b></li>
         </ul>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT <h>$COLS</h>;
             </script>
@@ -438,7 +438,7 @@
           </i></b></li>
         </ul>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT <h>$COLS</h>;
             </script>
@@ -490,7 +490,7 @@
 
     <div class="flex-2">
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT <h>$GRP</h>, GROUP_CONCAT(Q)
               FROM Produits
@@ -523,7 +523,7 @@
         </ul>
       </ul>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT Ref, COUNT(Q), GROUP_CONCAT(Q), MIN(Q), MAX(Q), SUM(Q), AVG(Q)
               FROM Produits <h>$GRP</h>;
@@ -556,7 +556,7 @@
         </ul>
         <br/>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT COUNT(<h>$DISTINCT</h><h>$COL</h>), GROUP_CONCAT(<h>$DISTINCT</h> Date)
               FROM Produits;
@@ -583,7 +583,7 @@
         </ul>
         <br/>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT Date, group_concat(Q) FROM Produits
                 WHERE <h>$COND</h>
@@ -615,7 +615,7 @@
         </ul>
         <br/>
         <sql-interactive>
-          <sql-selector class="hidden">
+          <sql-selector hidden>
             <script type="c-sql">
               SELECT Date, <h>$COL</h> FROM Produits
                 GROUP BY Date

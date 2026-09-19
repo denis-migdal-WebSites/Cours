@@ -34,7 +34,7 @@
       </li>
     </ul>
     <sql-interactive>
-      <sql-selector class="hidden">
+      <sql-selector hidden>
         <script type="c-sql">
           SELECT * FROM Produits WHERE Ref == 'Gomme'
               <h>$OP</h>
@@ -74,7 +74,7 @@
       </li>
     </ul>
     <sql-interactive>
-      <sql-selector class="hidden">
+      <sql-selector hidden>
         <script type="c-sql">
           SELECT * FROM T1 WHERE ID <h>$OP</h> (<h>$SUBQUERY</h>);
         </script>
@@ -119,7 +119,7 @@
         </li>
       </ul>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM T1 WHERE <h>$COND</h> (
               SELECT ID FROM T2 WHERE T2.ID = T1.ID
@@ -326,7 +326,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM T1 NATURAL FULL JOIN T2;
             SELECT * FROM T1 NATURAL <h>$JOIN</h> JOIN T2;
@@ -374,7 +374,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT T1.ID as 'T1.ID', T2.ID as 'T2.ID', *
               FROM T1 FULL JOIN T2 USING(<h>$COLS</h>);
@@ -398,7 +398,7 @@
         </ul>
       </div>
       <sql-interactive>
-        <sql-selector class="hidden">
+        <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM T1 INNER JOIN T2 ON <h>$COND</h>;
           </script>
