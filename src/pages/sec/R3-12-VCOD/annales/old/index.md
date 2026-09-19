@@ -5,8 +5,8 @@
         <title>DS 2024-2025 (RSW)</title>
         <meta name="color-scheme" content="dark light">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link   href="/templates/TPSubject@2026/index.css"  rel="stylesheet">
-        <script  src="/templates/TPSubject@2026/index.js"  type="module"></script>
+        <link   href="/@templates/TPSubject@2026/index.css"  rel="stylesheet">
+        <script  src="/@templates/TPSubject@2026/index.js"  type="module"></script>
     </head>
     <body>
         <main>

@@ -1,0 +1,1 @@
+import "WebSlides@2026/pages/@templates/slides@2026/";

@@ -45,7 +45,7 @@ setTimeout(async () => {
 
     const font = new FontFace(
         "Test",
-        'url("/assets/font/NotoColorEmoji.woff2")'
+        'url("/@assets/font/NotoColorEmoji.woff2")'
     );
 
     await font.load();

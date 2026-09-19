@@ -5,8 +5,8 @@
         <title>CM4 (TW)</title>
         <meta name="color-scheme" content="dark light">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <link   href="/templates/page@2026/index.css"  rel="stylesheet">
-        <script  src="/templates/page@2026/index.js"  type="module"></script>
+        <link   href="/@templates/page@2026/index.css"  rel="stylesheet">
+        <script  src="/@templates/page@2026/index.js"  type="module"></script>
     </head>
     <body>
         <main>
@@ -37,7 +37,7 @@
 <h2>Contenus dynamiques</h2>
 
 <div>Afin de tester nos pages Web en TP, nous utilisions jusqu'à présent <i>Live Server</i> comme serveur Web. Son fonctionnement est très simple : la racine du site Web est associée à un dossier <script type="c-bash"><h>$ROOT</h></script> du serveur. Chaque URL est alors associée à un fichier du serveur. 
-<i>Live Server</i> est ainsi un serveur web <i>statique</i> (<i>static web server</i>) distribuant des fichiers/ressources statiques (<i>static files/assets</i>). Ainsi, lorsqu'il reçoit une requête HTTP, il retourne le fichier demandé, e.g. :<br/>
+<i>Live Server</i> est ainsi un serveur web <i>statique</i> (<i>static web server</i>) distribuant des fichiers/ressources statiques (<i>static files/@assets</i>). Ainsi, lorsqu'il reçoit une requête HTTP, il retourne le fichier demandé, e.g. :<br/>
 <script type="c-bash">http://localhost:5000/<h>$PATHNAME</h></script> est associé au fichier <script type="c-bash"><h>$ROOT</h>/<h>$PATHNAME</h></script>.
 </div>
 
