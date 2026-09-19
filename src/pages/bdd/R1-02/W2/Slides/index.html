@@ -34,12 +34,12 @@
   <frame-uca>
     <div>
       <div class="overlay">
-        <span onslide="0"><script type="c-sql">VALUES <h>($VALS[,...])</h>;</script></span>
-        <span onslide="1-"><script type="c-sql">VALUES <h>($VALS[,...])[,...]</h>;</script></span>
+        <span slide="0"><script type="c-sql">VALUES <h>($VALS[,...])</h>;</script></span>
+        <span slide="1-"><script type="c-sql">VALUES <h>($VALS[,...])[,...]</h>;</script></span>
       </div>
       <ul>
-        <li onslide="0-"><script type="c-sql"><h>($VALS[,...])</h></script> : une entrée (valeurs séparées par une virgule).</li>
-        <li onslide="1">💡 pour représenter plusieurs entrées, les séparer par une virgule.</li>
+        <li slide="0-"><script type="c-sql"><h>($VALS[,...])</h></script> : une entrée (valeurs séparées par une virgule).</li>
+        <li slide="1">💡 pour représenter plusieurs entrées, les séparer par une virgule.</li>
       </ul>
     </div>
     <sql-interactive>
@@ -57,11 +57,11 @@
       </sql-selector>
       <sql-output class="center">
         <div class="overlay">
-          <div onslide="0">
+          <div slide="0">
             <sql-query  q="1"></sql-query>
             <sql-result q="1"></sql-result>
           </div>
-          <div onslide="1">
+          <div slide="1">
             <sql-query  q="2"></sql-query>
             <sql-result q="2"></sql-result>
           </div>
@@ -74,11 +74,11 @@
     <frame-uca>
       <div>
         <div class="overlay">
-          <span onslide="0-1"><script type="c-sql">INSERT INTO <h>$TABLE</h> <h>$VALUES_OR_SELECT</h>;</script></span>
-          <span onslide="2"><script type="c-sql">INSERT INTO <h>$TABLE</h> <h>($COLS[,...])</h> <h>$VALUES_OR_SELECT</h>;</script></span>
+          <span slide="0-1"><script type="c-sql">INSERT INTO <h>$TABLE</h> <h>$VALUES_OR_SELECT</h>;</script></span>
+          <span slide="2"><script type="c-sql">INSERT INTO <h>$TABLE</h> <h>($COLS[,...])</h> <h>$VALUES_OR_SELECT</h>;</script></span>
         </div>
         <ul>
-          <li onslide="2-"><script type="c-sql"><h>($COLS[,...])</h></script> : les colonnes à remplir (les autres vaudront <script type="c-sql">NULL</script>).</li>
+          <li slide="2-"><script type="c-sql"><h>($COLS[,...])</h></script> : les colonnes à remplir (les autres vaudront <script type="c-sql">NULL</script>).</li>
         </ul>
       </div>
       <sql-interactive>
@@ -89,13 +89,13 @@
             VALUES <h>$VALUES</h>;
             SELECT * FROM Users;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "values": "(NULL, 'Doe',    'Jon', 32)" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "values": "(NULL, 'Doe',    'Jon', 32),\n       (NULL, 'Sawyer', 'Tom', 15)" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           {
             "cols"  : "(Prenom, Nom)",
             "values": "           ('Doe', 'Jon')"
@@ -107,7 +107,7 @@
             <sql-query  q="2"></sql-query>
             <sql-result q="2"></sql-result>
           </div>
-          <div class="linespace" onslide="0,2"></div>
+          <div class="linespace" slide="0,2"></div>
           <div class="flex-2">
             <div>
               <center><strong>Avant :</strong></center>
@@ -120,7 +120,7 @@
               <sql-result q="3"></sql-result>
             </div>
           </div>
-          <div class="linespace" onslide="0,2"></div>
+          <div class="linespace" slide="0,2"></div>
         </sql-output>
       </sql-interactive>
     </frame-uca>
@@ -129,13 +129,13 @@
     <frame-uca>
       <div>
         <div class="overlay">
-          <span onslide="0-1"><script type="c-sql">UPDATE <h>$TABLE</h> SET <h>$COL=$VAL</h> WHERE <h>$COND</h>;</script></span>
-          <span onslide="2-"><script type="c-sql">UPDATE <h>$TABLE</h> SET <h>$COL=$VAL[,...]</h> WHERE <h>$COND</h>;</script></span>
+          <span slide="0-1"><script type="c-sql">UPDATE <h>$TABLE</h> SET <h>$COL=$VAL</h> WHERE <h>$COND</h>;</script></span>
+          <span slide="2-"><script type="c-sql">UPDATE <h>$TABLE</h> SET <h>$COL=$VAL[,...]</h> WHERE <h>$COND</h>;</script></span>
         </div>
         <ul>
           <li><script type="c-sql"><h>$COND</h></script> : les entrées à modifier.</li>
           <li><script type="c-sql"><h>$COL=$VAL</h></script> : la colonne <script type="c-sql"><h>$COL</h></script> prend la valeur <script type="c-sql"><h>$VAL</h></script>.<br/>
-          <span onslide="2-">💡 pour modifier plusieurs colonnes, les séparer par une virgule.</span>
+          <span slide="2-">💡 pour modifier plusieurs colonnes, les séparer par une virgule.</span>
           </li>
         </ul>
       </div>
@@ -149,25 +149,25 @@
             WHERE <h>$COND</h>;
             SELECT * FROM Users;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           {
             "vals": "Nom = 'Durand'",
             "cond": "Nom == 'Durant'"
           }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           {
             "vals": "Age = 23",
             "cond": "Age == 43"
           }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           {
             "vals": "Nom = 'Durand', Prenom='Théo'",
             "cond": "Nom == 'Durant'"
           }
           </sql-option>
-          <sql-option onslide="3">
+          <sql-option slide="3">
           {
             "vals": "Age = Age + 10",
             "cond": "Nom LIKE 'D%'"
@@ -194,8 +194,8 @@
         </sql-output>
       </sql-interactive>
       <div class="overlay">
-        <div class="hint" onslide="3">Vous pouvez calculer les nouvelles valeurs à partir des valeurs initiales de l'entrée.</div>
-        <div class="danger" onslide="0">La table peut contenir des homonymes. Utiliser les identifiants pour <script type="c-sql"><h>$COND</h></script>.</div>
+        <div class="hint" slide="3">Vous pouvez calculer les nouvelles valeurs à partir des valeurs initiales de l'entrée.</div>
+        <div class="danger" slide="0">La table peut contenir des homonymes. Utiliser les identifiants pour <script type="c-sql"><h>$COND</h></script>.</div>
       </div>
     </frame-uca>
   </frame-subsection>
@@ -215,13 +215,13 @@
             WHERE <h>$COND</h>;
             SELECT * FROM Users;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "cond": "Nom == 'Durant'" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "cond": "ID == 2" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           { "cond": "Age > 18" }
           </sql-option>
         </sql-selector>
@@ -245,7 +245,7 @@
         </sql-output>
       </sql-interactive>
       <div class="overlay">
-        <div class="danger" onslide="0-1">La table peut contenir des homonymes. Utiliser les identifiants pour <script type="c-sql"><h>$COND</h></script>.</div>
+        <div class="danger" slide="0-1">La table peut contenir des homonymes. Utiliser les identifiants pour <script type="c-sql"><h>$COND</h></script>.</div>
       </div>
     </frame-uca>
   </frame-subsection>
@@ -287,13 +287,13 @@
                  <h>$COL2</h>
             <h>$FROM</h>;
         </script>
-        <sql-option onslide="0">
+        <sql-option slide="0">
         { "col1": "'nom'", "col2": "UPPER('nom')" }
         </sql-option>
-        <sql-option onslide="1">
+        <sql-option slide="1">
         { "col1": "'nom'        as BEFORE", "col2": "UPPER('nom') as AFTER" }
         </sql-option>
-        <sql-option onslide="2-">
+        <sql-option slide="2-">
         {
           "col1": "column1        as BEFORE",
           "col2": "UPPER(column1) as AFTER",
@@ -306,10 +306,10 @@
         <div class="center">
           <sql-result q="1"></sql-result>
         </div>
-        <div class="linespace" onslide="0-1"></div>
+        <div class="linespace" slide="0-1"></div>
       </sql-output>
     </sql-interactive>
-    <div class="danger" onslide="2">Ne pas abuser des pré-traitements SQL sur les valeurs retournées par <script type="c-sql">SELECT</script>.<br/>
+    <div class="danger" slide="2">Ne pas abuser des pré-traitements SQL sur les valeurs retournées par <script type="c-sql">SELECT</script>.<br/>
       &nbsp;&nbsp;&nbsp; Si possible, <b>mise en forme en dehors de la requête SQL</b>.
       <ul>
         <li>Données structurées plus faciles à manipuler <i>(e.g. <script type="c-sql">'Prenom'</script>, <script type="c-sql">'NOM'</script>)</i> :
@@ -329,11 +329,11 @@
         <ul>
           <li><b><i>
             <span class="overlay">
-              <span onslide="0">Opérations mathématiques :</span>
-              <span onslide="1">Arrondis :</span>
-              <span onslide="2-">Valeur absolue :</span>
-              <!-- <span onslide="3">Entier aléatoire :</span>
-              <span onslide="4-">Entier aléatoire (dans [[0;10[[) :</span>-->
+              <span slide="0">Opérations mathématiques :</span>
+              <span slide="1">Arrondis :</span>
+              <span slide="2-">Valeur absolue :</span>
+              <!-- <span slide="3">Entier aléatoire :</span>
+              <span slide="4-">Entier aléatoire (dans [[0;10[[) :</span>-->
             </span>
           </i></b></li>
         </ul>
@@ -343,13 +343,13 @@
             <script type="c-sql">
               SELECT <h>$COLS</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
             { "cols": "1+1, 4%3, 4/3, 4/3.0" }
             </sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="1">
             { "cols": "FLOOR(1.2), ROUND(1.2), CEIL(1.2)" }
             </sql-option>
-            <sql-option onslide="2-">
+            <sql-option slide="2-">
             { "cols": "ABS(1), ABS(-1)" }
             </sql-option>
           </sql-selector>
@@ -360,9 +360,9 @@
         </sql-interactive>
       </div>
       <ul class="overlay">
-        <li class="danger" onslide="0"><script type="c-sql">/</script> sur entiers = division entière.</li>
-        <li onslide="1"><script type="c-sql">FLOOR</script>/<script type="c-sql">ROUND</script>/<script type="c-sql">CEIL</script><script type="c-sql">(<h>$N[, $D]</h>)</script>: arrondir <script type="c-sql"><h>$N</h></script> à <script type="c-sql"><h>$D</h></script> décimales.</li>
-        <li class="hint" onslide="3">Beaucoup d'autres fonctions existent, e.g. trigonométrie, logs, etc.</li>
+        <li class="danger" slide="0"><script type="c-sql">/</script> sur entiers = division entière.</li>
+        <li slide="1"><script type="c-sql">FLOOR</script>/<script type="c-sql">ROUND</script>/<script type="c-sql">CEIL</script><script type="c-sql">(<h>$N[, $D]</h>)</script>: arrondir <script type="c-sql"><h>$N</h></script> à <script type="c-sql"><h>$D</h></script> décimales.</li>
+        <li class="hint" slide="3">Beaucoup d'autres fonctions existent, e.g. trigonométrie, logs, etc.</li>
       </ul>
     </frame-uca>
   </frame-subsection>
@@ -381,11 +381,11 @@
         <ul>
           <li><b><i>
             <span class="overlay">
-              <span onslide="0">Date et/ou heure actuelle :</span>
-              <span onslide="1">Formatter une date :</span>
-              <span onslide="2">Calculer la durée entre deux dates :</span>
-              <span onslide="3">Timestamp actuel :</span>
-              <span onslide="4">Convertir un timestamp en date :</span>
+              <span slide="0">Date et/ou heure actuelle :</span>
+              <span slide="1">Formatter une date :</span>
+              <span slide="2">Calculer la durée entre deux dates :</span>
+              <span slide="3">Timestamp actuel :</span>
+              <span slide="4">Convertir un timestamp en date :</span>
             </span>
           </i></b></li>
         </ul>
@@ -394,19 +394,19 @@
             <script type="c-sql">
               SELECT <h>$COLS</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
             { "cols": "DATE(), TIME(), DATETIME()" }
             </sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="1">
             { "cols": "DATE(), STRFTIME('%d/%m/%Y', DATE())" }
             </sql-option>
-            <sql-option onslide="2">
+            <sql-option slide="2">
             { "cols": "TIMEDIFF('now', '2001-01-01')" }
             </sql-option>
-            <sql-option onslide="3">
+            <sql-option slide="3">
             { "cols": "UNIXEPOCH('now')" }
             </sql-option>
-            <sql-option onslide="4">
+            <sql-option slide="4">
             { "cols": "DATETIME(1726408442, 'unixepoch')" }
             </sql-option>
           </sql-selector>
@@ -417,9 +417,9 @@
         </sql-interactive>
       </div>
       <ul class="overlay">
-        <li class="hint" onslide="1"><script type="c-sql">FORMAT_DATE(<h>$F</h>, <h>$D</h>)</script> dans certains SGBD.</li>
-        <li onslide="3">Le <b>timestamp unix</b> représente une date par le nombre de secondes écoulées depuis le 1er janvier 1970. Il permet de faciliter les opérations sur les dates.</li>
-        <li class="hint" onslide="4">Beaucoup d'autres fonctions de manipulations de dates existent.</li>
+        <li class="hint" slide="1"><script type="c-sql">FORMAT_DATE(<h>$F</h>, <h>$D</h>)</script> dans certains SGBD.</li>
+        <li slide="3">Le <b>timestamp unix</b> représente une date par le nombre de secondes écoulées depuis le 1er janvier 1970. Il permet de faciliter les opérations sur les dates.</li>
+        <li class="hint" slide="4">Beaucoup d'autres fonctions de manipulations de dates existent.</li>
       </ul>
     </frame-uca>
   </frame-subsection>
@@ -429,11 +429,11 @@
         <ul>
           <li><b><i>
             <span class="overlay">
-              <span onslide="0">Transformer la casse :</span>
-              <span onslide="1">Taille :</span>
-              <span onslide="2">Formatter des données :</span>
-              <span onslide="3">Remplissage (ajouter des espaces en début/fin) :</span>
-              <span onslide="4">Retirer les espaces en début/fin :</span>
+              <span slide="0">Transformer la casse :</span>
+              <span slide="1">Taille :</span>
+              <span slide="2">Formatter des données :</span>
+              <span slide="3">Remplissage (ajouter des espaces en début/fin) :</span>
+              <span slide="4">Retirer les espaces en début/fin :</span>
             </span>
           </i></b></li>
         </ul>
@@ -442,19 +442,19 @@
             <script type="c-sql">
               SELECT <h>$COLS</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
             { "cols": "LOWER('Hello'),\n       UPPER('Hello')" }
             </sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="1">
             { "cols": "LENGTH('23'),\n       LENGTH(32)" }
             </sql-option>
-            <sql-option onslide="2">
+            <sql-option slide="2">
             { "cols": "FORMAT('x=%.2f', 1.2),\n       FORMAT('y=%.2f', 1.)" }
             </sql-option>
-            <sql-option onslide="3">
+            <sql-option slide="3">
             { "cols": "FORMAT('%05s' , 'Hi') as 'LPAD(''Hi'', 5)',\n       FORMAT('%-05s', 'Hi') as 'RPAD(''Hi'', 5)'" }
             </sql-option>
-            <sql-option onslide="4">
+            <sql-option slide="4">
             { "cols": "TRIM(' w '),\n       LTRIM(' w '),\n       RTRIM(' w ')" }
             </sql-option>
           </sql-selector>
@@ -465,10 +465,10 @@
         </sql-interactive>
       </div>
       <ul class="overlay">
-        <li onslide="0">À utiliser quand l'information stockée est <b>indépendante de la casse</b> (e.g. e-mail, nom, etc.) pour garantir l'uniformité des données manipulées.</li>
-        <li onslide="2"><script type="c-sql">FORMAT(<h>$F</h>, <h>$T[,...]</h>)</script> : formate des données <script type="c-sql"><h>$T</h></script> au format <script type="c-sql"><h>$F</h></script> (cf TP2).<br/>
+        <li slide="0">À utiliser quand l'information stockée est <b>indépendante de la casse</b> (e.g. e-mail, nom, etc.) pour garantir l'uniformité des données manipulées.</li>
+        <li slide="2"><script type="c-sql">FORMAT(<h>$F</h>, <h>$T[,...]</h>)</script> : formate des données <script type="c-sql"><h>$T</h></script> au format <script type="c-sql"><h>$F</h></script> (cf TP2).<br/>
         <div class="danger">Pour SQLite < 3.38, cette fonction s'appelle <script type="c-sql">PRINTF()</script>.</div></li>
-        <li onslide="3">Les chaînes de caractères sont usuellement de tailles variables.<br/>
+        <li slide="3">Les chaînes de caractères sont usuellement de tailles variables.<br/>
         Pour des raisons de performances, on peut les stocker avec une taille fixe :<br/>
         <script type="c-sql">[L/R]PAD(<h>$W</h>, <h>$N</h>, <h>$C</h>)</script> : ajoute <script type="c-sql"><h>$C</h></script> en début/fin de <script type="c-sql"><h>$W</h></script> jusqu'à obtenir une longueur <script type="c-sql"><h>$N</h></script>.<br/>
         <div class="danger">Cette fonction n'est pas disponible sur SQLite.</div></li>
@@ -482,8 +482,8 @@
     <ul>
       <li><b><i>
         <span class="overlay">
-          <span onslide="0">Agrégation sur les dates :</span>
-          <span onslide="1">Agrégation sur les références :</span>
+          <span slide="0">Agrégation sur les dates :</span>
+          <span slide="1">Agrégation sur les références :</span>
         </span>
       </i></b></li>
     </ul>
@@ -496,8 +496,8 @@
               FROM Produits
               GROUP BY <h>$GRP</h>;
           </script>
-          <sql-option onslide="0">{ "grp": "Date" }</sql-option>
-          <sql-option onslide="1">{ "grp": "Ref" }</sql-option>
+          <sql-option slide="0">{ "grp": "Date" }</sql-option>
+          <sql-option slide="1">{ "grp": "Ref" }</sql-option>
         </sql-selector>
         <sql-output>
           <div>
@@ -509,8 +509,8 @@
 
       <!-- <sql-dymtable table="Produits"></sql-dymtable> -->
       <div class="overlay">
-        <sql-dymtable onslide="0" id="group-date" table="Produits" groupby="Date" header=""></sql-dymtable>
-        <sql-dymtable onslide="1" id="group-ref"  table="Produits" groupby="Ref" header=""></sql-dymtable>
+        <sql-dymtable slide="0" id="group-date" table="Produits" groupby="Date" header=""></sql-dymtable>
+        <sql-dymtable slide="1" id="group-ref"  table="Produits" groupby="Ref" header=""></sql-dymtable>
       </div>
     </div>
   </frame-uca>
@@ -528,18 +528,18 @@
             SELECT Ref, COUNT(Q), GROUP_CONCAT(Q), MIN(Q), MAX(Q), SUM(Q), AVG(Q)
               FROM Produits <h>$GRP</h>;
           </script>
-          <sql-option onslide="0">{ "grp": "GROUP BY Ref" }</sql-option>
-          <sql-option onslide="1">{}</sql-option>
+          <sql-option slide="0">{ "grp": "GROUP BY Ref" }</sql-option>
+          <sql-option slide="1">{}</sql-option>
         </sql-selector>
         <sql-output class="center">
           <sql-query  q="1"></sql-query>
           <sql-result q="1"></sql-result>
-          <div class="linespace" onslide="1"></div>
+          <div class="linespace" slide="1"></div>
         </sql-output>
       </sql-interactive>
 
       <ul>
-        <li class="hint" onslide="1">Une fonction d'agrégation sans <script type="c-sql">GROUP BY</script> retourne une seule ligne.</li>
+        <li class="hint" slide="1">Une fonction d'agrégation sans <script type="c-sql">GROUP BY</script> retourne une seule ligne.</li>
       </ul>
     </frame-uca>
   <frame-subsection name="Compter les entrées/valeurs">
@@ -548,9 +548,9 @@
         <ul>
           <li><b><i>
             <span class="overlay">
-              <span onslide="2">Compter les entrées :</span>
-              <span onslide="0">Compter les valeurs non-nulles :</span>
-              <span onslide="1">Compter les valeurs non-nulles distinctes :</span>
+              <span slide="2">Compter les entrées :</span>
+              <span slide="0">Compter les valeurs non-nulles :</span>
+              <span slide="1">Compter les valeurs non-nulles distinctes :</span>
             </span>
           </i></b></li>
         </ul>
@@ -561,11 +561,11 @@
               SELECT COUNT(<h>$DISTINCT</h><h>$COL</h>), GROUP_CONCAT(<h>$DISTINCT</h> Date)
               FROM Produits;
             </script>
-            <sql-option onslide="0">{ "col": "Date"}</sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="0">{ "col": "Date"}</sql-option>
+            <sql-option slide="1">
               { "col": "Date", "distinct": "DISTINCT "}
             </sql-option>
-            <sql-option onslide="2">{ "col": "*" }</sql-option>
+            <sql-option slide="2">{ "col": "*" }</sql-option>
           </sql-selector>
           <sql-output class="center">
             <sql-query  q="1"></sql-query>
@@ -589,22 +589,22 @@
                 WHERE <h>$COND</h>
                 GROUP BY Date;
             </script>
-            <sql-option onslide="0">{ "cond": "Q >=10" }</sql-option>
-            <sql-option onslide="1">{ "cond": "Q >=20" }</sql-option>
-            <sql-option onslide="2">{ "cond": "SUM(Q) >=20" }</sql-option>
+            <sql-option slide="0">{ "cond": "Q >=10" }</sql-option>
+            <sql-option slide="1">{ "cond": "Q >=20" }</sql-option>
+            <sql-option slide="2">{ "cond": "SUM(Q) >=20" }</sql-option>
           </sql-selector>
           <sql-output class="center">
             <sql-query  q="1"></sql-query>
             <sql-result q="1"></sql-result>
-            <div class="linespace" onslide="1-"></div>
-            <div class="linespace" onslide="2-"></div>
-            <div class="linespace" onslide="2-"></div>
-            <div class="linespace" onslide="2-"></div>
-            <div class="linespace" onslide="2-"></div>
+            <div class="linespace" slide="1-"></div>
+            <div class="linespace" slide="2-"></div>
+            <div class="linespace" slide="2-"></div>
+            <div class="linespace" slide="2-"></div>
+            <div class="linespace" slide="2-"></div>
           </sql-output>
         </sql-interactive>
         <ul>
-          <li class="danger" onslide="2">On ne peut utiliser de fonction d'agrégation dans la condition de <script type="c-sql">WHERE</script>.</li>
+          <li class="danger" slide="2">On ne peut utiliser de fonction d'agrégation dans la condition de <script type="c-sql">WHERE</script>.</li>
         </ul>
       </div>
     </frame-uca>
@@ -621,24 +621,24 @@
                 GROUP BY Date
                 HAVING <h>$COND</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
             { "col" : "SUM(Q)", "cond": "SUM(Q) >= 10" }
             </sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="1">
             { "col" : "SUM(Q) as Total", "cond": "Total >= 10" }
             </sql-option>
-            <sql-option onslide="2">
+            <sql-option slide="2">
             { "col" : "SUM(Q) as Total", "cond": "Total >= 30" }
             </sql-option>
-            <sql-option onslide="3">
+            <sql-option slide="3">
             { "col" : "SUM(Q) as Total", "cond": "Total >= 50" }
             </sql-option>
           </sql-selector>
           <sql-output class="center">
             <sql-query  q="1"></sql-query>
             <sql-result q="1"></sql-result>
-            <div class="linespace" onslide="2-"></div>
-            <div class="linespace" onslide="3-"></div>
+            <div class="linespace" slide="2-"></div>
+            <div class="linespace" slide="3-"></div>
           </sql-output>
         </sql-interactive>
       </div>

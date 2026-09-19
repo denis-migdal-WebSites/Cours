@@ -196,12 +196,12 @@
     <frame-uca>
       <div>
         <div class="overlay">
-          <span onslide="0"><script type="c-sql">SELECT * FROM <h>$TABLE</h>;</script></span>
-          <span onslide="1-"><script type="c-sql">SELECT <h>$COLS[,...]</h> FROM <h>$TABLE</h>;</script></span>
+          <span slide="0"><script type="c-sql">SELECT * FROM <h>$TABLE</h>;</script></span>
+          <span slide="1-"><script type="c-sql">SELECT <h>$COLS[,...]</h> FROM <h>$TABLE</h>;</script></span>
         </div>
         <ul>
           <li><script type="c-sql"><h>$TABLE</h></script> : nom de la table SQL à requêter.</li>
-          <li onslide="1-"><script type="c-sql"><h>$COLS[,...]</h></script> : liste des colonnes à récupérer (séparées par ",").<br/>
+          <li slide="1-"><script type="c-sql"><h>$COLS[,...]</h></script> : liste des colonnes à récupérer (séparées par ",").<br/>
         <div class="hint"><script type="c-sql">*</script> correspond à l'ensemble des colonnes.</div></li>
         </ul>
       </div>
@@ -211,13 +211,13 @@
             SELECT * FROM <h>$TABLE</h>;
             SELECT <h>$COLS</h> FROM <h>$TABLE</h>;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
             { "cols" : "*", "table": "Users" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
             { "cols" : "Nom", "table": "Users" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
             { "cols" : "ID, Prenom", "table": "Users" }
           </sql-option>
         </sql-selector>
@@ -226,15 +226,15 @@
             <sql-query  q="1"></sql-query>
             <sql-result cmp_with="2" q="1"></sql-result>
           </div>
-          <div onslide="1-">
+          <div slide="1-">
             <sql-query  q="2"></sql-query>
             <sql-result q="2"></sql-result>
           </div>
         </sql-output>
       </sql-interactive>
       <div>
-        <div class="danger" onslide="1-">Le nom de la colonne entre guillemets si caractères non-alphanumériques.</div>
-        <div class="danger" onslide="2-">Ne récupérer que les colonnes nécessaires (réduire les données transférées).</div>
+        <div class="danger" slide="1-">Le nom de la colonne entre guillemets si caractères non-alphanumériques.</div>
+        <div class="danger" slide="2-">Ne récupérer que les colonnes nécessaires (réduire les données transférées).</div>
       </div>
     </frame-uca>
   </frame-subsection>
@@ -248,7 +248,7 @@
               SELECT Nom <h>$COL_AS1</h>, Age FROM Users;
               SELECT Nom <h>$COL_AS2</h>, Age FROM Users;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
             { "col_as2": "as User" }
             </sql-option>
           </sql-selector>
@@ -257,7 +257,7 @@
               <sql-query  q="1"></sql-query>
               <sql-result q="1"></sql-result>
             </div>
-            <div onslide="1-">
+            <div slide="1-">
               <sql-query  q="2"></sql-query>
               <sql-result q="2"></sql-result>
             </div>
@@ -270,10 +270,10 @@
     <frame-uca>
       <div>
         <ul>
-          <li><script type="c-sql">ORDER BY <h>$COL <span onslide="1-">[DESC|ASC]</span><span onslide="2-">[,...]</span></h></script> trier les lignes.
+          <li><script type="c-sql">ORDER BY <h>$COL <span slide="1-">[DESC|ASC]</span><span slide="2-">[,...]</span></h></script> trier les lignes.
             <ul>
-              <li onslide="1-">Par ordre croissant (<script type="c-sql">ASC</script>) ou décroissant (<script type="c-sql">DESC</script>) ;</li>
-              <li onslide="2">Pour trier sur plusieurs colonnes, les séparer par une virgule.</li>
+              <li slide="1-">Par ordre croissant (<script type="c-sql">ASC</script>) ou décroissant (<script type="c-sql">DESC</script>) ;</li>
+              <li slide="2">Pour trier sur plusieurs colonnes, les séparer par une virgule.</li>
             </ul>
           </li>
         </ul>
@@ -283,13 +283,13 @@
             <script type="c-sql">
               SELECT * FROM Users ORDER BY <h>$ORDER_BY</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
               { "order_by": "Age" }
             </sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="1">
               { "order_by": "Age DESC" }
             </sql-option>
-            <sql-option onslide="2">
+            <sql-option slide="2">
               { "order_by": "Age DESC, Nom ASC" }
             </sql-option>
           </sql-selector>
@@ -324,7 +324,7 @@
         <script type="c-sql">WHERE <h>$COND</h></script> : les entrées où <script type="c-sql"><h>$COND</h></script> est vrai sont retournées.
         <ul>
           <li>Opérateurs de comparaison : <script type="c-sql">></script>, <script type="c-sql"><</script>, <script type="c-sql">>=</script>, <script type="c-sql"><=</script>, <script type="c-sql">==</script>, <script type="c-sql">!=</script> ;</li>
-          <li onslide="2-">Opérateurs logiques : <script type="c-sql">NOT</script>, <script type="c-sql">OR</script>, <script type="c-sql">AND</script> ;</li>
+          <li slide="2-">Opérateurs logiques : <script type="c-sql">NOT</script>, <script type="c-sql">OR</script>, <script type="c-sql">AND</script> ;</li>
         </ul>
       </div>
       <sql-interactive>
@@ -334,16 +334,16 @@
             SELECT * FROM Users
                     WHERE <h>$COND</h>;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
             { "cond": "Age > 18" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
             { "cond": "0 <= Age <= 18" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
             { "cond": "0 <= Age AND Age <= 18" }
           </sql-option>
-          <sql-option onslide="3">
+          <sql-option slide="3">
             { "cond": "(0<=Age) AND (Age<=18)" }
           </sql-option>
         </sql-selector>
@@ -359,29 +359,29 @@
         </sql-output>
       </sql-interactive>
       <ul class="overlay">
-        <li onslide="1-2">⚠ <strong>Ne JAMAIS chaîner les opérateurs de comparaisons</strong>.
-        <ul onslide="2">
+        <li slide="1-2">⚠ <strong>Ne JAMAIS chaîner les opérateurs de comparaisons</strong>.
+        <ul slide="2">
           <li>soit <script type="c-sql">0 <= Age AND Age <= 18</script> ;</li>
           <li>soit <script type="c-sql">Age BETWEEN 0 AND 18</script> .</li>
         </ul></li>
-        <li onslide="3">💡 Vous pouvez aussi utiliser des parenthèses.</li>
+        <li slide="3">💡 Vous pouvez aussi utiliser des parenthèses.</li>
       </ul>
     </frame-uca>
     <frame-subsubsection name="Autres opérateurs">
       <frame-uca>
         <div>
           <ul class="overlay">
-              <li onslide="0"><script type="c-sql">[NOT] IN <h>($VALS[,...])</h></script> : la valeur est [n'est pas] dans la liste <script type="c-sql"><h>($VALS[,...])</h></script>.</li>
-              <li onslide="1"><script type="c-sql">[NOT] BETWEEN <h>$MIN</h> AND <h>$MAX</h></script> : la valeur [n'est pas] est pas entre <script type="c-sql"><h>$MIN</h></script> et <script type="c-sql"><h>$MAX</h></script> (inclus).<br/>
+              <li slide="0"><script type="c-sql">[NOT] IN <h>($VALS[,...])</h></script> : la valeur est [n'est pas] dans la liste <script type="c-sql"><h>($VALS[,...])</h></script>.</li>
+              <li slide="1"><script type="c-sql">[NOT] BETWEEN <h>$MIN</h> AND <h>$MAX</h></script> : la valeur [n'est pas] est pas entre <script type="c-sql"><h>$MIN</h></script> et <script type="c-sql"><h>$MAX</h></script> (inclus).<br/>
             <div class="hint">Équivalant à <script type="c-sql"><h>$VAL</h> >= <h>$MIN</h> AND <h>$VAL</h> <= <h>$MAX</h></script>.</div>
             <div class="danger">Comportement peut varier selon SGBD, e.g. <script type="c-sql"><h>$MIN</h></script> et <script type="c-sql"><h>$MAX</h></script> non-inclus.</div>
             </li>
-              <li onslide="2"><script type="c-sql">[NOT] LIKE <h>$PATTERN</h></script> : la valeur [ne] correspond [pas] à <script type="c-sql"><h>$PATTERN</h></script>.
+              <li slide="2"><script type="c-sql">[NOT] LIKE <h>$PATTERN</h></script> : la valeur [ne] correspond [pas] à <script type="c-sql"><h>$PATTERN</h></script>.
               <ul class="flex-2">
                   <li><script type="c-sql">_</script> n'importe quel caractère.</li>
                   <li><script type="c-sql">%</script> nombre indéterminé de <script type="c-sql">_</script>.</li>
               </ul></li>
-              <li onslide="3"><script type="c-sql">IS [NOT] NULL</script> : la valeur [n'est pas] est nulle nulle.<br/>
+              <li slide="3"><script type="c-sql">IS [NOT] NULL</script> : la valeur [n'est pas] est nulle nulle.<br/>
             <div class="danger">En SQL <script type="c-sql">NULL == NULL</script> est généralement évalué à <script type="c-sql">False</script>.</div>
           </li>
           </ul>
@@ -394,28 +394,28 @@
                 SELECT * FROM Users
                     WHERE <h>$LCOND</h> <h>$NOT_RCOND</h>;
               </script>
-              <sql-option onslide="0">
+              <sql-option slide="0">
               {
                 "lcond": "Nom",
                 "rcond": "IN ('Doe','Nescio')",
                 "not_rcond": "NOT IN ('Doe','Nescio')"
               }
               </sql-option>
-              <sql-option onslide="1">
+              <sql-option slide="1">
               {
                 "lcond": "Age",
                 "rcond": "BETWEEN 0 AND 18",
                 "not_rcond": "NOT BETWEEN 0 AND 18"
               }
               </sql-option>
-              <sql-option onslide="2">
+              <sql-option slide="2">
               {
                 "lcond": "Nom",
                 "rcond": "LIKE 'D%'",
                 "not_rcond": "NOT LIKE 'D%'"
               }
               </sql-option>
-              <sql-option onslide="3">
+              <sql-option slide="3">
               {
                 "lcond": "Age",
                 "rcond": "IS NULL",
@@ -451,7 +451,7 @@
             SELECT <h>$DISTINCT_1</h> Age FROM Users;
             SELECT <h>$DISTINCT_2</h> Age FROM Users;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "distinct_2": "DISTINCT" }
           </sql-option>
         </sql-selector>
@@ -475,7 +475,7 @@
         <div>
           <ul>
             <li><script type="c-sql">LIMIT <h>$N</h></script> : récupère les <script type="c-sql"><h>$N</h></script> premières entrées.
-            <ul><li onslide="2">💡 Avec la clause <script type="c-sql">ORDER BY</script> génère des tops.</li></ul></li>
+            <ul><li slide="2">💡 Avec la clause <script type="c-sql">ORDER BY</script> génère des tops.</li></ul></li>
           </ul>
           <sql-interactive>
             <sql-selector hidden>
@@ -483,13 +483,13 @@
                 SELECT * FROM Users <h>$ORDER_BY</h>;
                 SELECT * FROM Users <h>$ORDER_BY</h> LIMIT <h>$N</h>;
               </script>
-              <sql-option onslide="0">
+              <sql-option slide="0">
                 { "n" : "1" }
               </sql-option>
-              <sql-option onslide="1">
+              <sql-option slide="1">
                 { "n" : "2" }
               </sql-option>
-              <sql-option onslide="2">
+              <sql-option slide="2">
                 { "n" : "2", "order_by": "ORDER BY Age" }
               </sql-option>
             </sql-selector>
@@ -529,19 +529,19 @@
               SELECT * FROM Users;
               SELECT * FROM Users LIMIT <h>$N</h> OFFSET <h>$O</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
               { "n" : "1", "o" : "0" }
             </sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="1">
               { "n" : "1", "o" : "1" }
             </sql-option>
-            <sql-option onslide="2">
+            <sql-option slide="2">
               { "n" : "1", "o" : "2" }
             </sql-option>
-            <sql-option onslide="3">
+            <sql-option slide="3">
               { "n" : "2", "o" : "0*2" }
             </sql-option>
-            <sql-option onslide="4">
+            <sql-option slide="4">
               { "n" : "2", "o" : "1*2" }
             </sql-option>
           </sql-selector>
@@ -618,7 +618,7 @@
           <li step="6">Limite les lignes (<script type="c-sql">LIMIT</script>/<script type="c-sql">OFFSET</script>).</li>
         </ol>
         <div>
-          <span onslide="7"></span><!-- h4ck -->
+          <span slide="7"></span><!-- h4ck -->
           <!--<div style="text-align: center">
             <anim-player speed="1500" id="order-player"></anim-player>
           </div>-->

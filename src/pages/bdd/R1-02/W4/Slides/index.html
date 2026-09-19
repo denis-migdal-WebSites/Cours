@@ -27,9 +27,9 @@
     <ul>
       <li>Opérations d'ensembles sur ensemble d'entrées (idéalement même colonnes) :
         <ul>
-          <li><span class="overlay"><span onslide="0"><script type="c-sql">UNION</script></span><span onslide="1-"><script type="c-sql">UNION <h>[ALL]</h></script></span></span> : <b>concaténer</b> les lignes <span onslide="1-">[avec doublons]</span>.</li>
-          <li onslide="2-"><script type="c-sql">INTERSECT</script> : les lignes <b>communes</b> aux deux requêtes.</li>
-          <li onslide="3-"><script type="c-sql">EXCEPT</script>    : les lignes de la première requête <b>absentes</b> de la seconde.</li>
+          <li><span class="overlay"><span slide="0"><script type="c-sql">UNION</script></span><span slide="1-"><script type="c-sql">UNION <h>[ALL]</h></script></span></span> : <b>concaténer</b> les lignes <span slide="1-">[avec doublons]</span>.</li>
+          <li slide="2-"><script type="c-sql">INTERSECT</script> : les lignes <b>communes</b> aux deux requêtes.</li>
+          <li slide="3-"><script type="c-sql">EXCEPT</script>    : les lignes de la première requête <b>absentes</b> de la seconde.</li>
         </ul>
       </li>
     </ul>
@@ -40,23 +40,23 @@
               <h>$OP</h>
           SELECT NULL, Nom, Age FROM Users;
         </script>
-        <sql-option onslide="0">{ "op": "UNION" }</sql-option>
-        <sql-option onslide="1">{ "op": "UNION ALL" }</sql-option>
-        <sql-option onslide="2">{ "op": "INTERSECT" }</sql-option>
-        <sql-option onslide="3">{ "op": "EXCEPT" }</sql-option>
+        <sql-option slide="0">{ "op": "UNION" }</sql-option>
+        <sql-option slide="1">{ "op": "UNION ALL" }</sql-option>
+        <sql-option slide="2">{ "op": "INTERSECT" }</sql-option>
+        <sql-option slide="3">{ "op": "EXCEPT" }</sql-option>
       </sql-selector>
       <sql-output class="center">
         <sql-query  q="1"></sql-query>
         <sql-result q="1"></sql-result>
-        <div class="linespace" onslide="2,3"></div>
-        <div class="linespace" onslide="2,3"></div>
-        <div class="linespace" onslide="2,3"></div>
-        <div class="linespace" onslide="2"></div>
-        <div class="linespace" onslide="2"></div>
-        <div class="linespace" onslide="2"></div>
-        <div class="linespace" onslide="2"></div>
-        <div class="linespace" onslide="2"></div>
-        <div class="linespace" onslide="2"></div>
+        <div class="linespace" slide="2,3"></div>
+        <div class="linespace" slide="2,3"></div>
+        <div class="linespace" slide="2,3"></div>
+        <div class="linespace" slide="2"></div>
+        <div class="linespace" slide="2"></div>
+        <div class="linespace" slide="2"></div>
+        <div class="linespace" slide="2"></div>
+        <div class="linespace" slide="2"></div>
+        <div class="linespace" slide="2"></div>
       </sql-output>
     </sql-interactive>
   </frame-uca>
@@ -69,7 +69,7 @@
         <ul>
           <li>une <b>table</b> dans une clause <script type="c-sql">FROM</script> ;</li>
           <li>une <b>liste</b> (si une seule colonne) ;</li>
-          <li onslide="2-">un <b>scalaire</b> (si une seule ligne et colonne).</li>
+          <li slide="2-">un <b>scalaire</b> (si une seule ligne et colonne).</li>
         </ul>
       </li>
     </ul>
@@ -78,23 +78,23 @@
         <script type="c-sql">
           SELECT * FROM T1 WHERE ID <h>$OP</h> (<h>$SUBQUERY</h>);
         </script>
-        <sql-option onslide="0">
+        <sql-option slide="0">
         { "op": "IN", "subquery": "SELECT ID FROM T2" }
         </sql-option>
-        <sql-option onslide="1">
+        <sql-option slide="1">
         { "op": ">", "subquery": "SELECT ID FROM T2" }
         </sql-option>
-        <sql-option onslide="2">
+        <sql-option slide="2">
         { "op": ">=", "subquery": "SELECT MAX(ID) FROM T2" }
         </sql-option>
       </sql-selector>
       <sql-output class="center">
         <sql-query  q="1"></sql-query>
         <sql-result q="1"></sql-result>
-        <div class="linespace" onslide="2"></div>
+        <div class="linespace" slide="2"></div>
       </sql-output>
     </sql-interactive>
-    <div onslide="1-">
+    <div slide="1-">
       <div class="hint"> Retourne vrai si comparaison vraie pour <b>au moins un</b> élément de la liste.</div>
       <div class="danger"> Certains SGBD requièrent d'ajouter <script type="c-sql">ANY</script> entre l'opérateur de comparaison et la liste.</div>
     </div>
@@ -125,7 +125,7 @@
               SELECT ID FROM T2 WHERE T2.ID = T1.ID
             );
           </script>
-          <sql-option onslide="0">{ "cond": "EXISTS" }</sql-option>
+          <sql-option slide="0">{ "cond": "EXISTS" }</sql-option>
         </sql-selector>
         <sql-output class="center">
           <sql-query  q="1"></sql-query>
@@ -198,7 +198,7 @@
       </style>
       <div class="scale">
         <div class="table_flex">
-          <span onslide="31"></span><!-- h4ck -->
+          <span slide="31"></span><!-- h4ck -->
           <sql-dymtable id="cart_T1" table="T1" header="T1"></sql-dymtable>
             <span><strong>x</strong></span>
           <sql-dymtable id="cart_T2" table="T2" header="T2"></sql-dymtable>
@@ -294,7 +294,7 @@
       </ul>
       <div class="scale">
         <div class="table_flex">
-          <span onslide="13"></span><!-- h4ck -->
+          <span slide="13"></span><!-- h4ck -->
           <sql-dymtable id="join_T1" table="T1" header="T1"></sql-dymtable>
             <span><strong>JOIN</strong></span>
           <sql-dymtable id="join_T2" table="T2" header="T2"></sql-dymtable>
@@ -321,8 +321,8 @@
       <div>Il existe 3 types de jointures fréquemment utilisées :
         <ul>
           <li><script type="c-sql">INNER</script> : <script type="c-sql"><h>$T1</h>.ID == <h>$T2</h>.ID</script>, par défaut.</li>
-          <li onslide="1-"><script type="c-sql">LEFT </script>  : <script type="c-sql">INNER</script> + entrées de <script type="c-sql"><h>$T1</h></script> dont aucune entrée de <script type="c-sql"><h>$T2</h></script> ne correspond.</li>
-          <li onslide="2-"><script type="c-sql">FULL </script> : <script type="c-sql">LEFT </script> + entrées de <script type="c-sql"><h>$T2</h></script> dont aucune entrée de <script type="c-sql"><h>$T1</h></script> ne correspond.</li>
+          <li slide="1-"><script type="c-sql">LEFT </script>  : <script type="c-sql">INNER</script> + entrées de <script type="c-sql"><h>$T1</h></script> dont aucune entrée de <script type="c-sql"><h>$T2</h></script> ne correspond.</li>
+          <li slide="2-"><script type="c-sql">FULL </script> : <script type="c-sql">LEFT </script> + entrées de <script type="c-sql"><h>$T2</h></script> dont aucune entrée de <script type="c-sql"><h>$T1</h></script> ne correspond.</li>
         </ul>
       </div>
       <sql-interactive>
@@ -331,13 +331,13 @@
             SELECT * FROM T1 NATURAL FULL JOIN T2;
             SELECT * FROM T1 NATURAL <h>$JOIN</h> JOIN T2;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
             { "join": "INNER" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
             { "join": "LEFT" }
           </sql-option>
-          <sql-option onslide="2-">
+          <sql-option slide="2-">
             { "join": "FULL" }
           </sql-option>
         </sql-selector>
@@ -353,7 +353,7 @@
         </sql-output>
       </sql-interactive>
 
-      <div onslide="3">⚠ Il existe 2 autres types de jointures, <b>à éviter</b> :
+      <div slide="3">⚠ Il existe 2 autres types de jointures, <b>à éviter</b> :
         <ul>
           <li><script type="c-sql">RIGHT</script> : <script type="c-sql"><h>$T1</h> RIGHT JOIN <h>$T2</h></script> ⇔ <script type="c-sql"><h>$T2</h> LEFT JOIN <h>$T1</h></script> (pour des raisons de <i><b>lisibilité</b></i>, préférez <script type="c-sql">LEFT</script>)</li>
           <li><script type="c-sql">CROSS</script> : produit cartésien (<b>à éviter</b>).</li>
@@ -379,7 +379,7 @@
             SELECT T1.ID as 'T1.ID', T2.ID as 'T2.ID', *
               FROM T1 FULL JOIN T2 USING(<h>$COLS</h>);
           </script>
-          <sql-option onslide="0">{ "cols": "ID" }</sql-option>
+          <sql-option slide="0">{ "cols": "ID" }</sql-option>
         </sql-selector>
         <sql-output class="center">
           <sql-query  q="1"></sql-query>
@@ -402,7 +402,7 @@
           <script type="c-sql">
             SELECT * FROM T1 INNER JOIN T2 ON <h>$COND</h>;
           </script>
-          <sql-option onslide="0">{ "cond": "T1.T1 == T2.T2" }</sql-option>
+          <sql-option slide="0">{ "cond": "T1.T1 == T2.T2" }</sql-option>
         </sql-selector>
         <sql-output class="center">
           <sql-query  q="1"></sql-query>

@@ -25,7 +25,7 @@
           <script type="c-sql">
             SELECT * FROM pragma_table_xinfo('<h>$TABLE1</h>');
           </script>
-          <sql-option onslide="0">{ "table1": "Users" }</sql-option>
+          <sql-option slide="0">{ "table1": "Users" }</sql-option>
         </sql-selector>
         <sql-output class="center">
           <sql-query  q="1"></sql-query>
@@ -65,15 +65,15 @@
     <frame-uca>
     <div>
       <div class="overlay">
-        <span onslide="0-1"><script type="c-sql">CREATE TABLE <h>$TABLE</h> (<h>$COLNAME $COLTYPE[,...]</h>);</script></span>
-        <span onslide="2"><script type="c-sql">CREATE TABLE <h>[IF NOT EXISTS]</h> <h>$TABLE</h> (<h>$COLNAME $COLTYPE[,...]</h>);</script></span>
+        <span slide="0-1"><script type="c-sql">CREATE TABLE <h>$TABLE</h> (<h>$COLNAME $COLTYPE[,...]</h>);</script></span>
+        <span slide="2"><script type="c-sql">CREATE TABLE <h>[IF NOT EXISTS]</h> <h>$TABLE</h> (<h>$COLNAME $COLTYPE[,...]</h>);</script></span>
       </div>
       <ul class="flex-2">
         <li><script type="c-sql"><h>$COLNAME</h></script> : nom de la colonne ;</li>
         <li><script type="c-sql"><h>$COLTYPE</h></script> : type des données stockées.</li>
       </ul>
       <ul>
-        <li onslide="2"><script type="c-sql">IF NOT EXISTS</script> : ne pas recréer la table si existe déjà.
+        <li slide="2"><script type="c-sql">IF NOT EXISTS</script> : ne pas recréer la table si existe déjà.
         <ul>
           <li>⚠ table pas nécessairement vide !</li>
           <li>⚠ les schémas peuvent être différents !</li>
@@ -89,13 +89,13 @@
             CREATE TABLE <h>$IFEXISTS2</h> T(<h>$COLS</h>);
             SELECT * FROM T;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "cols": "Ref TEXT, Q INT", "ifexists2": "IF NOT EXISTS" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "cols": "Ref TEXT, Q INT" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           { "cols": "Ref TEXT,\n                             Q INT", "ifexists1": "IF NOT EXISTS",
             "ifexists2": "IF NOT EXISTS"
           }
@@ -104,7 +104,7 @@
         <sql-output class="flex-2">
           <div>
             <sql-query  q="1"></sql-query>
-            <div class="linespace" onslide="0,1"></div>
+            <div class="linespace" slide="0,1"></div>
             <sql-result q="1"></sql-result>
             <sql-query  q="2"></sql-query>
             <sql-result q="2"></sql-result>
@@ -112,11 +112,11 @@
             <sql-result q="3"></sql-result>
           </div>
           <div>
-            <sql-query  q="4" onslide="1,2"></sql-query>
-            <div class="linespace" onslide="0,1"></div>
+            <sql-query  q="4" slide="1,2"></sql-query>
+            <div class="linespace" slide="0,1"></div>
             <sql-result q="4"></sql-result>
-            <sql-query  q="5" onslide="2"></sql-query>
-            <sql-result q="5" onslide="2"></sql-result>
+            <sql-query  q="5" slide="2"></sql-query>
+            <sql-result q="5" slide="2"></sql-result>
           </div>
         </sql-output>
       </sql-interactive>
@@ -139,10 +139,10 @@
               SELECT * FROM T;
               SELECT * FROM pragma_table_xinfo('T');
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
               { "values_or_select": "VALUES (1, 'A'), (2, 'B')" }
             </sql-option>
-            <sql-option onslide="1">
+            <sql-option slide="1">
               { "values_or_select": "SELECT * FROM Produits" }
             </sql-option>
           </sql-selector>
@@ -152,10 +152,10 @@
               <sql-result q="1"></sql-result>
               <sql-query  q="2"></sql-query>
               <sql-result q="2"></sql-result>
-              <div class="linespace" onslide="0"></div>
-              <div class="linespace" onslide="0"></div>
-              <div class="linespace" onslide="0"></div>
-              <div class="linespace" onslide="0"></div>
+              <div class="linespace" slide="0"></div>
+              <div class="linespace" slide="0"></div>
+              <div class="linespace" slide="0"></div>
+              <div class="linespace" slide="0"></div>
             </div>
             <div>
               <sql-query  q="3"></sql-query>
@@ -177,7 +177,7 @@
               <script type="c-sql">
                 SELECT sql FROM sqlite_schema WHERE name IN (<h>$TABLES</h>);
               </script>
-              <sql-option onslide="0">
+              <sql-option slide="0">
               { "tables": "'Users'" }
               </sql-option>
             </sql-selector>
@@ -207,10 +207,10 @@
                 DROP TABLE <h>$IFEXISTS</h> <h>$TABLE</h>;
                 SELECT COUNT(*) FROM <h>$TABLE</h>;
               </script>
-              <sql-option onslide="0">
+              <sql-option slide="0">
               { "table": "Produits" }
               </sql-option>
-              <sql-option onslide="1">
+              <sql-option slide="1">
               { "ifexists": "IF EXISTS", "table": "Produits" }
               </sql-option>
             </sql-selector>
@@ -234,7 +234,7 @@
                 DELETE FROM <h>$TABLE</h>;
                 SELECT COUNT(*) FROM <h>$TABLE</h>;
               </script>
-              <sql-option onslide="0-1">
+              <sql-option slide="0-1">
                 { "table": "Produits" }
               </sql-option>
             </sql-selector>
@@ -253,7 +253,7 @@
         <div> </div>
         <div class="danger"><script type="c-sql">TRUNCATE TABLE</script> n'existe pas sur SQLite.</div>
       </div>
-      <ul onslide="1">
+      <ul slide="1">
         <li><script type="c-sql">CREATE TABLE IF EXISTS</script> pose problème si schémas différents.</li>
         <li><script type="c-sql">DROP TABLE IF EXISTS</script> puis <script type="c-sql">CREATE TABLE</script> pour s'assurer du schémas.</li>
       </ul>
@@ -264,13 +264,13 @@
       <div>
         <script type="c-sql">ALTER TABLE <h>$TABLE</h> <h>(RENAME|ADD|DROP)</h> COLUMN <h>$OPT</h>;</script>
         <ul class="overlay">
-          <li onslide="0"><script type="c-sql">RENAME COLUMN <h>COLNAME</h> TO <h>$NEW_NAME</h></script> : <b>renomme</b> une colonne.</li>
-          <li onslide="1"><script type="c-sql">ADD COLUMN <h>$COLNAME</h> <h>$COLTYPE</h></script> : <b>ajoute</b> une colonne.</li>
-          <li onslide="2-3"><script type="c-sql">DROP COLUMN <h>$COLNAME</h></script> : <b>supprime</b> une colonne.</li>
-          <li onslide="4"><script type="c-sql">RENAME TO <h>$NEW_NAME</h></script> : <b>renommer</b> une table.</li>
+          <li slide="0"><script type="c-sql">RENAME COLUMN <h>COLNAME</h> TO <h>$NEW_NAME</h></script> : <b>renomme</b> une colonne.</li>
+          <li slide="1"><script type="c-sql">ADD COLUMN <h>$COLNAME</h> <h>$COLTYPE</h></script> : <b>ajoute</b> une colonne.</li>
+          <li slide="2-3"><script type="c-sql">DROP COLUMN <h>$COLNAME</h></script> : <b>supprime</b> une colonne.</li>
+          <li slide="4"><script type="c-sql">RENAME TO <h>$NEW_NAME</h></script> : <b>renommer</b> une table.</li>
         </ul>
       </div>
-      <sql-interactive full-reset="true" onslide="0-3">
+      <sql-interactive full-reset="true" slide="0-3">
         <sql-selector hidden>
           <script type="c-sql">
             SELECT * FROM pragma_table_xinfo('Produits');
@@ -278,13 +278,13 @@
             SELECT * FROM pragma_table_xinfo('Produits');
             SELECT * FROM Produits;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "command": "RENAME", "opts": "Ref TO Prod" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "command": "ADD", "opts": "Sum INT" }
           </sql-option>
-          <sql-option onslide="2-3">
+          <sql-option slide="2-3">
           { "command": "DROP", "opts": "Q" }
           </sql-option>
         </sql-selector>
@@ -296,8 +296,8 @@
             <sql-result q="2"></sql-result>
             <sql-query  q="3"></sql-query>
             <sql-result q="3" style="font-size: 10px;"></sql-result>
-            <div class="linespace" onslide="0,2-"></div>
-            <div class="linespace" onslide="2-"></div>
+            <div class="linespace" slide="0,2-"></div>
+            <div class="linespace" slide="2-"></div>
           </div>
           <div>
             <sql-query  q="4"></sql-query>
@@ -306,8 +306,8 @@
         </sql-output>
       </sql-interactive>
       <div class="overlay">
-        <span onslide="0-2,4-">⚠ Modifier le schéma d'une table existante est dangereux si requêtes SQL déjà écrites.</span>
-        <span onslide="3">💡 Certains SGBD supportent des clauses <script type="c-sql">IF [NOT] EXISTS</script>.</span>
+        <span slide="0-2,4-">⚠ Modifier le schéma d'une table existante est dangereux si requêtes SQL déjà écrites.</span>
+        <span slide="3">💡 Certains SGBD supportent des clauses <script type="c-sql">IF [NOT] EXISTS</script>.</span>
       </div>
     </frame-uca>
   </frame-subsection>
@@ -334,7 +334,7 @@
           CREATE TABLE T (Prod TEXT, Q INT) STRICT;
           INSERT INTO T VALUES (4, 'Crayon');
         </script>
-        <sql-option onslide="0">{}</sql-option>
+        <sql-option slide="0">{}</sql-option>
       </sql-selector>
       <sql-output class="center">
         <sql-query  q="1"></sql-query>
@@ -350,11 +350,11 @@
       <div><script type="c-sql">CREATE TABLE T (A TEXT <h>$CONTRAINTE</h>) STRICT;</script>
         <ul>
           <li><script type="c-sql">DEFAULT <h>$VAL</h></script> : valeur par défaut si non renseignée lors d'un <script type="c-sql">INSERT</script>.</li>
-          <li onslide="1-"><script type="c-sql">NOT NULL</script></li>
-          <li onslide="2-"><script type="c-sql">UNIQUE</script> <i>⚠ La colonne peut contenir plusieurs valeurs <script type="c-sql">NULL</script>.</i></li>
-          <li onslide="3-"><script type="c-sql">CHECK(<h>$COND</h>)</script> : <script type="c-sql"><h>$COND</h></script> doit être vraie.</li>
-          <li onslide="5-"><script type="c-sql">AS (<h>$VAL</h>) <var onslide="6">[STORED]</h></script> : valeur (re-)calculée à partir des autres colonnes.
-            <ul><li onslide="6"><script type="c-sql">STORED</script> : valeur stockée et non-recalculée sur demande.</li></ul>
+          <li slide="1-"><script type="c-sql">NOT NULL</script></li>
+          <li slide="2-"><script type="c-sql">UNIQUE</script> <i>⚠ La colonne peut contenir plusieurs valeurs <script type="c-sql">NULL</script>.</i></li>
+          <li slide="3-"><script type="c-sql">CHECK(<h>$COND</h>)</script> : <script type="c-sql"><h>$COND</h></script> doit être vraie.</li>
+          <li slide="5-"><script type="c-sql">AS (<h>$VAL</h>) <var slide="6">[STORED]</h></script> : valeur (re-)calculée à partir des autres colonnes.
+            <ul><li slide="6"><script type="c-sql">STORED</script> : valeur stockée et non-recalculée sur demande.</li></ul>
           </li>
         </ul>
       </div>
@@ -366,25 +366,25 @@
             INSERT INTO  T <h>$COLS</h> VALUES <h>$VAL</h>;
             SELECT * FROM T;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "cstrnt1": "DEFAULT 0", "cols": "(A)", "val": "('A')" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "cstrnt1": "NOT NULL", "cols": "(ID)", "val": "(NULL)" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           { "cstrnt1": "UNIQUE", "cols": "(ID)", "val": "(0), (0)" }
           </sql-option>
-          <sql-option onslide="3">
+          <sql-option slide="3">
           { "cstrnt1": "CHECK(ID>0)", "cols": "(ID)", "val": "(-1)" }
           </sql-option>
-          <sql-option onslide="4">
+          <sql-option slide="4">
           { "cstrnt2": "CHECK(A == UPPER(A))", "cols": "(A)", "val": "('a')" }
           </sql-option>
-          <sql-option onslide="5">
+          <sql-option slide="5">
           { "cstrnt2": "AS ('ID:'||ID)", "cols": "(ID)", "val": "(0)" }
           </sql-option>
-          <sql-option onslide="6">
+          <sql-option slide="6">
           { "cstrnt2": "AS ('ID:'||ID) STORED", "cols": "(ID)", "val": "(0)" }
           </sql-option>
         </sql-selector>
@@ -401,8 +401,8 @@
             </div>
             <div>
               <sql-query  q="3"></sql-query>
-              <sql-result q="3" onslide="1-4"></sql-result>
-              <div onslide="0,5-">
+              <sql-result q="3" slide="1-4"></sql-result>
+              <div slide="0,5-">
                 <sql-query  q="4"></sql-query>
                 <sql-result q="4"></sql-result>
               </div>
@@ -422,7 +422,7 @@
               CREATE TABLE T (A INT, B INT, <h>$CSTR</h>) STRICT;
               INSERT INTO  T VALUES <h>$VALS</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
             { "cstr": "UNIQUE(A,B)", "vals": "(0,1), (0,0)" }
             </sql-option>
           </sql-selector>
@@ -440,7 +440,7 @@
               CREATE TABLE T (A INT, B INT, <h>$CSTR</h>) STRICT;
               INSERT INTO  T VALUES <h>$VALS</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
             { "cstr": "UNIQUE(A,B)", "vals": "(0,1), (0,1)" }
             </sql-option>
           </sql-selector>
@@ -458,7 +458,7 @@
               CREATE TABLE T (A INT, B INT, <h>$CSTR</h>) STRICT;
               INSERT INTO  T VALUES <h>$VALS</h>;
             </script>
-            <sql-option onslide="0">
+            <sql-option slide="0">
               { "cstr": "CHECK(A != B)", "vals": "(0,0)" }
             </sql-option>
           </sql-selector>
@@ -497,7 +497,7 @@
         <li><b>Clef primaire :</b> un index <script type="c-sql">UNIQUE NOT NULL</script>, encore plus rapide, un seul par table.
           <ul>
             <!-- <li>💡 Certains SGBD créent une clef primaire cachée nommée <script type="c-sql">ROWID</script>.</li> -->
-            <li onslide="3-"><script type="c-sql">AUTOINCREMENT</script> : incrémente automatiquement la clef primaire.
+            <li slide="3-"><script type="c-sql">AUTOINCREMENT</script> : incrémente automatiquement la clef primaire.
             <ul><li>⚠ que sur <script type="c-sql">INTEGER PRIMARY KEY</script>.</li></ul></li>
           </ul>
         </li>
@@ -510,22 +510,22 @@
             INSERT INTO  T VALUES <h>$VALS</h>;
             SELECT * FROM T;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "pk": "PK TEXT PRIMARY KEY", "vals": "('A'), ('B')" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "pk": "PK TEXT PRIMARY KEY", "vals": "(NULL)" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           { "pk": "PK TEXT PRIMARY KEY", "vals": "('A'), ('A')" }
           </sql-option>
-          <sql-option onslide="3">
+          <sql-option slide="3">
           { "pk": "PK INTEGER PRIMARY KEY AUTOINCREMENT", "vals": "(NULL), (NULL)" }
           </sql-option>
-          <sql-option onslide="4">
+          <sql-option slide="4">
           { "pk": "A TEXT, B TEXT, PRIMARY KEY(A,B)", "vals": "('A', 'B'), ('A', 'A')" }
           </sql-option>
-          <sql-option onslide="5">
+          <sql-option slide="5">
           { "pk": "A TEXT, B TEXT, PRIMARY KEY(A,B)", "vals": "('A', 'B'), ('A', 'B')" }
           </sql-option>
         </sql-selector>
@@ -540,16 +540,16 @@
           </div>
           <sql-query  q="3"></sql-query>
           <sql-result q="3"></sql-result>
-          <div onslide="0,3,4">
+          <div slide="0,3,4">
             <sql-query  q="4"></sql-query>
             <sql-result q="4"></sql-result>
           </div>
-          <div class="linespace" onslide="0-3"></div>
-          <div class="linespace" onslide="1,2,5"></div>
-          <div class="linespace" onslide="1,2,5"></div>
-          <div class="linespace" onslide="1,2,5"></div>
-          <div class="linespace" onslide="1,2,5"></div>
-          <div class="linespace" onslide="1,2,5"></div>
+          <div class="linespace" slide="0-3"></div>
+          <div class="linespace" slide="1,2,5"></div>
+          <div class="linespace" slide="1,2,5"></div>
+          <div class="linespace" slide="1,2,5"></div>
+          <div class="linespace" slide="1,2,5"></div>
+          <div class="linespace" slide="1,2,5"></div>
         </sql-output>
       </sql-interactive>
     </frame-uca>
@@ -579,16 +579,16 @@
             CREATE TABLE T (ID INT <h>$FK</h>) STRICT;
             INSERT INTO  T VALUES <h>$VALS</h>;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "fk": "REFERENCES Users(ID)", "vals": "(1)" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "fk": "REFERENCES Users", "vals": "(1)" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           { "fk": "REFERENCES Users", "vals": "(4)" }
           </sql-option>
-          <sql-option onslide="3">
+          <sql-option slide="3">
           { "fk": "REFERENCES Users", "vals": "(NULL)" }
           </sql-option>
         </sql-selector>
@@ -600,11 +600,11 @@
         </sql-output>
       </sql-interactive>
       <ul class="overlay">
-        <li onslide="0">💡 En contrainte de table : <script type="c-sql">FOREIGN KEY(<h>$FK[,...]</h>) REFERENCES <h>$T</h>[(<h>$PK[,...]</h>)]</script>.</li>
-        <li onslide="1">💡 Si les colonnes référencées ne sont pas spécifiées, la clef primaire est utilisée.</li>
-        <li onslide="2">
+        <li slide="0">💡 En contrainte de table : <script type="c-sql">FOREIGN KEY(<h>$FK[,...]</h>) REFERENCES <h>$T</h>[(<h>$PK[,...]</h>)]</script>.</li>
+        <li slide="1">💡 Si les colonnes référencées ne sont pas spécifiées, la clef primaire est utilisée.</li>
+        <li slide="2">
       ⚠ <script type="c-sql">PRAGMA foreign_keys = ON</script> pour activer la vérification des clefs étrangères sur SQLite.</li>
-        <li onslide="3">
+        <li slide="3">
       💡 La clef étrangère peut être nulle (sauf si contrainte <script type="c-sql">NOT NULL</script>).</li>
       </ul>
     </frame-uca>
@@ -675,13 +675,13 @@
             DELETE FROM Users WHERE ID == 2;
             SELECT * FROM T;
           </script>
-          <sql-option onslide="0">
+          <sql-option slide="0">
           { "pol": "RESTRICT" }
           </sql-option>
-          <sql-option onslide="1">
+          <sql-option slide="1">
           { "pol": "CASCADE" }
           </sql-option>
-          <sql-option onslide="2">
+          <sql-option slide="2">
           { "pol": "SET NULL" }
           </sql-option>
         </sql-selector>
@@ -694,14 +694,14 @@
           </div>
           <sql-query  q="3"></sql-query>
           <sql-result q="3"></sql-result>
-          <div onslide="1-">
+          <div slide="1-">
             <sql-query  q="4"></sql-query>
             <sql-result q="4"></sql-result>
           </div>
-          <div class="linespace" onslide="0,1"></div>
-          <div class="linespace" onslide="0,1"></div>
-          <div class="linespace" onslide="0,1"></div>
-          <div class="linespace" onslide="0,1"></div>
+          <div class="linespace" slide="0,1"></div>
+          <div class="linespace" slide="0,1"></div>
+          <div class="linespace" slide="0,1"></div>
+          <div class="linespace" slide="0,1"></div>
         </sql-output>
       </sql-interactive>
     </frame-uca>
