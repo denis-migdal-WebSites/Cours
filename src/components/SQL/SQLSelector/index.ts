@@ -26,7 +26,7 @@ export default class SQLSelector extends LISS({css: [theme, css]},
 
         // safer
         // @ts-expect-error
-        const queryText = query_script.api.properties.text;
+        const queryText = query_script.subject.properties.text;
 
         const query = unindent(queryText);
 
@@ -34,7 +34,7 @@ export default class SQLSelector extends LISS({css: [theme, css]},
         if(select_script !== null) {
 
             // @ts-expect-error
-            const selectQueryText = select_script.api.properties.text;
+            const selectQueryText = select_script.subject.properties.text;
 
             const q = unindent(selectQueryText.replaceAll('\u00a0',
                                                                      ' ') );
