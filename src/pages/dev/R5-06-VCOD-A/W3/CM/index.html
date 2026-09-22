@@ -16,16 +16,18 @@
 
 <div>Chaque composant est usuellement implémenté par un ensemble de classes. Le découpage des composants en classes reste une étape de conception, cependant elle commence à faire intervenir des notions d'implémentation.</div>
 
-<todo>But : garantir (dans la manière de coder et par les tests, donc aussi conçu pour les tests, cf ATP).</todo>
-
 <h3>Diagramme de classes</h3>
+
+<todo>Cheat sheets : UML + DP + termes</todo>
 
 - diagramme de classes + objet
 - diagramme de classe à la fois conception et durant implémentation.
 - POO
 - Objet : état à un instant T : débug ou montrer changement d'états.
 
+
 <h2>Les classes ne sont pas LA solution</h2>
+<!-- requis pour OCP -->
 
 <div>Les classes, l'héritage, et les méthodes ne sont pas la solution à tout. Avant de voir comment les utiliser, nous allons nous intéresser à quand les utiliser.</div>
 
@@ -118,7 +120,6 @@
 
 <h2>SOLID</h2>
 
-<todo>Cheat sheets : UML + DP + termes</todo>
 
 <div>Les classes doivent respecter les principes <b>SOLID</b> :
     <ul>
@@ -136,13 +137,13 @@
 
 <div>Chaque élément (composants, classes, méthodes/fonctions) ne doit avoir qu'une seule responsabilité (mais le faire bien). Par exemple, une fonction qui calcule un résultat <u>puis</u> qui l'affiche, fait deux choses différentes : calculer et afficher.</div>
 
-<div>Séparer ces deux responsabilités en 2 fonctions distinctes (<script type="c-ts">compute()</script> et <script type="c-ts">print()</script>) facilite l'implémentation des fonctions et leurs tests. Mais surtout, cela permet leur réutilisation pour des usages différents, e.g. au lieu d'afficher le résultat (<script type="c-ts">print(compute())</script>), le sauvegarder (<script type="c-ts">save(compute())</script>).</div>
+<div>Séparer ces deux responsabilités en 2 fonctions distinctes (<script type="c-ts">compute()</script> et <script type="c-ts">print()</script>) facilite l'implémentation des fonctions et leurs tests. Mais surtout, permet leur réutilisation pour des usages différents, e.g. sauvegarder au lieu d'afficher le résultat (i.e. <script type="c-ts">save(compute())</script> au lieu de <script type="c-ts">print(compute())</script>).</div>
 
 <div class="hint">Une fonction comportant plusieurs lignes fait bien "plusieurs choses". Par "responsabilité unique" on entend "une seule raison <i>conceptuelle</i> de changer".</div>
 
 <h4>Orchestration</h4>
 
-<div>Une fonction <script type="c-ts">onClick()</script> effectuant <script type="c-ts">print(compute())</script> fait 2 choses, pourtant elle est considérée comme n'ayant qu'une seule responsabilité. En effet, on dit qu'elle <b>délègue</b> des responsabilités à <script type="c-ts">compute()</script> et <script type="c-ts">print()</script>. L'orchestration est vue comme une responsabilité unique.</div>
+<div>Une fonction <script type="c-ts">onClick()</script> effectuant <script type="c-ts">print(compute())</script> fait 2 choses conceptuellement différentes, pourtant elle est considérée comme n'ayant qu'une seule responsabilité. En effet, on dit qu'elle <b>délègue</b> des responsabilités à <script type="c-ts">compute()</script> et <script type="c-ts">print()</script>. L'orchestration est vue comme une unique responsabilité.</div>
 
 <div>Ainsi, lorsqu'un élément fait trop de choses, on cherchera à en déléguer les responsabilités. Par exemple, une classe <script type="c-ts">Game</script> pourra déléguer l'affichage à <script type="c-ts">GameView</script>, le modèle à <script type="c-ts">GameModel</script>, et le traitement des actions à <script type="c-ts">GameLoop</script>. Chacun de ces sous-composants pouvant eux-même être redécoupés. La classe <script type="c-ts">Game</script> sert alors de <b>glue code</b> et d'orchestrateur.</div>
 
@@ -155,6 +156,9 @@
 <div>D'autant plus qu'un même graphe peut-être parcouru via des algorithmes différents en fonction de ce qu'on recherche (e.g. parcours en profondeur, en largeur, Dijkstra, A*, etc). On va alors utiliser une fonction externe qui se chargera du parcours (DP <b>Servant</b>) :
     <div class="flex-2">
         <script type="c-ts">
+            DFS(treeGraph, (node) => <h>...</h>);
+        </script>
+        <script type="c-ts">
             function DFS(treeGraph, callback) {
                 const stack = [treeGraph.rootNode];
                 while(node = stack.pop()) {
@@ -163,27 +167,36 @@
                 }
             }
         </script>
-        <script type="c-ts">
-            DFS(treeGraph, (node) => <h>...</h>);
-        </script>
     </div>
 </div>
 
-<h4>Responsabilités latentes</h4>
+<h4>Responsabilité latentes</h4>
 
-<div>Certaines responsabilités sont difficiles à identifier (<i>latent responsabilities</i>), et peuvent ainsi briser la responsabilité unique. Notamment, certains responsabilités émergent de l'interaction entre les objets (<i>emergent responsibility</i>).</div>
+<div>Certaines responsabilités sont difficiles à identifier (<i>latent responsabilities</i>), et peuvent ainsi enfreindre le principe de responsabilité unique.</div>
 
-<div>Par exemple, un signal est "lié" à d'autres signaux, eux-même liés à d'autres encore. Lorsque le signal est déclenché (<i>trigger</i>), il notifie les signaux auxquels il est lié en les déclenchant à leur tour. On a ici un graphe implicite de signaux, avec un parcours implicite. Une responsabilité de parcours émerge donc de l'interaction des signaux entre eux.</div>
+<div>Par exemple une méthode <script type="c-ts">.update()</script> semble ne faire qu'une seule chose (mettre à jour), mais recouvre potentiellement plusieurs responsabilités qu'on peut séparer en plusieurs méthodes :
+    <ul>
+        <li><script type="c-ts">.requestUpdate()</script> : <i>planifier</i> la mise à jour (peut déléguer à un <i>scheduler</i>).</li>
+        <li><script type="c-ts">.update()</script> : <i>orchestrer</i> la mise à jour (notamment si l'objet est une composition de différentes parties).</li>
+        <li><script type="c-ts">.onUpdate()</script> : <i>actions</i> spécifiques à la classe (appelé par <script type="c-ts">.update()</script>).</li>
+    </ul>
+</div>
 
-<div>Or le rôle d'un signal est d'être un signal, pas de savoir comment il se propage et se transmet. On va ainsi externaliser la propagation du signal via une classe qui en définira le comportement. Cette propagation peut être plus ou moins complexe : se faire en plusieurs phases (e.g <script type="c-ts">trigger</script>, <script type="c-ts">changes</script>, <script type="c-ts">notify</script>), utiliser des stratégies de batching (e.g. n'exécuter les listeners qu'une fois par frame), définir un ordre de parcours particulier, gérer les cycles, etc.</div>
+<h4>Responsabilités émergentes</h4>
+
+<div>Certains responsabilités latentes peuvent aussi émergent de l'interaction entre objets (<i>emergent responsibility</i>).</div>
+
+<div>Par exemple, un objet <script type="c-ts">Signal</script> émet une notification lorsqu'il est déclenché (<i>trigger</i>). Cette notification peut elle-même déclencher d'autres signaux. L'interaction entre ces différents signaux fait implicitement émerger un graphe de propagation, qui est parcouru lorsqu'un signal est déclenché. Une nouvelle responsabilité émerge ainsi de l'interaction entre les signaux.</div>
+
+<div>Or la responsabilité d'un <script type="c-ts">Signal</script> est de notifier lorsqu'il est déclenché, pas de savoir comment il se propage. On va alors externaliser la propagation du signal via une classe qui en définira explicitement le comportement. Cette propagation peut être plus ou moins complexe : se faire en plusieurs phases (e.g <script type="c-ts">prepass</script>, <script type="c-ts">propagate</script>, <script type="c-ts">notify</script>), utiliser des stratégies de batching (e.g. ne notifier qu'une fois par frame), définir un ordre de parcours particulier, gérer les cycles, etc.</div>
 
 <h3>Open-Close</h3>
 
 <h4>Principe</h4>
 
-<div>Le code doit <i>être ouvert aux extensions</i>, i.e. permettre l'ajout de nouvelles fonctionnalités, tout en étant <i>fermé aux modifications</i>, i.e. le code (stable) existant ne doit pas être modifié. Le code stable doit ainsi pouvoir être étendu sans être modifié.</div>
+<div>Le code doit <i>être ouvert aux extensions</i> (i.e. permettre l'ajout de nouvelles fonctionnalités) tout en étant <i>fermé aux modifications</i> (i.e. le code existant et stable ne doit pas être modifié). Le code stable doit ainsi pouvoir être étendu sans être modifié.</div>
 
-<div>En effet, modifier un code stable risque d'engendrer des bugs dans ce qui "marchait déjà" (regression), à la fois au sein du code modifié, mais aussi dans le code l'utilisant. Souvent même, on ne peut tout simplement pas modifier directement l'existant (e.g. bibliothèques), au risque de devoir réappliquer ses propres modifications pour chaque nouvelle version.</div>
+<div>En effet, modifier un code stable risque d'introduire des bugs dans ce qui "marchait déjà" (regression), à la fois au sein du code modifié, mais aussi dans le code l'utilisant. Souvent même, on ne peut tout simplement pas modifier directement l'existant (e.g. bibliothèques), au risque de devoir réappliquer ses propres modifications pour chaque nouvelle version.</div>
 
 <h4>Modifier l'existant</h4>
 
@@ -208,7 +221,7 @@
 
 <h4>Étendre l'existant</h4>
 
-<div>Pouvoir étendre l'existant nécessite de laisser la porte ouverte aux évolutions futures, pas pas de devoir les anticiper. Cela ne requiert pas de rendre le code générique.</div>
+<div>Pouvoir étendre l'existant nécessite de laisser la porte ouverte aux évolutions futures, pas de devoir les anticiper. Cela ne requiert pas de rendre le code générique.</div>
 
 <div>Par exemple, une fonction dont la responsabilité est d'orchestrer l'impression d'une facture à partir d'un client et d'une liste de produits peut être rendue générique de sorte à supporter plusieurs formatages, types d'impressions, etc.
     <div class="flex-2">
@@ -225,19 +238,19 @@
                                 format, printer) {
                 const invoice = new Invoice(ci, pi);
                 const formatted = format(invoice)
-                printter.print( formatted );
+                printer.print( formatted );
             }
         </script>
     </div>
 </div>
 
-<div>Or, la généricité obtenue par l'ajout de paramètres complexifie l'implémentation, l'usage, et les tests de la fonction... tout en étant inutile si cette généricité n'est jamais utilisée. Au pire, il est toujours possible d'écrire une autre fonction d'orchestration répondant à un autre usage/contexte. Ce n'est que lorsqu'on aura besoin de 3-4 versions différentes de la même orchestration, qu'on commencera à factoriser en généralisant la fonction.</div>
+<div>Or, la généricité obtenue par l'ajout de paramètres complexifie l'implémentation, l'usage, et les tests de la fonction... tout en étant inutile si cette généricité n'est jamais utilisée. Au pire, il est toujours possible d'écrire une nouvelle fonction d'orchestration répondant à un autre usage/contexte. Ce n'est que lorsqu'on aura besoin de 3-4 versions différentes de la même orchestration, qu'on commencera à factoriser en généralisant la fonction.</div>
 
 <h4>Comment faire ?</h4>
 
 <div>Les concepts précédemment étudiés aident déjà au respect de l'OCP. La responsabilité unique, évite l'ajout de responsabilités à l'existant, donc sa modification. La composition permet la création/modifications de fonctionnalités, simplement en assemblant les briques différemment. L'injection de dépendances évite de modifier une classe lorsque ses dépendances changent. L'API de convenance évite à la fois de modifier la structure de base lorsqu'on ajoute une nouvelle fonctionnalité, mais évite aussi de modifier l'interface de haut niveau lorsqu'une fonction est convertie en méthode e.g. pour des raisons de performances.</div>
 
-<div>On va aussi favoriser les registres aux <script type="c-ts">switch</script> (ou blocks de <script type="c-ts">if</script>/<script type="c-ts">else if</script>/<script type="c-ts">else</script>). En effet, avec un <script type="c-ts">switch</script>, rajouter une valeur possible nécessite de modifier le code existant afin d'ajouter une clause <script type="c-ts">case</script> correspondante. Avec un registre, e.g. tableau associatif, il suffit d'enregistrer un nouveau callback associé à la nouvelle valeur, ce qui peut se faire de manière décentralisée :
+<div>On va aussi favoriser les registres aux conditions (<script type="c-ts">switch</script> ou blocks de <script type="c-ts">if</script>/<script type="c-ts">else if</script>/<script type="c-ts">else</script>). En effet, avec des conditions, toute nouvelle valeur possible nécessite de modifier le code afin d'ajouter le cas correspondant. Avec un registre (e.g. un tableau associatif), il suffit d'associer un nouveau callback à la valeur, ce qui peut se faire de manière décentralisée :
     <div class="flex-2">
         <script type="c-ts">
             function translate(msg, lang) {
@@ -249,35 +262,35 @@
         </script>
         <div>
             <script type="c-ts">
+                // fichier lang/FR: ajoute un translator.
+                translators["FR"] = translateFR;
+            </script>
+            <script type="c-ts">
                 function translate(msg, lang) {
                     translators[lang](msg);
                 }
-            </script>
-            <script type="c-ts">
-                // fichier lang/FR: ajoute un translator.
-                translators["FR"] = translateFR;
             </script>
         </div>
     </div>
 </div>
 
-<div>Une autre manière de procéder est de créer des <b>templates</b>, i.e. des fonctions/classes génériques dont on peut définir une certaine partie du comportement, e.g. par injection de dépendances. Pour les classes, on peut créer un algorithme générique dont certaines parties sont définies par l'implémentation (ou la surcharge) de méthodes (potentiellement abstraites). L'intérêt est alors de garantir le respect d'une structure algorithmique :
+<div>Une autre manière de procéder est de créer des <b>templates</b>, i.e. des fonctions/classes génériques dont on peut (re)définir certaines parties du comportement (e.g. par injection de dépendances). Pour les classes, on peut créer un algorithme générique dont certaines parties sont définies par l'implémentation de méthodes abstraites (ou redéfinitions de méthodes concrètes). L'intérêt est alors de garantir le respect d'une structure algorithmique :
     <div class="flex-2">
         <script type="c-ts">
             class Template {
+                abstract before(): void;
+                after() {<h>...</h>} // default behavior.
                 final foo() {
                     this.before();
                     <h>...</h>
                     this.after();
                 }
-                abstract before(): void;
-                after() {<h>...</h>} // default behavior.
             }
         </script>
         <script type="c-ts">
             class Foo extends Template {
                 before() { <h>...</h> }
-                overload after() { <h>...</h> }
+                override after() { <h>...</h> }
             }
         </script>
     </div>
@@ -287,13 +300,13 @@
 
 <h4>Le polymorphisme</h4>
 
-<div>On doit pouvoir remplacer toute instance d'un type <script type="c-ts">X</script>, par toute instance de ses sous-types, i.e. les instances héritant ou implémentant <script type="c-ts">X</script>. Par exemple, une fonction acceptant un paramètre de type <script type="c-ts">X</script>, doit pouvoir supporter tout sous-types de <script type="c-ts">X</script>. Ainsi, une variable/paramètre de type <script type="c-ts">X</script> peut prendre "plusieurs formes", c'est ce qu'on appelle le <b>polymorphisme</b>.</div>
+<div>Toute variable (ou constante) de type <script type="c-ts">X</script> peut, en réalité, être une instance de n'importe quel sous-type de <script type="c-ts">X</script> (i.e. héritant ou implémentant <script type="c-ts">X</script>). Par exemple, une fonction qui prend en paramètre un argument de type <script type="c-ts">X</script> peut recevoir une instance de l'un de ses sous-types. Ainsi une même variable (ou constante) peut faire référence à des instances de types concrets différents, et donc prendre "plusieurs formes". C'est ce qu'on appelle le <b>polymorphisme</b>.</div>
 
-<div>Or, la fonction doit pouvoir s'exécuter sans connaître le type réel du paramètre à l'exécution, i.e. "comme si" il était indistinguable d'un <script type="c-ts">X</script>. En effet, si la fonction doit se retrouver à gérer chaque cas particulier, non seulement son code s'en retrouve complexifié, mais aussi devra être modifié à chaque nouvelle dérivée/implémentation de <script type="c-ts">X</script>.</div>
+<div>Or, si le code se retrouve à effectuer un traitement particulier en fonction du type concret de la variable (ou constante), non seulement il s'en retrouve complexifié, mais devra également être adapté pour chaque nouvelle dérivée (ou implémentation). Ainsi le code ne devrait pas avoir à savoir le type concret de la variable (ou constante).</div>
 
 <h4>Contrats</h4>
 
-<div>Une interface défini un <b>contrat</b>, en indiquant ce qu'elle accepte en entrée, et ce qu'elle peut retourner. On parle alors de :
+<div>Une interface défini un <b>contrat</b>, indiquant ce qu'elle accepte en entrée, et ce qu'elle peut retourner. On parle alors de :
     <ul>
         <li><b>pre-condition</b> : ce qui doit être vrai au début de la fonction/méthode, i.e. dans les données d'entrée.</li>
         <li><b>post-condition</b> : ce qui doit être vrai à la fin de la fonction/méthode, i.e. dans les données de sortie.</li>
@@ -303,7 +316,7 @@
 
 <div class="hint">Idéalement, ce contrat est explicité/garanti par un système de vérification de types (<i>type checking</i>), et/ou d'assertions.</div>
 
-<div>Pour pouvoir être substituable à <script type="c-ts">X</script>, tout sous-types de <script type="c-ts">X</script> doit respecter les attentes posées par <script type="c-ts">X</script>, i.e. son contrat (explicite comme implicite), i.e. ce à quoi s'attend tout utilisateur de <script type="c-ts">X</script>. En effet, si le sous-type de <script type="c-ts">X</script> :
+<div>Pour pouvoir être substituable à <script type="c-ts">X</script>, tout sous-types de <script type="c-ts">X</script> doit respecter les attentes posées par <script type="c-ts">X</script>, i.e. son contrat (explicite comme implicite), ce à quoi s'attendra tout utilisateur de <script type="c-ts">X</script>. En effet, si le sous-type de <script type="c-ts">X</script> :
     <ul>
         <li><b>pre-condition</b> : ne supporte pas certaines entrées, il ne saura pas traiter tout ce que l'utilisateur de <script type="c-ts">X</script> lui transmettra.</li>
         <li><b>post-condition</b> : retourne des valeurs supplémentaires, l'utilisateur de <script type="c-ts">X</script> ne saura pas comment les traiter.</li>
@@ -322,7 +335,7 @@
 
 <h4>Faux héritage</h4>
 
-<div>Certaines spécialisations ne correspondent pas systématiquement à un sous-type. Par exemple, on a appris qu'un carré était un cas particulier d'un rectangle. On serait ainsi tenté de faire hériter <script type="c-ts">Square</script> de <script type="c-ts">Rectangle</script>. Or, si cela ne pose pas de problèmes pour des structures (i.e. RO), pour des entités (i.e. RW), 2 problèmes se posent :
+<div>Certaines spécialisations ne correspondent pas systématiquement à un sous-type. Par exemple, on sait qu'un carré <b>est un</b> rectangle particulier. On serait ainsi tenté de faire hériter <script type="c-ts">Square</script> de <script type="c-ts">Rectangle</script>. Or, si cela ne pose pas de problèmes pour des structures (i.e. RO), pour des entités (i.e. RW) 2 problèmes se posent :
     <ul>
         <li>un utilisateur de <script type="c-ts">Rectangle</script> ne s'attend pas à ce que la modification de la largeur modifie aussi sa longueur.</li>
         <li>un <script type="c-ts">Rectangle</script> dont la largeur devient égale à sa longueur ne se transforme pas en <script type="c-ts">Square</script> (et inversement).</li>
@@ -331,7 +344,7 @@
 
 <div>Ainsi, il faut considérer soit que <script type="c-ts">Square</script> et <script type="c-ts">Rectangle</script> sont deux entités distinctes avec leurs propres comportements, soit qu'un carré n'est pas un type, mais une propriété de <script type="c-ts">Rectangle</script> vérifiée lorsque sa largeur égale sa longueur.</div>
 
-<div>L'héritage doit ainsi être utilisé avec parcimonie, et ne doit pas être servir à juste réutiliser des comportements. On préférera souvent la composition qui permet de choisir des sous-parties de comportements à hériter, remplacer, voire supprimer. On ne défini alors plus un sous-type mais un type différent.</div>
+<div>L'héritage doit ainsi être utilisé avec parcimonie, et ne doit pas être servir à juste réutiliser des comportements. On préférera souvent la composition qui permet de choisir des sous-parties de comportements à hériter, remplacer, voire supprimer. La composition ne définira alors pas un sous-type, mais un nouveau type différent.</div>
 
 <h4>L'exception</h4>
 
@@ -354,13 +367,31 @@
 
 <div>Un code ne doit dépendre que de ce dont il a besoin, i.e. de l'interface minimale permettant de répondre à ses besoins. Par exemple, une fonction affichant un rectangle n'a pas à connaître (et donc de dépendre) des méthodes permettant de modifier le rectangle.</div>
 
-<div>Cela permet à la fois d'identifier de manière précise les dépendances d'un code, d'apporter des garanties, ainsi que de rendre le code plus générique. En effet, une fonction qui dépend une interface sans mutateurs, indique (et garantie) qu'elle ne modifiera pas l'objet, et aura des contraintes moindres quant à ce qu'elle accepte.</div>
+<div>Cela permet à la fois d'identifier de manière précise les dépendances d'un code, d'apporter des garanties, ainsi que de rendre le code plus générique. En effet, une fonction qui dépend une interface sans mutateurs, indique (et garantie) qu'elle ne modifiera pas l'objet, et aura moins de contraintes quant à ce qu'elle accepte.</div>
 
-<div>Par exemple, une fonction acceptant une <script type="c-ts">Curve</script> en lecture seule pourra aussi accepter une <script type="c-ts">Line</script> car partagent la même interface en lecture, même si elles ont des interfaces incompatibles en écriture.</div>
+<div>Par exemple, une fonction acceptant une <script type="c-ts">Curve</script> en lecture seule pourra ainsi accepter e.g. une <script type="c-ts">Line</script> si son interface est compatible en lecture, et ce même si elle ne l'est pas en écriture.</div>
 
 <div class="hint">Certains langages supportent le <b>duck typing</b>, i.e. tout objet est compatible avec une interface, sans avoir besoin de l'implémenter ou de l'étendre, tant qu'il en respecte les contraintes.
     <div class="quote">If it looks like a duck, swims like a duck, and quacks like a duck, then it probably is a duck.</div>
 </div>
+
+<h4>Découper les interfaces en capacités</h4>
+
+<div>Pour cela, on ne résonne plus en termes de types (d'objets), mais en termes de <b>capacités</b>. Par exemple l'interface d'un <script type="c-ts">Signal</script> peut être décomposée en 3 capacités :
+    <ul class="flex-3">
+        <li><script type="c-ts">Triggerable</script> : le déclencher.</li>
+        <li><script type="c-ts">Subscribable</script> : l'observer.</li>
+        <li><script type="c-ts">Clearable</script> : vider ses observateurs.</li>
+    </ul>
+</div>
+
+<div class="danger">Une capacité peut regrouper plusieurs méthodes. Par exemple, <script type="c-ts">Subscribable</script> permettra généralement d'observer le signal, mais aussi de vérifier et d'arrêter cette observation (soit 3 méthodes).</div>
+
+<div>Une fonction (ou classe) n'a ainsi pas réellement besoin d'un <script type="c-ts">Signal</script>, mais d'un objet fournissant les capacités qu'elle exploite <i>réellement</i> (e.g. <script type="c-ts">Triggerable</script> et <script type="c-ts">Clearable</script>). Cela peut alors être l’occasion de se demander si la fonction (ou classe) doit réellement dépendre de cette capacité, ou s’il est possible de la rendre indépendante.</div>
+
+<div>Par exemple, une classe utilisant un <script type="c-ts">Triggerable</script>, peut être modifiée pour dépendre d'un callback à la place. Elle devient ainsi indépendante du système de signal, mais est toujours compatible avec celui-ci : il suffit de remplacer le <script type="c-ts">Triggerable</script> par un callback déclenchant le signal.</div>
+
+<div class="hint">Il est aussi possible de créer une classe agnostique, centrée sur les concepts métiers et indépendante des autres interfaces. Une autre classe peut alors l’intégrer au système en lui ajoutant des comportements, e.g. en déclenchant le signal après chaque modification.</div>
 
 <h4>Principe de moindre connaissance</h4>
 
@@ -368,14 +399,16 @@
 
 <div>Par exemple une fonction <script type="c-ts">calcNetPrice()</script> n'a pas à savoir comment un produit stocke son prix brut, ni de la manière dont le taux de TVA est récupéré. Le fait de ne pas dépendre d'une interface <script type="c-ts">Product</script> permet à la fonction d'être réutilisée directement, ou avec d'autres structures.
     <div class="flex-2">
+        <div style="text-align: center;"><b>DON'T</b></div>
+        <div style="text-align: center;"><b>DO</b></div>
+    </div>
+    <div class="flex-2">
         <script type="c-ts">
-            // DON'T
             function calcNetPrice(p: Product) {
                 return p.grossPrice * (1 + VAT(p))
             }
         </script>
         <script type="c-ts">
-            // DO
             function calcNetPrice(grossPrice, VAT) {
                 return grossPrice * (1 + VAT)
             }
@@ -387,15 +420,119 @@
 
 <h3>Inversion des dépendances</h3>
 
-<div>Le code doit dépendre d'une abstraction <b>stable</b> agnostique de l'implémentation. L'abstraction doit ainsi communiquer l'intention sans dépendre de l'implémentation. Cela permet à la fois de protéger les utilisateurs de potentiels changements dans l'implémentation, mais aussi de pouvoir indifféremment utiliser différentes implémentations.</div>
+<div>Le code doit dépendre d'une abstraction <b>stable</b>, agnostique de l'implémentation. L'abstraction doit ainsi communiquer l'intention sans dépendre de l'implémentation. Cela permet à la fois de protéger les utilisateurs de potentiels changements dans l'implémentation, mais aussi de pouvoir, indifféremment, utiliser différentes implémentations.</div>
 
-<div class="danger">Cela ne signifie pas que tout doit dépendre d'une interface. Une abstraction peut aussi être une classe abstraite, voire une classe concrète, qu'il est possible de transformer ensuite en interface lorsque le besoin émerge.</div>
+<div class="danger">Cela ne signifie pas que tout doit dépendre d'une interface. Une abstraction peut aussi être une classe abstraite, voire une classe concrète, qu'il est ensuite possible de transformer en interface lorsque le besoin émerge.</div>
 
-<div>Par exemple, une fonction dépendant d'une abstraction est générique : elle peut être (re)utilisée avec toutes implémentations de l'abstraction. Ainsi, si elle prend un flux, elle pourra accepter tout type de flux respectant la même interface, indépendamment son implémentation.</div>
+<div>Par exemple, une fonction prenant en argument un flux pourra être appelée avec tout type de flux, tant qu'ils en respectent l'interface. Si l'implémentation d'un flux change, son usage restera inchangé.</div>
 
 <div class="danger">Contrairement à ce qui est affirmé par endroits, l'inversion des dépendances ne dit rien quant au composant qui doit être propriétaire de l'interface (composant utilisateur, composant fournissant l'implémentation, ou autre ?). Idéalement, on la placera dans un composant abstrait qui sera implémentée d'un côté, et utilisée de l'autre.</div>
 
 <div class="hint">Dépendre d'interfaces peut aussi éviter des dépendances circulaires dans certains langages.</div>
+
+<h4>Niveaux d'indépendance</h4>
+
+<div>Nous pouvons distinguer plusieurs niveau d'indépendances :
+    <ol start="0">
+        <li><i>Dépendance à une <b>implémentation</b> :</i> le code utilise directement l'implémentation concrète.</li>
+        <li><i>Dépendance à une <b>abstraction</b> (<u>DIP</u>):</i> le code est indépendant de l'implémentation, mais a besoin de l'importer.</li>
+        <li><i>Dépendance <b>injectée</b> :</i> la dépendance n'est pas importée par le code, mais reste nécessaire à l'exécution.</li>
+        <li><i>Indépendance totale :</i> le code est exécuté sans la dépendance, la fonctionnalité peut être ajoutée e.g. par décoration.</li>
+    </ol>
+</div>
+
+<div>L'inversion des dépendances se situe ainsi au niveau 1. L'injection de dépendances (ou de hooks) permet d'atteindre le niveau 2 (ou 3), cependant elle nécessite de spécifier les dépendances à chaque usage. Pour éviter cela, on peut utiliser des <i>factory</i> et/ou des <i>fonctions de convenances</i> :
+    <div class="flex-2">
+        <script type="c-ts">
+            createUser("name");
+            // au lieu de :
+            createUser(IMPL_V1, "name");
+        </script>
+        <script type="c-ts">
+            function createUser(...args) {
+                return _createUser(IMPL_V1, ...args);
+            }
+        </script>
+    </div>
+</div>
+
+<div class="hint">Les <i>hooks</i> permettent de dépendre d'une interface qu'on défini soit-même au lieu de dépendre d'interfaces externes. </div>
+
+<h4>Détails et politique</h4>
+
+<div>On peut séparer le code en 2 catégories :
+    <ul>
+        <li><i>les détails :</i> <b>implémente</b> l'abstraction, détermine <i>comment</i> on fait.</li>
+        <li><i>la politique :</i> <b>utilise</b> l'abstraction, détermine <i>ce</i> qu'on fait. Code généralement trivial, donne l'intention.</li>
+    </ul>
+</div>
+
+<div>Par exemple, la fonction <script type="c-ts">observe()</script> qui écoute une cible et exécute le callback une première fois est une politique :
+    <script type="c-ts">
+        function observe(target, callback) {
+            listen(target, callback);
+            call(target, callback);
+        }
+    </script>
+</div>
+
+<div>Dépendre de la fonction <script type="c-ts">observe()</script> n'est pas une infraction au DIP. Elle ne dépend pas d'une implémentation concrète, mais est construite <b>par-dessus</b> l'abstraction, qu'elle enrichit.</div>
+
+<div class="hint">Transformer un maximum de détails en politiques permet de minimiser le contrat, et, par conséquent :
+    <ul class="flex-2">
+        <li>le volume de code à implémenter.</li>
+        <li>la part susceptible de changer.</li>
+    </ul>
+</div>
+
+<h4>Contrats publiques et internes</h4>
+
+<div>On peut distinguer la partie publique, de la partie interne d'un contrat :
+    <ul>
+        <li><i>partie publique :</i> ce que l'extérieur du module peut utiliser.</li>
+        <li><i>partie interne :</i> ce que les politiques internes au module utilisent, et que l'implémentation doit donc respecter.</li>
+    </ul>
+</div>
+
+<div>L'extérieur du module va dépendre de la partie publique du module, mais aussi de sa partie interne, car requis par les politiques internes. Ainsi, pour respecter le DIP, la partie interne du contrat doit aussi être une abstraction.
+    <div class="flex-2">
+        <script type="c-ts">
+            function foo(o: Subscribable) {
+                listen(o, () => {});
+            }
+        </script>
+        <script type="c-ts">
+            function listen(o: Subscribable, cb) {
+                // utilise le contrat interne.
+            }
+        </script>
+    </div>
+</div>
+
+<div>On souhaite ainsi exposer une interface publique qui cache sa partie interne, tout en évitant des conversions dangereuses. Pour cela, on pourra cacher l'interface interne derrière une propriété privée (ou un symbole privé en TS), empêchant son accès par l'extérieur :
+    <div class="flex-2">
+        <script type="c-ts">
+            const OBSERVABLE = Symbol();
+
+            type Subscribable = {
+                [OBSERVABLE]: {
+                    add(cb): void;
+                }
+            }
+        </script>
+        <script type="c-ts">
+            function getInternalAPI(o) {
+                return o[OBSERVABLE];
+            }
+
+            function listen(o: Subscribable, cb) {
+                getInternalAPI(o).add(cb);
+            }
+        </script>
+    </div>
+</div>
+
+<div class="hint">Vous remarquerez que la fonction <script type="c-ts">listen()</script> n'implémente pas directement l'écoute, mais se contente de rediriger la requête. Elle ne dépend que de l'abstraction, et reste ainsi dans la partie "politique". Elle peut donc être utilisée avec n’importe quelle implémentation, sans avoir à recourir à une fonction <script type="c-ts">listen()</script> spécifique à chaque implémentation.</div>
 
 <h2>Qualité du code</h2>
 
