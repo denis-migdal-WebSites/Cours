@@ -31,7 +31,7 @@
             <li>ses <b>méthodes</b>.</li>
         </ol>
         </div>
-        <div>Le nom du type peut être surmonté de son <i>stéréotype</i> (e.g. interface, abstract). En l'absence de stéréotype explicite, le type sera une classe.</div>
+        <div>Le nom du type peut être surmonté de son <i>stéréotype</i> (e.g. interface, abstract). En l'absence de stéréotype explicite, le type est une classe.</div>
         <div>Les paramètres templates (ou génériques) sont indiqués par un rectangle en haut à droite.</div>
     </div>
     <img style="width:100%" src="./assets/class.svg">
@@ -62,25 +62,83 @@
 
 <h3>Les variables</h3>
 
+<div>Les variables (attributs, et paramètres) peuvent préciser leur :
+    <ul class="flex-2">
+        <li><b>type :</b> <script type="c-text">name: Type</script></li>
+        <li><b>multiplicité</b>/<b>cardinalité :</b> <script type="c-text">name: Type[1..2]</script></li>
+        <li><b>valeur par défaut :</b> <script type="c-text">name = 42</script></li>
+        <li><b>contraintes :</b> <script type="c-text">name: Type[]{ordered,unique}</script></li>
+    </ul>
+</div>
 
-- type
-- cardinalité
-- propriété
-- valeur par défaut.
+<div class="hint">Bien qu’UML dispose de sa propre notation pour les types, je vous recommande d’utiliser directement les types du langage que vous aurez choisi.</div>
 
 <h3>Les liens</h3>
 
-- symbole interface possible.
-- héritage / implémentation.
-- compo / aggrégation
-- association simple.
-- dépendance
-=> peut être réflexif
-=> nom + sens de la flèche, sens de lecture, (+ stéréotypes).
-=> rôle (+ card/visibilité)
-=> type et nom de l'indice.
+<div class="flex-4 gap">
+    <div class="span-3">
+        <div>Le diagramme de classe distingue 6 types de liens :
+            <ul class="flex-2">
+                <li><i>Héritage</i></li>
+                <li><i>Réalisation</i> (pour les interfaces).</li>
+
+                <li><i>Association</i></li>
+                <li><i>Dépendance</i></li>
+
+                <li><i>Agrégation</i> </li>
+                <li><i>Composition</i> (appartient à la classe).</li>
+            </ul>
+        </div>
+        <div>La relation de composition est plus forte que l'agrégation :
+            <ul>
+                <li>le composant ne peut appartenir qu'à un seul composé (et ne peut en changer).</li>
+                <li>lors de la destruction du composé, ses composants sont aussi détruits.</li>
+            </ul>
+        </div>
+    </div>
+    <img style="width:100%" src="./assets/class-links.svg">
+</div>
+
+<div class="hint">L'agrégation et la composition sont toutes deux des associations.</div>
+
+<div class="hint">Les associations peuvent être réflexives, faisant le lien entre la classe et elle-même.</div>
+
+<h4>Lecture de l'association</h4>
+
+<div>La flèche donne le "sens" (<i>navigabilité</i>) de l'association : la classe à l'origine connaît l'association, tandis que la classe pointée en ignore l'existence. Si les deux classes connaissent l'association, on utilise alors une simple ligne plutôt qu'une flèche.</div>
+
+<div>L'association peut également porter un nom, permettant d'en préciser la signification. Par exemple, une association entre une "Personne" et un "Livre" peut être nommée "a écrit", "a lu", "recommande", "possède", "emprunte", "a réservé", selon la relation qu'on souhaite exprimer. Une flèche à côté du nom permet d'en préciser le sens de lecture.</div>
+
+<div class="hint">Les dépendances quant à elles ne sont généralement pas nommées, mais ont un <i>stéréotype</i>.</div>
+
+<h4>Rôles</h4>
+
+<div class="flex-3 gap">
+    <div class="span-2">
+        <div>À chaque extrémité de l'association, il est possible d'indiquer, à côté de la classe, le <i>rôle</i> qu'elle joue dans l'association. Généralement, il sera alors utilisé comme nom de l'attribut représentant l'association dans la classe opposée.</div>
+    </div>
+    <img style="width:100%" src="./assets/class-role.svg">
+</div>
+
+<div class="hint">Bien qu'il ne soit pas nécessaire de représenter l'attribut dans la classe, vous pouvez tout de même en préciser la visibilité, la multiplicité, et les contraintes.</div>
+
+<div class="danger">Attention au sens de lecture. Une extrémité décrit :
+    <ul class="flex-2">
+        <li>le <b>rôle</b> joué par la classe <b>adjacente</b>.</li>
+        <li>l'<b>attribut</b> correspond dans la classe <b>opposée</b>.</li>
+    </ul>
+</div>
+
+<h4>Indices</h4>
+
+<div class="flex-3 gap">
+    <div class="span-2">Lorsque les associations sont stockées sous la forme d'un tableau associatif, on peut préciser, dans un encart, le nom et le type de la clef. La multiplicité indique alors le nombre d'instances associées à chaque clef.</div>
+    <img style="width: 100%;" src="./assets/class-classifier.svg"/>
+</div>
 
 <h3>Les autres diagrammes UML</h3>
+
+<div class="hint">Les notations du diagramme de composants peuvent aussi être utilisées dans le diagramme de classe.</div>
 
 <h4>Diagramme d'Objet</h4>
 
