@@ -12,22 +12,93 @@
         <main>
             <h1>Implémentation : classes et objects</h1>
 
-<h2>Les classes</h2>
-
-<div>Chaque composant est usuellement implémenté par un ensemble de classes. Le découpage des composants en classes reste une étape de conception, cependant elle commence à faire intervenir des notions d'implémentation.</div>
-
-<h3>Diagramme de classes</h3>
-
 <todo>Cheat sheets : UML + DP + termes</todo>
 
-- diagramme de classes + objet
-- diagramme de classe à la fois conception et durant implémentation.
-- POO
-- Objet : état à un instant T : débug ou montrer changement d'états.
+<h2>Les classes</h2>
 
+<div>Chaque composant est usuellement implémenté par un ensemble de classes, qu'on représente alors par un <b>diagramme de classes</b> (UML).</div>
+    
+<div class="hint">Le découpage des composants en classes reste une étape de conception, cependant elle commence à faire intervenir des notions d'implémentation.</div>
+
+<h3>Les types</h3>
+
+<div class="flex-4 gap">
+    <div class="span-3">
+        <div>Un type est représenté par un rectangle subdivisé en 3 régions :
+        <ol class="flex-3">
+            <li>son <b>nom</b> (en gras).</li>
+            <li>ses <b>attributs</b>.</li>
+            <li>ses <b>méthodes</b>.</li>
+        </ol>
+        </div>
+        <div>Le nom du type peut être surmonté de son <i>stéréotype</i> (e.g. interface, abstract). En l'absence de stéréotype explicite, le type sera une classe.</div>
+        <div>Les paramètres templates (ou génériques) sont indiqués par un rectangle en haut à droite.</div>
+    </div>
+    <img style="width:100%" src="./assets/class.svg">
+</div>
+
+<h3>Les membres</h3>
+
+<div class="flex-4 gap">
+    <div class="span-3">
+        <div>Il est possible d'indiquer la visibilité de chaque membres (attributs et méthodes) par le biais d'un symbole à gauche de son nom :
+            <ul class="flex-4">
+                <li><script type="c-text">+</script> : publique.</li>
+                <li><script type="c-text">~</script> : paquet.</li>
+                <li><script type="c-text">#</script> : protégé.</li>
+                <li><script type="c-text">-</script> : privé.</li>
+            </ul>
+        </div>
+        <div>D'autres propriétés du membres peuvent aussi être précisées :
+            <ul class="flex-3">
+                <li>statique : en souligné.</li>
+                <li>abstrait : en italique.</li>
+                <li>calculé : <script type="c-text">/</script></li>
+            </ul>
+        </div>
+    </div>
+    <img style="width:100%" src="./assets/class-members.svg"/>
+</div>
+
+<h3>Les variables</h3>
+
+
+- type
+- cardinalité
+- propriété
+- valeur par défaut.
+
+<h3>Les liens</h3>
+
+- symbole interface possible.
+- héritage / implémentation.
+- compo / aggrégation
+- association simple.
+- dépendance
+=> peut être réflexif
+=> nom + sens de la flèche, sens de lecture, (+ stéréotypes).
+=> rôle (+ card/visibilité)
+=> type et nom de l'indice.
+
+<h3>Les autres diagrammes UML</h3>
+
+<h4>Diagramme d'Objet</h4>
+
+<div class="flex-3 gap">
+    <div class="span-2">Le diagramme d'objet est un diagramme de classe dans lequel on représente des instances, permettant de représenter l'état d'un système à un instant T. Il peut alors être utilisé pour documenter e.g. un bug (e.g. l'état permettant de reproduire le bug, l'état dans lequel l'application se trouve après le bug, etc), ou une opération (état avant et après l'opération).</div>
+    <todo>img</todo>
+</div>
+
+<h4>Diagramme de structures composites</h4>
+
+<div>Le diagramme de structures composites permet de représenter la structure d'un système. Le diagramme de déploiement, de composant, ou de classe lui sera généralement préféré. Il peut toutefois être utilisé pour représenter un système physique et ses composants matériels (e.g. dans l'embarqué).</div>
+
+<h4>Diagramme de profils</h4>
+
+<div>Le diagramme de profils permet d'étendre UML, e.g. en déclarant de nouveaux stéréotypes. En pratique ce diagramme n'est jamais utilisé. Décrire textuellement les conventions ajoutées est généralement bien plus lisible et compréhensible.</div>
 
 <h2>Les classes ne sont pas LA solution</h2>
-<!-- requis pour OCP -->
+<!-- requis pour SOLID -->
 
 <div>Les classes, l'héritage, et les méthodes ne sont pas la solution à tout. Avant de voir comment les utiliser, nous allons nous intéresser à quand les utiliser.</div>
 
