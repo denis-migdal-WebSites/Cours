@@ -31,7 +31,7 @@
 
 <p>Le code est alors si <b>instable</b> (i.e. fréquemment modifié), si illisible et incompréhensible, qu'il faudrait jeter le code existant, revenir à l'étape de conception, puis tout réimplementer à partir de 0 afin de repartir sur des bases saines. Cependant, une réécriture complète du code est souvent si coûteuse en ressources et en temps, qu'elle est bien souvent inenvisageable. De plus, reprendre la conception n'empêche pas de faire de nouvelles erreurs, et de repartir avec de nouvelles dettes techniques, engendrant un besoin perpétuel de recommencer le projet, sans jamais le finir, et toujours repartant de 0.</p>
 
-<!--<img src="./@assets/Sisyphe.png"/>-->
+<!--<img src="./assets/Sisyphe.png"/>-->
 
 <h3>Bons et mauvais principes</h3>
 
@@ -51,7 +51,7 @@
 
 <div class="hint">Un <b>patron de conception</b> (<i>design pattern</i>), est un modèle générique et éprouvé, permettant de répondre à un problème récurrent en conception logicielle.</div>
 
-<!-- <img src="./@assets/Erysichthon.png" />-->
+<!-- <img src="./assets/Erysichthon.png" />-->
 
 <h3>Abstraction</h3>
 
@@ -116,11 +116,11 @@
 <div>Le diagramme de <b>déploiement</b> représente les différents composants, leurs relations, ainsi que les cibles sur lesquelles ils seront déployés. Il permet ainsi de représenter l'architecture globale du projet.</div>
 
 <div class="flex-3 gap">
-    <img style="width:100%;align-self:center" src="./@assets/Deployment.svg" />
+    <img style="width:100%;align-self:center" src="./assets/Deployment.svg" />
     <div class="span-2">
         <div class="flex-4 gap">
             <div class="span-3">Chaque composant est représenté par un rectangle avec 2 petits onglets sur le côté gauche. Une représentation alternative est toutefois utilisée lorsqu'un composant en contient d'autres (cf figure à gauche).</div>
-            <img style="width:100%;align-self:center" src="./@assets/Deployment-bigcompo.svg"/>
+            <img style="width:100%;align-self:center" src="./assets/Deployment-bigcompo.svg"/>
         </div>
         <div>Les liens entre les composants peuvent être représentés par une flèche :
             <ul>
@@ -201,7 +201,7 @@
 
 <div>Le diagramme de composants représente les composants avec les interfaces qu'elles fournissent ou dont elles ont besoin :
     <div class="flex-3 gap">
-        <img style="width:100%" src="./@assets/component.svg" />
+        <img style="width:100%" src="./assets/component.svg" />
         <div class="span-2">Les interfaces sont représentées par une ligne avec un :
             <ul>
                 <li><i>cercle :</i> interface <b>fournie</b> par le composant.</li>
@@ -224,7 +224,7 @@
         <div>On dit alors que le composant <b>implémente</b> l'interface, qu'on représente par le biais d'une flèche de <i>réalisation</i> (trait pointillé, tête triangle blanc).</div>
         <div class="hint">La notation exacte sera vue au CM3 avec le diagramme de classes.</div>
     </div>
-    <img style="width:100%" src="./@assets/component-alt.svg"/>
+    <img style="width:100%" src="./assets/component-alt.svg"/>
 </div>
 
 <div class="hint">Bien que ce ne soit pas standard, il est tout à fait possible de fusionner le diagramme de composants avec le diagramme de déploiement.</div>
@@ -238,7 +238,7 @@
 <div>Les <b>couches d'abstraction</b> sont une application du principe d'abstraction à l'échelle des composants. Les couches les plus basses (de <i>bas niveau</i>) sont les couches les plus techniques, quand les couches les plus hautes (de <i>haut niveau</i>) sont les plus abstraites.</div>
 
 <div class="flex-3 gap">
-    <img style="width:50%" src="./@assets/couches.svg">
+    <img style="width:50%" src="./assets/couches.svg">
     <div style="grid-column: span 2;"><p>Les <b>DAO</b> (<i>Data Access Object</i>) abstraient l'accès à des données persistantes, indépendamment de leur support de stockage (e.g. fichiers, base SQL, etc.). On manipule alors les données par le biais de classes qui se chargent d'effectuer les opérations demandées.</p>
     <script type="c-ts">
         const product = Products.findByRef(<h>$ref</h>);
@@ -258,7 +258,7 @@
 
 <div>Il est aussi d'attribuer à chaque composant ses propres responsabilités. C'est par exemple le cas dans l'architecture 3-tiers :
     <div class="flex-3" style="gap:10px">
-        <img style="width: 100%" src="./@assets/3-tiers.svg"/>
+        <img style="width: 100%" src="./assets/3-tiers.svg"/>
         <div style="grid-column: span 2;">
             <p>La couche <b>présentation</b> défini l'interface utilisateur. Son rôle est d'afficher les données, ainsi que de convertir les événements bruts (e.g. clavier, souris) en intentions (e.g. supprimer un produit) qu'elle transmet à la couche inférieure.</p>
 
@@ -277,7 +277,7 @@
 
 <div>Il est aussi possible de découper le projet en modules fournissant chacune un service, e.g. gestion utilisateurs, gestion produits, planificateur, etc. Il est ainsi aisé d'ajouter/retirer des fonctionnalités au projet, en ajoutant/retirant des modules.</div>
 
-<img style="width:50%" src="./@assets/modules.svg"/>
+<img style="width:50%" src="./assets/modules.svg"/>
 
 <div>Certains modules peuvent dépendre d'un autre, bien qu'on cherche à les rendre le plus indépendant possible.</div>
 
@@ -382,7 +382,7 @@
 
 <div>Le diagramme de communication représente les communications entre objets dans le cadre d'un <i>scénario donné</i> :
     <div class="flex-3 gap">
-        <img style="width:100%" src="./@assets/Communication.svg"/>
+        <img style="width:100%" src="./assets/Communication.svg"/>
         <div class="span-2">
             <div>Chaque composant est représenté par un carré incluant son nom et/ou son type sous la forme <script type="c-text"><h>[$NAME]</h><h>[:$TYPE]</h></script>. Les composants communiquant entre eux sont reliés par une ligne droite.</div>
 
@@ -398,7 +398,7 @@
 <div>Le diagramme de séquence permet de représenter des scénario plus complexes. Il offre une représentation chronologique des interactions, tout en étant plus expressif. Il est très utilisé pour décrire des protocoles réseaux.</div>
 
 <div class="flex-2 gap">
-    <img style="width:100%" src="./@assets/Sequence.svg"/>
+    <img style="width:100%" src="./assets/Sequence.svg"/>
     <div>
         <div>Un objet est décrit par un rectangle, comme dans le diagramme de communication. Sa <b>ligne de vie</b> est représentée par un trait vertical en pointillé, et ses périodes d'activités par un rectangle blanc sur cette même ligne.</div>
         <div>Les messages sont représentés par des flèches.</div>
@@ -415,14 +415,14 @@
             </ul>
             <div class="hint">Un objet peut s'envoyer un message à lui-même.</div>
         </div>
-        <img style="width:60%" src="./@assets/Sequence-arrows.svg"/>
+        <img style="width:60%" src="./assets/Sequence-arrows.svg"/>
     </div>
 </div>
 
 <div class="flex-3 gap">
     <div class="flex-2 gap">
-        <img style="width:100%" src="./@assets/Sequence-bloc.svg"/>
-        <img style="width:100%" src="./@assets/Sequence-bloc2.svg"/>
+        <img style="width:100%" src="./assets/Sequence-bloc.svg"/>
+        <img style="width:100%" src="./assets/Sequence-bloc2.svg"/>
     </div>
     <div class="span-2">
         <div>Le diagramme de séquence utilise des cadres pour représenter des comportements particuliers (e.g. structures de contrôle, parallélisme).</div>
@@ -436,7 +436,7 @@
         <div>Par exemple le cadre <script type="c-text">ref</script> (<u>ref</u>erence) permet de représenter un ensemble d'interactions défini dans dans un autre diagramme de séquence, vers lequel il renvoie.</div>
         <div>Le cadre est alors vide, ne contenant que le nom du diagramme de séquence auquel se référer.</div>
     </div>
-    <img style="width: 50%;" src="./@assets/Sequence-ref.svg"/>
+    <img style="width: 50%;" src="./assets/Sequence-ref.svg"/>
 </div>
 
 <div>Le diagramme de séquence permet aussi d'utiliser d'autres types de cadres :

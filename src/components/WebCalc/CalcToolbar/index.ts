@@ -198,7 +198,7 @@ export class CalcToolbarItem extends LISS({
         super();
 
         const content = document.createElement('img');
-        content.src = `../../../../@assets/tableur/img/toolbar/${this.host.getAttribute('name')}.png`;
+        content.src = `../../../../assets/tableur/img/toolbar/${this.host.getAttribute('name')}.png`;
 
         if( ! this.host.hasAttribute('value') ) {
             this.content.append( content );

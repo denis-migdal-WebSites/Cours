@@ -104,14 +104,14 @@ C'est le principe <b>YAGNI</b> (<i>You ain't gonna need it</i>) : tu ne vas pas 
 
 <p>Dans ce cadre, UML fournit le <i>diagramme de cas d'utilisation</i>, pour représenter graphiquement et synthétiquement la liste des cas d'utilisation décrits dans le cahier des charges. Il permet ainsi d'échanger sur (et de réfléchir aux) différents usages et acteurs du système.</p>
 
-<img style="width: 40%;" src="./@assets/Use case.svg"/>
+<img style="width: 40%;" src="./assets/Use case.svg"/>
 
 <div class="danger">Bien évidemment, ce diagramme est peu utile si vous n'avez que peu de cas d'utilisation et/ou d'acteurs.</div>
 
 <h3>Formalisme</h3>
 
 <div class="flex-2" style="gap:10px">
-    <img style="width:100%" src="./@assets/Use case - desc.svg"/>
+    <img style="width:100%" src="./assets/Use case - desc.svg"/>
     <div>
         <p>En UML, une flèche dont la pointe est un triangle creux indique une <i>spécialisation</i> (cf héritage en POO). Elle indique qu'un acteur (ou cas d'utilisation) étend un autre, i.e. qu'il en est une sous-catégorie.</p>
 
@@ -137,7 +137,7 @@ C'est le principe <b>YAGNI</b> (<i>You ain't gonna need it</i>) : tu ne vas pas 
         <li><b>Découper en sous diagrammes</b>, <i>e.g. par acteurs ou groupes de fonctionnalités</i>, pour rester lisible.</li>
     </ol>
 </div>
-<img style="width: 80%;" src="./@assets/Use case2.svg"/>
+<img style="width: 80%;" src="./assets/Use case2.svg"/>
 
 <h2>Activités</h2>
 
@@ -145,7 +145,7 @@ C'est le principe <b>YAGNI</b> (<i>You ain't gonna need it</i>) : tu ne vas pas 
 
 <p>Pour décrire visuellement un cas d'utilisation, il est possible d'utiliser un <b>diagramme d'activité</b> où chaque noeud correspond à une action :</p>
 
-<img style="width:60%" src="./@assets/Activity.svg"/>
+<img style="width:60%" src="./assets/Activity.svg"/>
 
 <p class="danger">Une action est indépendante de l'interface graphique. Il ne faut ainsi pas mettre, i.e. "clic sur le bouton confirmer", mais "confirmation".</p>
 
@@ -155,13 +155,13 @@ C'est le principe <b>YAGNI</b> (<i>You ain't gonna need it</i>) : tu ne vas pas 
 
 <h4>Événements</h4>
 <div class="flex-2">
-    <img style="width:80%" src="./@assets/Activity-2.svg"/>
+    <img style="width:80%" src="./assets/Activity-2.svg"/>
     <div>Le sablier représente une attente (généralement en temps), quand la réception d'un signal peut soit être l'attente d'un signal (si flèche entrante), ou la réaction à un signal (sinon).</div>
 </div>
 
 <h4>Interruptions</h4>
 <div class="flex-2">
-    <img style="width:80%" src="./@assets/Activity-4.svg"/>
+    <img style="width:80%" src="./assets/Activity-4.svg"/>
     <div><p>Une <b>zone interruptible</b>, représentée en pointillés, est une zone dont les actions peuvent être interrompus, <i>e.g. erreur, annulation de l'activité, etc</i>.<p>
 
     <p>L'<b>interruption</b>, représentée par une flèche en éclair, pointe vers les actions à effectuer en cas d'interruption.</p>
@@ -170,14 +170,14 @@ C'est le principe <b>YAGNI</b> (<i>You ain't gonna need it</i>) : tu ne vas pas 
 
 <h4>Partitions</h4>
 <div class="flex-2">
-    <img style="width: 80%" src="./@assets/Activity-1.svg"/>
+    <img style="width: 80%" src="./assets/Activity-1.svg"/>
     <div><p>Les <b>partitions</b> divisent le diagramme en zones, chacune correspondant e.g. à un acteur. Cela est permet d'insister sur <i>qui</i> effectue l'action.</p>
     <p>Les données échangées lors des communications entre acteurs peuvent être représentés via un rectangle.</p></div>
 </div>
 
 <h4>Sous-activité</h4>
 <div class="flex-2">
-    <img style="width: 80%" src="./@assets/Activity-3.svg"/>
+    <img style="width: 80%" src="./assets/Activity-3.svg"/>
     <div><p>Une <b>sous-activité</b> permet de regrouper une sous-partie du diagramme d'activité, au sein d'un ensemble cohérent, afin d'en améliorer la lecture.</p>
     <p>Vous noterez qu'on utilise alors des symboles de début/fin de flux au lieu des symboles de début/fin d'activités.</p>
     </div>
