@@ -18,65 +18,124 @@
 
 <div class="hint">Pour rappel, nous vous fournissons des <a href="https://github.com/denis-migdal/DrawIO-UML-Shape-Libraries">bibliothèques de formes UML</a> que vous pouvez importer dans draw.io.</div>
 
-<h2>Classes</h2>
+<h2>Traductions</h2>
 
-<div>Créez les diagrammes de classes pour les contextes suivants.</div>
+<div><i>Traduisez</i> les phrases suivantes en diagramme UML.</div>
 
-<h3>Les cours</h3>
+<h3>Écrivains</h3>
+
+<div>Tout écrivain a écrit au moins une oeuvre.</div>
+
+<q-file @qid="#72598c50" @accept=".svg"></q-file>
+
+<h3>Université</h3>
+
+<div>Les personnes peuvent être associées à des universités aussi bien en tant qu’étudiants qu’en tant que professeurs.</div>
+
+<q-file @qid="#dbfb0201" @accept=".svg"></q-file>
+
+<h3>Cinéma</h3>
+
+<div>Les cinémas sont composés de plusieurs salles. Une projection est la diffusion d'un film dans une salle, à un horaire donné.</div>
+
+<q-file @qid="#2916e851" @accept=".svg"></q-file>
+
+<h3>Facteur</h3>
+
+<div>Tous les jours, le facteur distribue des recommandés dans une zone géographique qui lui est affectée. Les adresses sont aussi associées à une zone géographique. Les recommandés sont de deux sortes : lettres ou colis. Comme plusieurs facteurs peuvent intervenir sur la même zone, on souhaite, pour
+chaque recommandé, le facteur qui l’a distribué, en plus du destinataire.</div>
+
+<div class="exo">Vous porterez une attention particulière au sens des flèches ainsi qu'aux noms, rôles, et multiplicité des associations.</div>
+
+<q-file @qid="#a879205d" @accept=".svg"></q-file>
+
+
+<h3>Cours</h3>
 
 <ol>
-    <li>Chaque étudiant du département SD suit un ensemble de modules.</li>
+    <li>Chaque étudiant du département SD sont inscrits à un ensemble de modules.</li>
+    <li>Pour chaque module, les étudiants ont une note de DS.</li>
     <li>Chaque module a un coefficient et est constitué d'un ensemble de cours, qui peuvent être des cours magistraux (CM), de travaux dirigés (TD), et de travaux pratiques (TP).</li>
     <li>Les CM, TD et TP sont associés à des séances de CM, TD et de TP. Chaque séance a une date, un enseignant, et sont effectuées dans une salle. Les CM sont faits en amphi, les TD en salle de classe, et les TP en salle machine.</li>
     <li>Les étudiants sont répartis dans des groupes de TD et de TP. Les étudiants d'un groupe de TP appartiennent au même TD. Chaque séance de TD (ou de TP) est associée à un groupe de TD (ou de TP).</li>
-    <li>Pour chaque module, les étudiants ont une note de DS.</li>
 </ol>
 
 <q-file @qid="#75ae9f98" @accept=".svg"></q-file>
 
+<h2>Réflexions</h2>
+
+<div>Dans un premier temps, vous <i>traduirez</i> les phrases suivantes en diagramme UML. Des remarques et questions vous guideront afin de concevoir une seconde version respectant les concepts vus en cours.</div>
+
+
+<h3>Hôtel</h3>
+
+<div>Un hôtel a les caractéristiques suivantes : une adresse, un nombre de chambres et une catégorie. Un hôtel est composé d'au moins deux chambres. Une chambre est caractérisée par le nombre de lits qu’elle contient, son prix et son numéro. Chaque chambre dispose d’une salle d’eau : douche ou bien baignoire. Un hôtel héberge des personnes qui occupent des chambres pendant une période donnée. Il peut employer du personnel et est impérativement dirigé par un directeur. On ne connaît que le nom et le prénom des employés, des directeurs et des occupants. Certaines personnes sont des enfants et d’autres des adultes (faire travailler des enfants est interdit).</div>
+
+<q-file @qid="#8e587725" @accept=".svg"></q-file>
+
+<div>Reprenez votre diagramme pour ne modéliser que les éléments pertinents vis à vis de la problématique de l’hôtel :<br/>
+On souhaite calculer le chiffre d'affaire de l'hôtel entre deux dates données. Le chiffre d'affaire d'une journée est la somme des prix de chaque chambre occupée durant cette journée.<br/>
+On souhaite aussi savoir qui occupe quelle chambre et à quelle(s) date(s).</div>
+
+<q-file @qid="#29e26732" @accept=".svg"></q-file>
+
+<div class="hint">Une bonne modélisation ne représente pas la réalité, mais le problème. On modélise alors ce qui est pertinent vis à vis de la problématique, d'une manière qui en facilite la résolution.</div>
+
+
 <h3>Revenus</h3>
 
 <ol>
-    <li>Une personne est caractérisée par son nom, son prénom, son sexe et son âge. Les objets de classe Personne doivent pouvoir calculer leurs revenus et leurs charges. Les attributs de la classe sont privés ; le nom, le prénom ainsi que l’âge de la personne doivent être accessibles par des opérations publiques.</li>
-    <li>Deux types de revenus sont envisagés : d’une part le salaire et d’autre part toutes les autres sources de revenus. Les deux revenus sont représentés par des nombres réels (float). Pour calculer les charges globales, on applique un coefficient fixe de 20% sur les salaires et un coefficient de 15% sur les autres
+    <li>Une personne est caractérisée par son nom, son prénom, son sexe et son âge. On souhaite pouvoir calculer les charges et les revenus de chaque personne.</li>
+    <li>Deux types de revenus sont envisagés : d’une part le salaire et d’autre part toutes les autres sources de revenus. Le montant de chaque revenu est indiqué. Pour calculer les charges globales, on applique un coefficient fixe de 20% sur les salaires et un coefficient de 15% sur les autres
 revenus.</li>
-    <li>Un objet de la classe Personne peut être créé à partir du nom et de la date de naissance. Il est possible de changer le prénom d’une personne. Par ailleurs, le calcul des charges ne se fait pas de la même manière lorsque la personne décède.</li>
+    <li>Le calcul des charges ne se fait pas de la même manière lorsque la personne décède.</li>
 </ol>
 
 <q-file @qid="#73c151b4" @accept=".svg"></q-file>
 
-<h3>Multiples</h3>
+<ol>
+    <li>Un logiciel n'est pas figé dans le temps. Par exemple, l'âge d'une personne change au cours du temps. Modifiez la modélisation de sorte à ce que l'âge soit toujours correcte.</li>
+    <li>Vous avez probablement modélisé le status vivant/décédé d'une personne par :
+        <ul>
+            <li>des <i>classes</i> <script type="c-text">PersonneVivante</script>/<script type="c-text">PersonneDecedee</script> : une personne vivante peut décéder, or il n'est pas possible de changer le type de l'instance.</li>
+            <li>un <i>boolean</i> : on préfère généralement stocker la date de décès car contient davantage d'informations et permet d'obtenir l'état à une date donnée. Dans d'autres contextes, elle permet également de retrouver les logs correspondant au changement d'état et d'en identifier la cause.</li>
+        </ul>
+    </li>
+    <li>Plutôt que d'avoir une classe <script type="c-text">Salaire</script> implémentant <script type="c-text">Revenu</script>, on peut associer les revenus à un type de revenu. Le salaire sera alors une instance de <script type="c-text">RevenuType</script>. Cela évite l'utilisation de l'héritage, permet à un revenu de changer de type, facilite la manipulation des différents types de revenus, etc.</li>
+    <li>Il n'est pas de la responsabilité de <script type="c-text">Personne</script> de savoir calculer ses revenus et ses charges. Cela est de surcroît dangereux car plusieurs types de revenus co-existent (e.g. brut, net, imposable). Le danger est alors qu'une personne ayant besoin du revenu net modifie ce calcul, engendrant des valeurs erronées dans les parties de code s'attendant au revenu brut. Il est ainsi préférable d'effectuer les calculs à partir de calculateurs externes.</li>
+</ol>
 
-<div>Tout écrivain a écrit au moins une oeuvre</div>
 
-<q-file @qid="#72598c50" @accept=".svg"></q-file>
+<q-file @qid="#b38af789" @accept=".svg"></q-file>
 
-<div>Les personnes peuvent être associées à des universités en tant qu’étudiants aussi bien qu’en tant que professeurs.</div>
+<h3>Rectangle</h3>
 
-<q-file @qid="#dbfb0201" @accept=".svg"></q-file>
-
-<div>Un rectangle a deux sommets qui sont des points. On construit un rectangle à partir des coordonnées de deux points. Il est possible de calculer sa surface et son périmètre, ou encore de le translater.</div>
+<div>Un rectangle <i>peut</i> être construit à partir de 2 points (on considère un plan en 2D sans rotation). Il est possible de calculer sa surface et son périmètre, ou encore de le translater.</div>
 
 <q-file @qid="#ef454752" @accept=".svg"></q-file>
 
-<div>Les cinémas sont composés de plusieurs salles. Les films sont projetés dans des salles. Les projections correspondantes ont lieu à chacune à une heure déterminée.</div>
+<div>Stocker l'état interne du rectangle sous la forme de 2 points amalgame 2 concepts : sa forme et sa position. Des erreurs d'arrondis lors de translations successives peuvent alors progressivement déformer la forme du rectangle. Nous souhaitons ainsi dissocier la forme et la position, tant dans leur représentation que dans les opérations qui leur sont appliquées.</div>
 
-<q-file @qid="#2916e851" @accept=".svg"></q-file>
+<div>Aussi, le rectangle effectue lui-même les opérations sur les points. Or, il n'est pas de la responsabilité du rectangle de savoir manipuler des points. De plus, ces opérations sont susceptibles d'être réutilisées ailleurs dans le code. Nous souhaitons donc ajouter des primitives réutilisables au point, que le rectangle exploitera.</div>
 
-<div>Tous les jours, le facteur distribue des recommandés dans une zone géographique qui lui est affectée. Les habitants sont aussi associés à une zone géographique. Les recommandés sont de deux sortes : lettres ou colis. Comme plusieurs facteurs peuvent intervenir sur la même zone, on souhaite, pour
-chaque recommandé, le facteur qui l’a distribué, en plus du destinataire.</div>
+<q-file @qid="#0f6aca75" @accept=".svg"></q-file>
 
-<q-file @qid="#a879205d" @accept=".svg"></q-file>
+<div class="hint">Il nous manque encore des éléments pour approfondir la conception. Est-ce que le rectangle :
+    <ul>
+        <li>conserve une copie des points, ou est-il modifié lorsque les points le sont ?</li>
+        <li>représente une :
+            <ul>
+                <li><i>aire :</i> où sa position fait partie de ses propriétés intrinsèques.</li>
+                <li><i>forme :</i> où sa position est une propriété de son association avec la surface de rendu.</li>
+            </ul>
+        </li>
+    </ul>
+</div>
 
-<h3>Hôtel</h3>
-
-<div>Un hôtel est composé d’au moins deux chambres. Chaque chambre dispose d’une salle d’eau : douche ou bien baignoire. Un hôtel héberge des personnes. Il peut employer du personnel et il est impérativement dirigé par un directeur. On ne connaît que le nom et le prénom des employés, des directeurs et des occupants. Certaines personnes sont des enfants et d’autres des adultes (faire travailler des enfants est interdit). Un hôtel a les caractéristiques suivantes : une adresse, un nombre de pièces et une catégorie. Une chambre est caractérisée par le nombre et de lits qu’elle contient, son prix et son numéro. On veut pouvoir savoir qui occupe quelle chambre à quelle date. Pour chaque jour de l’année, on veut pouvoir calculer le loyer de chaque chambre en fonction de son prix et de son occupation (le loyer est nul si la chambre est inoccupée). La somme de ces loyers permet de calculer le chiffre d’affaires de l’hôtel entre deux dates.</div>
-
-<div>Donnez une diagramme de classes pour modéliser <b>le problème</b> de l’hôtel.</div>
-
-<q-file @qid="#8e587725" @accept=".svg"></q-file>
 
 <h3>Dessins</h3>
+
+<todo>Déplacer S6 Opti</todo>
 
 <q-file @qid="#cb36300a" @accept=".svg"></q-file>
 
