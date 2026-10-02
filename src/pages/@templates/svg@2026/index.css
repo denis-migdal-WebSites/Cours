@@ -1,0 +1,29 @@
+@import "../page@2026/";
+
+@media print {
+  @page {
+    size: A4 landscape;
+  }
+}
+
+main {
+    width: 100%;
+    scale: unset;
+
+    & > img {
+        width: 100% !important;
+    }
+}
+
+@media print {
+
+    body {
+        margin: 0px;
+    }
+
+    /* fit in one page */
+    main {
+        border-left-width: 8px;
+        border-right-width: 8px;
+    }
+}
