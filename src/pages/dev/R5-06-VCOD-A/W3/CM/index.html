@@ -12,8 +12,6 @@
         <main>
             <h1>Implémentation : classes et objects</h1>
 
-<todo>Cheat sheets : UML + DP + termes</todo>
-
 <h2>Les classes</h2>
 
 <div>Chaque composant est usuellement implémenté par un ensemble de classes, qu'on représente alors par un <b>diagramme de classes</b> (UML).</div>
@@ -80,12 +78,12 @@
         <div>Le diagramme de classe distingue 6 types de liens :
             <ul class="flex-2">
                 <li><i>Héritage</i></li>
-                <li><i>Réalisation</i> (pour les interfaces).</li>
-
                 <li><i>Association</i></li>
-                <li><i>Dépendance</i></li>
-
+                
+                <li><i>Réalisation</i> (pour les interfaces).</li>
                 <li><i>Agrégation</i> </li>
+
+                <li><i>Dépendance</i></li>
                 <li><i>Composition</i> (appartient à la classe).</li>
             </ul>
         </div>
@@ -142,10 +140,12 @@
 
 <h4>Diagramme d'Objet</h4>
 
-<div class="flex-3 gap">
-    <div class="span-2">Le diagramme d'objet est un diagramme de classe dans lequel on représente des instances, permettant de représenter l'état d'un système à un instant T. Il peut alors être utilisé pour documenter e.g. un bug (e.g. l'état permettant de reproduire le bug, l'état dans lequel l'application se trouve après le bug, etc), ou une opération (état avant et après l'opération).</div>
-    <todo>img</todo>
+<div class="flex-4 gap">
+    <div class="span-3">Le diagramme d'objet est un diagramme de classe dans lequel on représente des instances, permettant de représenter l'état d'un système à un instant T. Il peut alors être utilisé pour documenter e.g. un bug (e.g. l'état permettant de reproduire le bug, l'état dans lequel l'application se trouve après le bug, etc), ou une opération (état avant et après l'opération).</div>
+    <img style="width:80%" src="./assets/class-object.svg">
 </div>
+
+<div class="hint">Les objets peuvent être inclus dans un diagramme de classe, et reliés à une classe par le biais d'un lien de dépendance <script type="c-text"><<instanceOf>></script>.</div>
 
 <h4>Diagramme de structures composites</h4>
 

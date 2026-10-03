@@ -641,7 +641,7 @@
         <mxCell id="AAGseRXGF4UFzJ6hZ7-N-98" parent="AAGseRXGF4UFzJ6hZ7-N-97" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" value="" vertex="1">
           <mxGeometry height="8" width="80" y="30" as="geometry" />
         </mxCell>
-        <mxCell id="AAGseRXGF4UFzJ6hZ7-N-100" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&amp;lt;&amp;lt;use&amp;gt;&amp;gt;&lt;br&gt;&amp;lt;&amp;lt;instanceOf&amp;gt;&amp;gt;" vertex="1">
+        <mxCell id="AAGseRXGF4UFzJ6hZ7-N-100" parent="1" style="text;html=1;whiteSpace=wrap;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;rounded=0;" value="&lt;i&gt;&amp;lt;&amp;lt;use&amp;gt;&amp;gt;&lt;br&gt;&amp;lt;&amp;lt;instanceOf&amp;gt;&amp;gt;&lt;/i&gt;" vertex="1">
           <mxGeometry height="40" width="226" x="934" y="280" as="geometry" />
         </mxCell>
       </root>
