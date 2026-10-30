@@ -1,10 +1,10 @@
-import "../../TPSubject@2026/";
+import "@Cours/pages/@templates/TPSubject@2026/";
 
-import "@Cours/components/WebCalc/CalcSheet";
-import "@Cours/components/WebCalc/CalcToolbar";
+import "@Cours/components/@topics/tableur/WebCalc/CalcSheet";
+import "@Cours/components/@topics/tableur/WebCalc/CalcToolbar";
 
-import "@Cours/components/WebCalc/CalcSheetTP";
-import "@Cours/components/WebCalc/CalcCellTP";
+import "@Cours/components/@topics/tableur/WebCalc/CalcSheetTP";
+import "@Cours/components/@topics/tableur/WebCalc/CalcCellTP";
 import { getInput, getOutput } from "@LISS/src";
 
 // TODO: QFileWidget type isn't exported ?

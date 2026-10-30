@@ -1,9 +1,9 @@
 import { type FrameUCA } from "WebSlides@2026/widgets/frames/FrameUCA";
-import { SQLDymTable } from "@Cours/components/SQL/SQLDymTable";
+import { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 import { _doStep } from "../../CM/players/order_helpers";
 
 // ensure init.
-import "@Cours/components/SQL/SQLDymTable";
+import "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 
 async function init_slide(slide: FrameUCA) {
 

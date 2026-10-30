@@ -1,4 +1,4 @@
-import { SQLExecutionOutput } from "@Cours/components/SQL/SQLInteractive";
+import { SQLExecutionOutput } from "@Cours/components/@topics/bdr/SQL/SQLInteractive";
 import { getOutput } from "@LISS/src";
 
 const uml_output = document.querySelector("#uml .output")!;

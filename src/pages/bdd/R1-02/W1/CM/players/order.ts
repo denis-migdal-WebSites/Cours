@@ -1,8 +1,8 @@
 import { PlayerToolbar } from "@Cours/components/PlayerToolbar";
-import { SQLDymTable } from "@Cours/components/SQL/SQLDymTable";
+import { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 import { getOutput } from "@LISS/src";
 
-import "@Cours/components/SQL/SQLDymTable"; // ensure init.
+import "@Cours/components/@topics/bdr/SQL/SQLDymTable"; // ensure init.
 import { _doStep } from "./order_helpers";
 
 const player    = document.querySelector<PlayerToolbar>("#order-player")!;

@@ -1,4 +1,4 @@
-import type { SQLDymTable } from "@Cours/components/SQL/SQLDymTable";
+import type { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 
 const query = [ `SELECT `,
                 [4, `DISTINCT `],

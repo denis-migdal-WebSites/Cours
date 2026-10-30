@@ -1,4 +1,4 @@
-import { CalcSheet } from "@Cours/components/WebCalc/CalcSheet";
+import { CalcSheet } from "@Cours/components/@topics/tableur/WebCalc/CalcSheet";
 
 const sheet = document.querySelector<CalcSheet>('#sheet_cursor')!;
 

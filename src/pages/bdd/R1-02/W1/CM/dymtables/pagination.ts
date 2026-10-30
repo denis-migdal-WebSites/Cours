@@ -1,10 +1,10 @@
-import { SQLDymTable    } from "@Cours/components/SQL/SQLDymTable";
-import { SQLInteractive } from "@Cours/components/SQL/SQLInteractive";
-import { SQLExecutionResult } from "@Cours/components/SQL/SQLOutput";
+import { SQLDymTable    } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
+import { SQLInteractive } from "@Cours/components/@topics/bdr/SQL/SQLInteractive";
+import { SQLExecutionResult } from "@Cours/components/@topics/bdr/SQL/SQLOutput";
 import { getOutput } from "@LISS/src";
 
-import "@Cours/components/SQL/SQLDymTable"; // ensure init.
-import { SelectResult } from "@Cours/components/SQL/SQLResult";
+import "@Cours/components/@topics/bdr/SQL/SQLDymTable"; // ensure init.
+import { SelectResult } from "@Cours/components/@topics/bdr/SQL/SQLResult";
 
 const table = document.querySelector<SQLDymTable>("#pagination-table")!;
 const sql   = document.querySelector<SQLInteractive>("#pagination-sql")!;

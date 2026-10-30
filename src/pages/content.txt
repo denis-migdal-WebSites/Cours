@@ -8,7 +8,7 @@
         + W3:3. Commandes Shell
             - CM
             - Slides
-            - TD
+            - TP
             - cheat:Cheat sheet
 - sec:🔐 Sécurité
     - R1-11:[S1] Introduction à la Cybersécurité

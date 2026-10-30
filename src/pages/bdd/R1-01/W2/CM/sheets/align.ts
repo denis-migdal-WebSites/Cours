@@ -1,5 +1,5 @@
-import { CalcSheet } from "@Cours/components/WebCalc/CalcSheet";
-import { CalcToolbar } from "@Cours/components/WebCalc/CalcToolbar";
+import { CalcSheet } from "@Cours/components/@topics/tableur/WebCalc/CalcSheet";
+import { CalcToolbar } from "@Cours/components/@topics/tableur/WebCalc/CalcToolbar";
 
 const sheet = document.querySelector<CalcSheet>('#sheet_align')!;
 

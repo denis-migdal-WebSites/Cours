@@ -1,4 +1,4 @@
-@import "../../TPSubject@2026/index.css";
+@import "@Cours/pages/@templates/TPSubject@2026/index.css";
 
 .sheet_answer {
     display:flex;

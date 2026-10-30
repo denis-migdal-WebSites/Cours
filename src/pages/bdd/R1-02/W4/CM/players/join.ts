@@ -1,7 +1,7 @@
 import { PlayerToolbar } from "@Cours/components/PlayerToolbar";
-import { SQLDymTable } from "@Cours/components/SQL/SQLDymTable";
+import { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 
-import "@Cours/components/SQL/SQLDymTable"; // force init.
+import "@Cours/components/@topics/bdr/SQL/SQLDymTable"; // force init.
 import { getOutput } from "@LISS/src";
 
 const T1     = document.querySelector<SQLDymTable>("#join_T1")!;

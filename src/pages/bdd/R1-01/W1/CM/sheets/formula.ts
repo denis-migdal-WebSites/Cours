@@ -1,5 +1,5 @@
-import { CalcSheet } from "@Cours/components/WebCalc/CalcSheet";
-import { Formats } from "@Cours/components/WebCalc/Format";
+import { CalcSheet } from "@Cours/components/@topics/tableur/WebCalc/CalcSheet";
+import { Formats } from "@Cours/components/@topics/tableur/WebCalc/Format";
 
 const sheet = document.querySelector<CalcSheet>('#sheet_formula')!;
 

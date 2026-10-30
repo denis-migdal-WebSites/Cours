@@ -1,4 +1,4 @@
-import { CalcSheet } from "@Cours/components/WebCalc/CalcSheet";
+import { CalcSheet } from "@Cours/components/@topics/tableur/WebCalc/CalcSheet";
 
 const s_$formula = [
     document.querySelector<CalcSheet>('#sheet____formula')!,

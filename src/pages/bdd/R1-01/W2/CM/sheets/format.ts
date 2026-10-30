@@ -1,6 +1,6 @@
-import { CalcSheet } from "@Cours/components/WebCalc/CalcSheet";
-import { CalcToolbar } from "@Cours/components/WebCalc/CalcToolbar";
-import { Formats } from "@Cours/components/WebCalc/Format";
+import { CalcSheet } from "@Cours/components/@topics/tableur/WebCalc/CalcSheet";
+import { CalcToolbar } from "@Cours/components/@topics/tableur/WebCalc/CalcToolbar";
+import { Formats } from "@Cours/components/@topics/tableur/WebCalc/Format";
 
 const sheet = document.querySelector<CalcSheet>('#sheet_format')!;
 

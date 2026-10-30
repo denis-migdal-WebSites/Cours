@@ -1,8 +1,8 @@
-import { SQLDymTable } from "@Cours/components/SQL/SQLDymTable";
+import { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 import { type FrameUCA } from "WebSlides@2026/widgets/frames/FrameUCA";
 
 // ensure init.
-import "@Cours/components/SQL/SQLDymTable";
+import "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 
 function init_slide(slide: FrameUCA) {
 

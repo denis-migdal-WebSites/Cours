@@ -1,7 +1,7 @@
-import "@Cours/components/SQL/SQLDymTable"; // ensure init.
+import "@Cours/components/@topics/bdr/SQL/SQLDymTable"; // ensure init.
 
 import { PlayerToolbar } from "@Cours/components/PlayerToolbar";
-import { SQLDymTable } from "@Cours/components/SQL/SQLDymTable";
+import { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 import { getOutput } from "@LISS/src";
 
 const T1     = document.querySelector<SQLDymTable>("#cart_T1")!;
