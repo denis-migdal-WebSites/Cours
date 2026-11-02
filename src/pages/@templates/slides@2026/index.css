@@ -1,1 +1,14 @@
 @import "WebSlides@2026/pages/@templates/slides@2026/";
+
+.terminal {
+    border: 1px solid gray; border-radius: 5px; padding: 5px;
+    & > pre {
+        margin: 0;
+    }
+}
+
+terminal {
+    border: 1px solid gray; border-radius: 5px; padding: 5px;
+    font-family: monospace;
+    white-space: pre;
+}

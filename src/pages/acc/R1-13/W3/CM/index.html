@@ -14,6 +14,8 @@
 
 <h2>Historique des IHM</h2>
 
+<img style="width:100%" src="./assets/history.svg"/>
+
 <div>En soit, un ordinateur est un circuit électronique, qui pour une entrée donnée produit une sortie. Initialement, l'entrée était constituée d'une série d'interrupteurs, et la sortie d'une série de lampes (début XIXe siècle).</div>
 
 <div class="hint">Au fur et à mesure que ces circuits électroniques grandissent (~1940), ces éléments d'entrés-sorties seront regroupés sur un poste de contrôle appelé <i>"panneau de commande"</i>, <i>"pupitre de commande"</i>, ou <i>"console de commande"</i>, séparé du reste de l'ordinateur (<i>mainframe</i>).</div>
@@ -23,6 +25,9 @@
 <div>Cependant, les interrupteurs sont peu pratiques. On va très vite vouloir stocker les entrées (données et/ou instructions) afin de pouvoir facilement les rejouer, les transporter, et les archiver. Or, on sait déjà faire cela depuis au moins 1321 avec les cylindres à picots (e.g. boîtes à musiques), et depuis 1725 avec les cartes perforées (métiers à tisser, piano mécanique, etc). C'est ainsi qu'à partir de <b>1890</b>, les cartes perforées seront utilisées par les tous premiers systèmes électroniques.</div>
 
 <div>De même, les lampes sont peu pratiques. Si on a très vite utilisé des cadrans (tout en conservant des voyants), on souhaite conserver les résultats sans avoir à les retranscrire à la main. On désire alors imprimer les résultats. Or, cette technologie existe déjà depuis 1840 avec les télégraphes électriques. C'est ainsi qu'en <b>1925</b>, le premier ordinateur avec imprimante voit le jour.</div>
+
+<div class="hint">Les <b>modems</b> apparaissent dès <b>1949</b>, permettant alors d'échanger des donnés à distance via les lignes téléphoniques.<br/>
+L'accès à distance ne se fera toutefois qu'à partir de 1963.</div>
 
 <h3>Clavier et CLI</h3>
 
@@ -61,7 +66,7 @@
 
 <div>Toutefois, parallèlement à l'intégration des claviers, les ordinateurs gagnent progressivement en capacité de stockage interne, avec les bandes magnétiques en 1951 et les disques durs en 1956. Les cartes perforées (utilisées jusqu'en 1980-1990) seront progressivement remplacées par les bandes magnétiques, Internet (1970), les disquettes (1971), les CD/DVD (1982), clefs USB (2000), etc.</div>
 
-<div>Il faudra toutefois attendre <b>1961</b> pour avoir les premiers systèmes de fichiers. Dès lors, il est possible d'écrire (sans écrans...), puis d'enregistrer, des instructions dans un fichier qu'on pourra ensuite exécuter sur demande. On parle alors de <b>fichiers exécutables</b>.</div>
+<div>Il faudra toutefois attendre <b>1961</b> pour avoir les premiers systèmes de fichiers. Dès lors, il est possible d'écrire (sans écrans...), puis d'enregistrer, des instructions dans un fichier qu'on pourra ensuite exécuter à tout moment. On parle alors de <b>fichiers exécutables</b>.</div>
 
 <h3>Écrans et TUI</h3>
 
@@ -92,8 +97,7 @@ dialog     --title "User information"     --form "Please enter your details:"   
 
 <div>Les terminaux disparaissent progressivement au profit d'ordinateurs personnels équipés d'une interface graphique. Les <b>émulateurs de terminal</b> vont alors simuler un terminal au sein d'une fenêtre graphique, maintenant la possibilité d'administrer les ordinateurs en lignes de commandes.</div>
 
-<div>Les ordinateurs commencent à être reliés entre eux à partir de 1969, permettant leur administration à distance. Cependant, l'ouverture d'une session graphique à distance (1982) reste très coûteuse jusqu'à la démocratisation de la fibre (~2010). Même aujourd'hui, l'accès à distance s'effectue principalement en mode texte (CLI et TUI).</div>
-
+<div>Même aujourd'hui, l'accès à distance s'effectue principalement en mode texte (CLI et TUI). En effet, une session graphique nécessite un débit élevé (jusqu'à 10 Mbit/s), ainsi qu'une faible latence. Bien que cette technologie existe dès 1982, il faudra attendre la démocratisation de l'ADSL 2+ (~2004) pour qu'elle devienne réellement viable. Toutefois, les pics de latence peuvent encore en dégrader le confort d'utilisation.</div>
 
 <div class="hint">De nombreux ordinateurs ne disposent pas d'une GUI (e.g. serveurs, embarqués) afin de réduire les surfaces d'attaques, et d'en économiser les ressources (calculs, réseau, etc.).</div>
 
@@ -217,14 +221,7 @@ dialog     --title "User information"     --form "Please enter your details:"   
     </table>
 </div>
 
-<div>Une commande s'utilise dès lors très simplement :
-    <ol class="flex-2">
-        <li><b>recopier</b> la signature de la commande.</li>
-        <li><b>remplacer</b> les encadrés par la valeur souhaitée.</li>
-    </ol>
-</div>
-
-<div>Par exemple, l'usage des commandes <script type="c-bash">cp</script>, <script type="c-bash">mv</script>, et <script type="c-bash">rm</script> peuvent être décrites ainsi :
+<div>Par exemple, l'usage des commandes <script type="c-bash">cp</script>, <script type="c-bash">mv</script>, et <script type="c-bash">rm</script> peut être décrit ainsi :
     <div class="flex-2">
         <ul>
             <li><script type="c-bash">rm <h>[-r]</h> <h>$FILE...</h></script> : <b>supprimer</b> (<i><u>r</u>e<u>m</u>ove</i>).</li>
@@ -241,7 +238,12 @@ dialog     --title "User information"     --form "Please enter your details:"   
 
 <div class="hint">Les arguments préfixés par <script type="c-bash">-</script> sont des <b>options</b> modifiant le comportement de la commande.</div>
 
-<todo>Exo</todo>
+<div>Une commande s'utilise dès lors très simplement :
+    <ol class="flex-2">
+        <li><b>recopier</b> la signature de la commande.</li>
+        <li><b>remplacer</b> les encadrés par la valeur souhaitée.</li>
+    </ol>
+</div>
 
 <div class="danger">Les fichiers supprimés via <script type="c-bash">rm</script> sont supprimés <b>définitivement</b>. Ainsi, il est préférable d'utiliser la commande <script type="c-bash">trash</script>, afin de placer les fichiers dans la corbeille de l'utilisateur, permettant de restaurer les fichiers supprimés par erreurs.</div>
 
@@ -366,8 +368,6 @@ dialog     --title "User information"     --form "Please enter your details:"   
 <div class="hint"><script type="c-text">..</script> désigne le dossier parent du répertoire courant, ainsi <script type="c-bash">cd ..</script> permet de remonter dans l'arborescence.</div>
 
 <div class="hint">La version de <script type="c-bash">ls</script> que nous utilisons dispose d'une option <script type="c-bash">--tree</script> permettant d'afficher l'arborescence d'un dossier.</div>
-
-<todo>Exo (+ animation)</todo>
 
 <h4>L'invite de commande</h4>
 
@@ -494,12 +494,15 @@ dialog     --title "User information"     --form "Please enter your details:"   
 <div>Dans une commande, lorsqu'on souhaite manipuler un ensemble de fichiers, on préfère éviter d'avoir à écrire leurs chemins uns à uns. Pour cela on utilise les <b>caractères de remplacements</b> (<i>wildcard</i>) :
     <ul>
         <li><script type="c-text">*</script> : représente 0 à plusieurs <b>caractères</b>, <i>e.g. <script type="c-bash">./*.txt</script> : tous les fichiers d'extension ".txt" dans le dossier courant.</i></li>
-        <li><script type="c-text">**/</script> : représente 0 à plusieurs <b>dossiers</b>, <i>e.g. <script type="c-bash">./**/foo.txt</script> : le fichier "foo.txt" dans un des sous dossiers.</i></li>
+        <li><script type="c-text">**/</script> : représente 0 à plusieurs <b>dossiers</b>, <i>e.g. <script type="c-bash">./**/foo.txt</script> : les fichiers "foo.txt" dans un des sous dossiers.</i></li>
         <li><script type="c-text">{<h>$VALS,...</h>}</script> : représente une <b>alternative</b>, <i>e.g. <script type="c-bash">./{foo,faa}.txt</script> : "foo.txt" ou "faa.txt" dans le dossier courant.</i></li>
     </ul>
 </div>
 
 <div>En réalité, le Shell réécrit la ligne de commande avant de l'exécuter. Il interprète ainsi les caractères spéciaux, comme les caractères de remplacements, ainsi que <script type="c-bash">~</script> avant d'exécuter la ligne de commande.</div>
+
+<div class="danger">Si des commandes comme <script type="c-bash">find</script> acceptent des caractères de remplacements en argument, ces derniers doivent être exécutés par la commande, et non par le Shell. Il convient alors de les échapper (ou de les placer entre guillemets) afin d'éviter leur interprétation par le Shell, e.g. : <script type="c-bash">find . -name '*.txt'</script>.
+</div>
 
 <div class="hint">Nous fournissons une commande <script type="c-bash">dry-run <h>$CMDLINE</h></script> affichant la ligne de commande finale, sans l'exécuter :
     <script type="c-shell">
@@ -507,9 +510,6 @@ dialog     --title "User information"     --form "Please enter your details:"   
         cp foo.txt faa.txt -t /home/user
         $ !!
     </script>
-</div>
-
-<div class="danger">Si des commandes comme <script type="c-bash">find</script> acceptent des caractères de remplacements en argument, ces derniers doivent être exécutés par la commande, et non par le Shell. Il convient alors de les échapper (ou de les placer entre guillemets) afin d'éviter leur interprétation par le Shell, e.g. : <script type="c-bash">find . -name '*.txt'</script>.
 </div>
 
 <h2>Le terminal</h2>
@@ -548,7 +548,7 @@ dialog     --title "User information"     --form "Please enter your details:"   
     </ul>
 </div>
 
-<div class="danger">Attention à ne pas oublier la touche majuscule pour la copie. En effet, <script type="c-text">^+C</script> arrête la commande en cours d'exécution.</div>
+<div class="danger">Attention à ne pas oublier la touche majuscule pour la copie. En effet, <script type="c-text">^+C</script> tue la commande en cours d'exécution.</div>
 
 <div class="hint">Sous Linux, vous pouvez aussi coller un texte sélectionné via le clic-milieu ou clic-molette de la souris.</div>
 
@@ -568,7 +568,7 @@ dialog     --title "User information"     --form "Please enter your details:"   
 
 <div>Lorsqu'une commande s'exécute, elle "prend" le contrôle du terminal (clavier et écran), et ne le rend qu'une fois son exécution terminée. Ainsi, pour revenir au Shell et entrer de nouvelles commandes, il faudra tout d'abord quitter l'application TUI en cours d'exécution.</div>
 
-<div class="hint">Les interfaces TUI sont moins "standard", mais sont plus ergonomiques. Afin de faciliter votre apprentissage, nous essayerons de proposer des alternatives TUI ergonomiques lorsque possible.</div>
+<div class="hint">Les TUI sont plus ergonomiques, mais moins "standard". Afin de faciliter votre apprentissage, nous essayerons de proposer des alternatives TUI lorsque possible.</div>
 
 
 <h4>Buffer alternatif</h4>

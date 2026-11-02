@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
         <meta charset="utf8"/>
-        <title>CM2 (Outils)</title>
+        <title>CM3 (accueil)</title>
         <meta name="color-scheme" content="dark light">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link   href="/@templates/slides@2026/index.css"  rel="stylesheet">
@@ -12,285 +12,727 @@
         <main>
             <frame-uca-title
                 title     = "[R1-13] Accueil Numérique"
-                subtitle  = "CM2 - Commandes Shell"
+                subtitle  = "CM3 - Commandes Shell"
                 author    = "Denis MIGDAL"
                 mail      = "denis.migdal@uca.fr">
             </frame-uca-title>
 
-    <frame-subsection id="why-cli" name="Pourquoi les lignes de commandes ?">
+    <frame-section name="Historique des IHM">
         <frame-uca>
-            <div>3 manières d'intéragir avec un ordinateur :
-                <ul>
-                    <li><b>CLI</b> : interface <i>en lignes de commande</i> (<i>Command Line Interface</i>) ;</li>
-                    <li><b>GUI</b> : interface <i>graphique</i> (<i>Graphical User Interface</i>) ;</li>
-                    <li><b>TUI</b> : interface <i>textuelle</i> (<i>Text-based User Interface</i>).</li>
-                </ul>
-            </div><div>Avantages des CLI par rapport GUI :
-                <ul>
-                    <li>possibilité de copier/coller des instructions (c'est du texte).</li>
-                    <li>automatisation avec des scripts (fichier contenant des lignes de commandes).</li>
-                    <li>langage de programmation (variables, conditions, boucles, etc).</li>
-                    <li>interface plus rapide/simple à concevoir.</li>
-                    <li>serveurs sans interfaces graphiques (réduit surface d'attaque, économise ressources).</li>
-                </ul>
-            </div>
-        </frame-uca>
-    </frame-subsection>
-
-<frame-section name="Le Shell" id="shell">
-    <frame-subsection name="L'invite de commande" id="invite">
-        <frame-uca>
-            <div>L'invite de commande (ou <i>prompt</i>) :
-                <ul>
-                    <li>indique que l'utilisateur peut saisir une nouvelle ligne de commande.</li>
-                    <li>affiche des informations (personnalisable).</li>
-                </ul>
-            </div>
-
-            <div class="terminal">
-<pre><font color="#4CE64C"><b>demigda@demigda-Latitude-5400</b></font>:<font color="#295FCC"><b>~</b></font>$ echo &quot;Hello&quot;
-Hello
-<font color="#4CE64C"><b>demigda@demigda-Latitude-5400</b></font>:<font color="#295FCC"><b>~</b></font>$</pre>
-            </div>
-            <div>L'invite <script type="c-shell">demigda@demigdal-Latitude-5400:\~$</script> indique ainsi :
-                <ul class="flex-2">
-                    <li>le nom de l'<b>utilisateur</b> (<script type="c-shell">demigda</script>)</li>
-                    <li>le nom de l'<b>ordinateur</b> (<script type="c-shell">demigdal-Latitude-5400</script>)</li>
-                    <li>le <b>répertoire</b> actuel (<script type="c-shell">~</script>), cf CM2.</li>
-                </ul>
-            <br/>
-            💡 <script type="c-shell">@</script> se lit "at" en anglais et indique un lieu.
-            </div>
-
-        </frame-uca>
-    </frame-subsection>
-    <frame-subsection name="La ligne de commande" id="command-line">
-        <frame-uca>
-            <div>Ligne de commande = instruction à exécuter (≈ appel d'une fonction), avec :
-                <ul>
-                    <li>une <b>commande</b> (≈ une fonction) à exécuter ;</li>
-                    <li>des <b>arguments</b> passés en <b>paramètres</b>.</li>
-                </ul>
-            </div>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>Fonction python :</th><th>Ligne de commande :</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><center><script type="c-python">foo(1, 2, 3)</script></center></td>
-                        <td><center><script type="c-bash">foo 1 2 3</script></center></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <div>Différences syntaxiques :
-                <ul class="flex-2">
-                    <li>pas de parenthèses ;</li>
-                    <li mark="🕮"><b>argument</b> = <i>valeur</i> qu'on transmet (appel).</li>
-                    <li>arguments séparés par un espace.</li>
-                    <li mark="🕮"><b>paramètre</b> = <i>variable</i> manipulée (définition).</li>
-                </ul>
-            </div>
-
-            <div>⚠ Si espaces dans l'argument : les échapper, ou de mettre entre guillemets simples :
-                <div class="flex-3">
-                    <script type="c-shell">
-                    $ foo 'a b'
-                    </script>
-                    <script type="c-shell">
-                    $ foo a\ b
-                    </script>
-                    <script type="c-shell">
-                    $ foo a' 'b
-                    </script>
+            <img style="width:100%" src="../CM/assets/history.svg"/>
+            <div class="overlay" style="align-items: center">
+                <div slide="1">
+                    <div><b>XIXe siècle :</b> circuit électronique, qui pour une entrée donnée produit une sortie.
+                        <ul class="flex-2">
+                            <li><i>Entrée :</i> interrupteurs</li>
+                            <li><i>Sortie :</i> lampes</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div class="hint">Éventuellement, les entrées-sorties sont regroupées sur un poste de contrôle appelé<br/>
+                    <i>"panneau de commande"</i>, <i>"pupitre de commande"</i>, ou <i>"console de commande"</i>.</div>
                 </div>
+                <div slide="2">
+                    <div><b>1890 :</b> les cartes perforées remplacent les éléments d'entrées-sorties.
+                        <ul>
+                            <li>stocke les entrées (données et/ou instructions).</li>
+                            <li>permet de les rejouer, les transporter, et les archiver.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div><b>1925 :</b> sortie imprimante.
+                        <ul>
+                            <li>conserve les résultats sans avoir à les retranscrire.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div><b>1943 :</b> modem, échange de données via les lignes téléphoniques.
+                        <ul>
+                            <li><u>très</u> lent (1 300 bit/s).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div slide="3">
+                    <div><b>1956 :</b> télétypes avec clavier alpha-numérique.
+                        <ul>
+                            <li>saisie des instructions (<i>commandes</i>) directement sur l'ordinateur.</li>
+                            <li>les résultats sont imprimés.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div><b>Invite de commande (<i>prompt</i>) :</b> indique qu'une nouvelle commande peut être saisie (ici <script type="c-text">></script>).
+                        <div class="flex-3">
+                            <script type="c-text">
+                                >
+                            </script>
+                            <script type="c-text">
+                                > 1+1
+                            </script>
+                            <script type="c-text">
+                                > 1+1
+                                2
+                                >
+                            </script>
+                        </div>
+                    </div>
+                    <br/>
+                    <b>Ligne de commande :</b> instruction <i>(imprimée sur la même ligne que l'invite)</i>.
+                        <ul>
+                            <li>On parle alors d'<b>interface en ligne de commande</b> (<i>CLI - Command Line Interface</i>).</li>
+                        </ul>
+                </div>
+                <div slide="4">
+                    <div>Les ordinateurs gagnent progressivement en capacité de stockage interne :
+                        <ul class="flex-2">
+                            <li>bandes magnétiques en 1951.</li>
+                            <li>disques durs en 1956.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div><b>1961 : </b> systèmes de fichiers.
+                        <ul>
+                            <li><b>Fichier exécutable : </b> fichier contenant des instructions qu'on peut éditer (sans écrans) et exécuter.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div class="hint">Les cartes perforées demeurent toutefois pertinentes pour la saisie d'entrées complexes et/ou répétées.
+                        <ul>
+                            <li>utilisées jusqu'en 1980-1990.</li>
+                            <li>progressivement remplacées par des supports de stockage amovibles plus performants.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div slide="5-6">
+                    <div><b>1964 :</b> terminaux avec écrans textuels.
+                        <ul>
+                            <li>l'écran remplace les imprimantes pour la visualisation.</li>
+                            <li>le terminal permet à un <i>utilisateur</i> de se <i>connecter</i> à l'ordinateur (<i>mainframe</i>), qui continue de disposer d'une <i>console</i> pour son administration.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div class="overlay">
+                        <div class="flex-3 gap" slide="5">
+                            <div class="span-2"><b>TUI</b> (<i>Text-based/Terminal User Interface</i>) :
+                                <ul>
+                                    <li>on peut dessiner sur un écran entier.</li>
+                                    <li>plus ergonomique : <i>formulaires, panneau de commande virtuel.</i></li>
+                                </ul>
+                                <br/>
+
+                                <div><b>1968 :</b> la souris permet de naviguer en cliquant sur les éléments de l'écran, au lieu d'utiliser les touches du clavier (tabulation, flèches).</div>
+                            </div>
+                            <img style="width: 100%" src="../CM/assets/TUI.png"/>
+                        </div>
+                        <div>
+                            <div class="hint" slide="6">Les lignes de commandes (CLI) conservent toutefois de nombreux avantages :
+                                <ul>
+                                    <li>automatisation : les enregistrer dans un fichier (<i>script</i>) pour les "rejouer" à tout moment.</li>
+                                    <li>toute la puissance d'un langage de programmation <i>(variables, conditions, boucles, etc)</i>.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div slide="7">
+                    <div><b>1973 :</b> interfaces graphiques modernes (<b>GUI</b> - <i>Graphical User Interface</i>).
+                        <ul>
+                            <li><b>Gestionnaire de fenêtres :</b> les fenêtres sont dessinées pixels par pixels, et manipulées à la souris.</li>
+                            <li><b>Émulateurs de terminal :</b> simule un terminal au sein d'une fenêtre graphique.</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div><b>1982 :</b> session graphique à distance.
+                        <ul>
+                            <li>nécessite un débit élevé (jusqu'à 10 Mbit/s), ainsi qu'une faible latence => ADSL2+ (~2004).</li>
+                            <li>même aujourd'hui, l'accès à distance est principalement textuelle (CLI/TUI).</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div class="hint">De nombreux ordinateurs ne disposent pas d'une GUI <i>(e.g. serveurs, embarqués)</i> afin de :
+                        <ul class="flex-2">
+                            <li>réduire les surfaces d'attaques.</li>
+                            <li>économiser les ressources <i>(calculs, réseau, etc.)</i>.</li>
+                        </ul>
+                    </div>
+                </div>
+
+
             </div>
         </frame-uca>
-    </frame-subsection>
-</frame-section>
-    <frame-subsection name="Shell vs Terminal">
+    </frame-section>
+    <frame-section name="Le Shell">
         <frame-uca>
-            <ul>
-                <li><i>Shell</i> : programme qui <b>interpréte</b> et <b>exécute</b> les commandes shell.</li>
-                <li><i>Terminal</i> (ou <i>console</i>) : interface graphique entre l'utilisateur et le Shell.</li>
-            </ul>
 
-            <div>🕮 Les premiers ordinateurs avaient la taille d'une pièce (e.g. 160m²). Des consoles constituées d'un clavier et d'un écran (≈ terminal) permettaient d’interagir avec l'ordinateur mainframe (≈ shell).</div>
+<div>Le <b>Shell</b> (1971) est à la fois :
+    <ul>
+        <li>le <b>langage</b> dans lequel on écrit les lignes de commandes.</li>
+        <li>l'<b>interpréteur</b> qui lit et exécute les lignes de commandes.</li>
+    </ul>
+</div>
+
+<div>Le <b>Terminal</b> sert alors d'interface graphique entre l'utilisateur et le Shell, il permet :
+    <ul>
+        <li>d'écrire les <i>lignes de commandes</i> envoyées au Shell</li>
+        <li>d'en visualiser les résultats retournés par le Shell.</li>
+    </ul>
+</div>
+
+<center>
+    <img src="../CM/assets/terminal.svg"/>
+</center>
+
         </frame-uca>
-    </frame-subsection>
-    <frame-subsection name="CLI vs TUI">
-        <frame-uca>
-            <ul>
-                <li><b>CLI</b> (<i>Command-Line Interface</i>) : lignes de commande.</li>
-                <li><b>TUI</b> (<i>Terminal User Interface</i>) : interactif avec clavier et souris (pas standard, + ergonomique).</li>
-            </ul>
-            <div class="flex-2">
+        <frame-subsection name="Commandes Shell">
+            <frame-uca>
+
+<div><b>Ligne de commande :</b> ligne de texte représentant une instruction à exécuter, e.g. :
+    <div class="flex-3">
+        <script type="c-text">
+            > 1+2
+            3
+        </script>
+        <script type="c-text">
+            > add 1 2
+            3
+        </script>
+        <script type="c-text">
+            > add(1, 2)
+            3
+        </script>
+    </div>
+</div>
+
+<div>En Shell, une <i>ligne de commande</i> commence par une <b>commande</b> représentant l'instruction à exécuter, e.g. :
+    <ul class="flex-3">
+        <li><script type="c-bash">cp</script> : <i><u>c</u>o<u>p</u>y</i>, copier un fichier.</li>
+        <li><script type="c-bash">mv</script> : <i><u>m</u>o<u>v</u>e</i>, déplacer un fichier.</li>
+        <li><script type="c-bash">rm</script> : <i><u>r</u>e<u>m</u>ove</i>, supprimer un fichier.</li>
+        <li><script type="c-bash">touch</script> : créer un fichier.</li>
+        <li><script type="c-bash">mkdir</script>: <i><u>m</u>a<u>k</u>e <u>dir</u>ectory</i>.</li>
+        <li><script type="c-bash">find</script> : rechercher un fichier.</li>
+    </ul>
+</div>
+
+<div>La commande est potentiellement suivie d'un ou de plusieurs <b>arguments</b>, le tout séparé par des espaces :
+    <div class="flex-2">
+        <script type="c-text">
+            > cmd arg1 arg2
+            result
+        </script>
+        <script type="c-text">
+            > add 1 2
+            3
+        </script>
+    </div>
+</div>
+
+<div class="info">Les <b>arguments</b> (<i>appel</i>) sont les <i>valeurs</i> qu'on transmets aux <b>paramètres</b> (<i>définition</i>).</div>
+
+<div class="danger">Si un argument contient un espace, il doit être échappé  (ou placé entre guillemets simples) :
+    <ul class="flex-3">
+        <li><script type="c-bash">a\ b</script></li>
+        <li><script type="c-bash">'a b'</script></li>
+        <li><script type="c-bash">a' 'b</script></li>
+    </ul>
+</div>
+
+<!-- <div>Une ligne de commande s'apparente à l'<b>appel d'une fonction</b>, avec une <i>commande</i> :
+    <ul class="flex-2">
+        <li><i>Ligne de commande Shell :</i> <script type="c-bash">foo 1 2 3</script>.</li>
+        <li><i>Appel d'une fonction python :</i> <script type="c-python">foo(1, 2, 3)</script>.</li>
+    </ul>
+</div> -->
+            </frame-uca>
+        </frame-subsection>
+        <frame-subsection name="La documentation">
+            <frame-uca>
+                <!-- prendre le temps de décrire -->
+                <div class="flex-2 gap">
+
+                    <div><b>Signature :</b> décrit l'usage d'une commande.
+                        <ul>
+                            <li><script type="c-bash">rm <h>[-r]</h> <h>$FILE...</h></script> : <b>supprimer</b> (<i><u>r</u>e<u>m</u>ove</i>).</li>
+                            <li><script type="c-bash">cp <h>[-r]</h> <h>$SRC...</h> <h>-t|-T $DST</h></script> : <b>copier</b> (<i><u>c</u>o<u>p</u>y</i>).</li>
+                            <li><script type="c-bash">mv <h>$SRC...</h> <h>-t|-T $DST</h></script> : <b>déplacer</b> (<i><u>m</u>o<u>v</u>e</i>).</li>
+                        </ul>
+                        <br/>
+                        <div><b>Options :</b> modifie le comportement des commandes:
+                            <ul>
+                                <li><script type="c-bash"><h>-r</h></script> : si dossier (<i><u>r</u>ecursive</i>).</li>
+                                <li><script type="c-bash"><h>-t $DST</h></script> <b>dossier</b> où placer <script type="c-bash"><h>$SRC</h></script> (<i><u>t</u>arget</i>).</li>
+                                <li><script type="c-bash"><h>-T $DST</h></script> nouv. <b>chemin</b> de <script type="c-bash"><h>$SRC</h></script> (<i>not  <u>t</u>arget</i>).</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div>
+                        <ol>
+                            <li><b>recopier</b> la signature de la commande.</li>
+                            <li><b>remplacer</b> les encadrés.</li>
+                        </ol>
+                    <table style="border: 1px solid light-dark(black, white);">
+                        <thead>
+                            <tr>
+                                <th>Syntaxe</th>
+                                <th>Signification</th>
+                                <th>Exemple</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><script type="c-bash">cmd <h>$VAR</h></script></td>
+                                <td>une valeur (à remplacer).</td>
+                                <td><script type="c-bash">cmd <h>A</h></script></td>
+                            </tr>
+                            <tr>
+                                <td><script type="c-bash">cmd <h>[A]</h></script></td>
+                                <td>valeur facultative.</td>
+                                <td><script type="c-bash">cmd</script>/<script type="c-bash">cmd <h>A</h></script></td>
+                            </tr>
+                            <tr>
+                                <td><script type="c-bash">cmd <h>A|B</h></script></td>
+                                <td>l'un ou l'autre.</td>
+                                <td><script type="c-bash">cmd <h>A</h></script>/<script type="c-bash">cmd <h>B</h></script></td>
+                            </tr>
+                            <tr>
+                                <td><script type="c-bash">cmd <h>$X...</h></script></td>
+                                <td>un ou plusieurs arguments.</td>
+                                <td><script type="c-bash">cmd <h>A B C</h></script></td>
+                            </tr>
+                            <tr>
+                                <td><script type="c-bash">cmd <h>$X,...</h></script></td>
+                                <td>idem, mais séparés par <script type="c-text">,</script>.</td>
+                                <td><script type="c-bash">cmd <h>A,B,C</h></script></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                </div>
+
+                <div class="exo">...<br/><br/><br/><br/><br/></div>
+            </frame-uca>
+            <frame-uca>
+                <div>La manière d'accéder à la documentation d'une commande dépend de sa nature (cf <script type="c-bash">type -t <h>$CMD</h></script>) :
+                    <div class="flex-2">
+                        <script type="c-shell">
+                            > type -t cp
+                            file
+                            > man cp
+                        </script>
+                        <script type="c-shell">
+                            > type -t cd
+                            builtin
+                            > help cd
+                        </script>
+                    </div>
+                    <ul class="flex-2">
+                        <li>si <script type="c-text">file</script> (commande "normale") : <script type="c-bash">man <h>$CMD</h></script></li>
+                        <li>si <script type="c-text">keyword</script>/<script type="c-text">builtin</script> (interne au Shell) : <script type="c-bash">help <h>$CMD</h></script>.</li>
+                    </ul>
+                </div>
                 <div>
-                    <center>
-                        <strong>CLI</strong> (commande <script type="c-bash">tree</script>)
-                    </center>
-                    <img src="../CM/@assets/cli-example.png"/>
-                </div>
-                <div>
-                    <center>
-                        <strong>TUI</strong> (commande <script type="c-bash">gdu</script>)
-                    </center>
-                    <img src="../CM/@assets/tui-example.png"/>
-                </div>
-            </div>
-        </frame-uca>
-    </frame-subsection>
-    <frame-subsection name="Utilisation du terminal">
-        <frame-uca>
-            <div>⚠ Recopies à la main ⇒ erreurs et fautes de frappe.</div>
+                    <div class="hint">La commande <script type="c-bash">tldr <h>$CMD</h></script> est une version simplifiée de <script type="c-bash">man</script> et de <script type="c-bash">help</script>.</div>
 
-            <ul>
-                <li><b>Copier-coller</b> : <script type="c-text">^+⇧+C</script> et <script type="c-text">^+⇧+V</script> ou clic-milieu/molette de la souris.<br/>
-                ⚠ <script type="c-text">^+C</script> arrête la commande en cours d'exécution.<br/><br/></li>
-                <li><b>Auto-complétion</b> des commandes et chemins : <script type="c-text">⭾</script>.<br/>
-            💡 <script type="c-text">⭾+⭾</script> pour affiches les possibilités.<br/><br/></li>
-                <li><b>Historique</b> : <script type="c-text">↑</script> ou <script type="c-text">↓</script> pour naviguer dans l'historique des lignes de commandes (et les réexécuter) .<br/>
-            💡 <script type="c-text">←</script> ou <script type="c-text">→</script> pour  modifier la ligne de commande.<br/><br/></li>
-            </ul>
-        </frame-uca>
-    </frame-subsection>
-<frame-section name="Les commandes" id="Commandes">
-    <frame-subsection name="Quelques commandes utiles" id="utils">
-        <frame-uca>
-            <div><b>La documentation :</b>
+                    <div class="hint">Nous fournissons une <i>cheat sheet</i> donnant l'usage simplifié des commandes que nous utiliserons.</div>
+                </div>
+            </frame-uca>
+        </frame-subsection>
+        <frame-subsection name="Historique et auto-complétion">
+            <frame-uca>
+                <div>Le Shell interprète certaines touches :
                 <ul>
-                    <li><script type="c-bash">man  <h>$CMD</h></script> (<u>man</u>uel) : affiche la documentation de la commande <script type="c-bash"><h>$CMD</h></script>.</li>
-                    <li><script type="c-bash">tldr <h>$CMD</h></script> (<u>t</u>oo <u>l</u>ong : <u>d</u>idn't <u>r</u>ead) : version simplifiée de <script type="c-bash">man</script>.</li>
-                    <li><script type="c-bash">help <h>$CMD</h></script> : affiche la liste des commandes internes de bash.</li>
+                    <li><script type="c-text">←</script>/<script type="c-text">→</script> : modifier une ligne de commande en cours d'écriture.</li>
+                    <li><script type="c-text">↑</script>/<script type="c-text">↓</script> : parcourir l'historique des commandes exécutées<i> (e.g. pour les modifier puis ré-exécuter)</i>.</li>
+                    <li><script type="c-text">⭾</script> (tabulation) : auto-complétion des commandes et des chemins.</li>
+                    <li><script type="c-text">⭾+⭾</script> : afficher les possibilités d'auto-complétion.</li>
                 </ul>
-            </div>
-            <div><b>Le terminal :</b>
+                </div>
+
+                <div class="hint">Afin d'éviter les erreurs de saisies, il est très vivement encouragé d'utiliser l'auto-complétion du shell.</div>
+
+            </frame-uca>
+        </frame-subsection>
+    </frame-section>
+    <frame-section name="Les fichiers">
+        <frame-subsection name="Organiser les fichiers">
+            <frame-uca>
+
+<div class="flex-4 gap">
+    <div class="span-3">
+        <div><b>Catalogue de fichiers [1961] :</b> regroupe un ensemble de fichiers.</div>
+
+        <ul>
+            <li>Besoin de <i>sélectionner</i> un catalogue pour accéder au contenu.</li>
+            <li>Fichiers identifiés par leur nom <u>au sein</u> du catalogue <i>courant</i>.</li>
+        </ul>
+    </div>
+    <script type="c-shell">
+        👤 User1
+        ├── 📄 faa
+        └── 📄 foo
+        👤 User2
+        └── 📄 faa
+    </script>
+</div>
+
+<ul>
+    <li>Pas suffisant pour organiser un nombre important de fichiers.</li>
+</ul>
+            </frame-uca>
+            <frame-uca>
+
+<div class="flex-4 gap">
+    <div class="span-3">
+        <div><b>Répertoire (<i>directory</i>) [1965] :</b> peut contenir d'autres répertoires.</div>
+        
+        <ul>
+            <li>Fichiers identifiés par leur nom <u>au sein</u> du répertoire de travail.</li>
+            <li><b>Répertoire de travail (<i>working directory</i>) :</b>
                 <ul>
-                    <li><script type="c-bash">clear</script> : replace l'invite de commande en haut de la fenêtre.</li>
-                    <li><script type="c-bash">reset</script> : efface complètement le contenu du terminal.</li>
-                    <li><script type="c-bash">exit</script> : quitte le terminal.</li>
+                    <li><i>répertoire courant/sélectionné, "dans lequel on est".</i></li>
                 </ul>
-            </div>
-            <div><b>L'historique :</b>
+            </li>
+            <li><b>Répertoire personnel (<i>home directory</i>) :</b>
                 <ul>
-                    <li><script type="c-bash">history</script> : affiche l'historique des dernières lignes de commandes exécutées.</li>
-                    <li><script type="c-bash">!!</script> : réexécuter la dernière commande entrée.</li>
-                    <li><script type="c-bash">!<h>$CMD</h></script> : réexécute la dernière commande <script type="c-bash"><h>$CMD</h></script> entrée.</li>
+                    <li><i>possédé par chaque utilisateur.</i></li>
                 </ul>
-            </div>
-        </frame-uca>
-    </frame-subsection>
-    <frame-subsection id="manip_files" name="Manipuler les fichiers">
-        <frame-uca>
-            <div>Commandes standards pour manipuler les fichiers :
-                <ul class="flex-2">
-                    <li><script type="c-bash">mkdir <h>$DIR...</h></script> (<i><u>m</u>a<u>k</u>e <u>dir</u>ectory</i>) <b>créer</b>.</li>
-                    <li><script type="c-bash">touch <h>$FILE...</h></script> <b>créer un fichier</b> vide.</li>
-                    <li><script type="c-bash">rm <h>[-r]</h> <h>$FILE...</h></script> (<i><u>r</u>e<u>m</u>ove</i>) <b>supprimer</b>.</li>
-                    <li><script type="c-bash">cp <h>[-r]</h> <h>$SRC...</h> <h>$DST</h>/</script> (<i><u>c</u>o<u>p</u>y</i>) <b>copier</b>.</li>
-                    <li><script type="c-bash">mv <h>$SRC...</h> <h>$DST</h>/</script> (<i><u>m</u>o<u>v</u>e</i>) <b>déplacer</b>.</li>
-                    <li><script type="c-bash">mv <h>$SRC</h> <h>$DST</h>/<h>$NAME</h></script> <b>déplacer et renommer</b>.</li>
-                </ul>
+            </li>
+        </ul>
+    </div>
+    <script type="c-shell">
+        📂 /
+        ├── 📂 User1
+        |   ├── 📂 faa
+        |   └── 📄 foo
+        └── 📂 User2
+            └── 📄 faa
+    </script>
+</div>
+
+<div class="hint">Les <b>répertoires</b> (<i>directory</i>) sont aussi appelés <b>dossiers</b> (<i>folder</i>) :
+    <ul>
+        <li><i>Répertoire :</i> terme technique consacré.</li>
+        <li><i>Dossier :</i> appellation courante <i>(dans interfaces graphiques, et auprès grand publique)</i>.</li>
+    </ul>
+    </div>
+            </frame-uca>
+            <frame-uca>
+
+                <div><b>Dossier racine (<i>root directory</i>) :</b> noté <script type="c-text">/</script>, contient l'ensemble des fichiers <i>(directement ou indirectement)</i> :
+                    <script type="c-bash">
+                        📂 /
+                        ├── 📂 home  # dossiers personnels des utilisateurs.
+                        ├── 📂 mnt   # volumes montés (e.g. partition Windows)
+                        ├── 📂 media # volumes éjectables (e.g. clef USB)
+                        ├── 📂 tmp   # fichiers temporaires (supprimés au redémarrage).
+                        ...
+                    </script>
+                    </div>
+                </div>
+            </frame-uca>
+        </frame-subsection>
+        <frame-subsection name="Parcourir les fichiers">
+            <frame-uca>
+
+                <div><b>Les commandes :</b>
+                    <ul>
+                        <li><script type="c-bash">ls <h>[$DIR]</h></script> (<i><u>l</u>i<u>s</u>t</i>) affiche le contenu du dossier (<i>par défaut, du répertoire de travail</i>).</li>
+                        <li><script type="c-bash">cd <h>[$DIR]</h></script> (<i><u>c</u>hange <u>d</u>irectory</i>) aller dans le dossier (<i>par défaut, répertoire personnel</i>).</li>
+                    </ul>
+                </div>
+                    
+<div class="overlay">
+    <div slide="1">
+                <div class="flex-2">
+<terminal>> ls
+<font color="#0039AA"><b>📂User1</b></font> <font color="#0039AA"><b>📂User2</b></font>
+> ls User1
+<font color="#0039AA"><b>📂faa</b></font>  📄foo
+> cd User1
+> ls
+<font color="#0039AA"><b>📂faa</b></font>  📄foo
+> </terminal>
+                    <script type="c-shell">
+                        📂 /
+                        ├── 📂 User1
+                        |   ├── 📂 faa
+                        |   └── 📄 foo
+                        └── 📂 User2
+                            └── 📄 faa
+                    </script>
+                </div>
+    </div>
+    <div slide="2">
+        <div class="flex-3">
+            <div class="span-2 exo">Quelles commandes pour :
                 <ul>
-                    <li><script type="c-bash">find <h>$DIR</h> -name <h>$NAME</h></script> rechercher (récursivement) dans <script type="c-bash"><h>$DIR</h></script> les fichiers correspondant à <script type="c-bash"><h>$NAME</h></script>.</li>
+                    <li>XXX</li>
                 </ul>
             </div>
-            <div>💡 <script type="c-bash">-r</script> : copier/supprimer des dossiers récursivement.<br/>
-            💡 <script type="c-bash">mkdir -p <h>$DIR</h></script> : créer les dossiers parents de <script type="c-bash"><h>$DIR</h></script> s'ils n'existent pas.
-            </div>
-            <div>⚠ <script type="c-bash">rm</script> : supprime <b>définitivement</b> les fichiers.<br/>
-            💡 <script type="c-bash">trash <h>$FILE...</h></script> : place les fichiers dans la corbeille.</div>
-        </frame-uca>
-    </frame-subsection>
-    <frame-subsection name="Éditer un fichier" id="edit">
-        <frame-uca>
-            <div class="center">
-                <center><script type="c-bash">nano <h>[$FILE]</h></script> (CLI)</center>
-                <img src="/@assets/admsys/img/nano.png"/>
-                <i>Raccourcis claviers indiqués en bas de la fenêtre.</i>
-            </div>
-        </frame-uca>
-    </frame-subsection>
-</frame-section>
-<frame-section id="path" name="Les chemins">
-    <frame-subsection id="abspath" name="Chemin absolu">
-        <frame-uca>
-            <div><b>Chemin absolu</b> (<i>absolute path</i>) : en partant de la <b>racine</b>, chemin à emprunter pour atteindre le fichier.</div>
-            <div>Sous Linux tous les fichiers sont contenus dans le dossier <b>racine</b> (<i>root directory</i>), noté <script type="c-text">/</script> :
-                <div class="terminal">
+            <script type="c-shell">
+                📂 /
+                ├── 📂 User1
+                |   ├── 📂 faa
+                |   └── 📄 foo
+                └── 📂 User2
+                    └── 📄 faa
+            </script>
+        </div>
+    </div>
+</div>
+    <div class="hint"><script type="c-text">..</script> : dossier parent du répertoire courant.
+    </div>
+
+    <div class="hint"><script type="c-bash">ls --tree <h>[$DIR]</h></script> : affiche l'arborescence du dossier <i>(option spécifique à la version utilisée)</i>.</div>
+            </frame-uca>
+            <frame-uca>
+
+<div>Savoir <b>où</b> on se trouve pour exécuter les commandes sur le bon ordinateur et dans le bon dossier :
+    <ul class="flex-3">
+        <li><script type="c-bash">whoami</script> : utilisateur.</li>
+        <li><script type="c-bash">hostname</script> : nom de l'ordinateur.</li>
+        <li><script type="c-bash">pwd</script> (<i><u>p</u>rint <u>w</u>orking <u>d</u>irectory</i>).</li>
+    </ul>
+<ul>
+    <li>L'invite de commande affiche ces informations avant chaque saisie de commande :
+
+    <div class="flex-3">
+        <terminal><font color="#4CE64C"><b>demigda@Latitude</b></font>:<font color="#295FCC"><b>~</b></font>$</terminal>
+        <script type="c-shell">
+            <h>$USER</h>@<h>$HOST</h>:<h>$DIR</h>$ 
+        </script>
+        <ul>
+            <li>utilisateur : <script type="c-shell">demigda</script> ;</li>
+            <li>ordinateur : <script type="c-shell">Latitude</script> ;</li>
+            <li>répertoire de travail : <script type="c-shell">~</script>.</li>
+        </ul>
+    </div>
+    </li>
+</ul>
+</div>
+
+<div>
+<div class="hint"><script type="c-bash">@</script> ("at" en anglais) indique un lieu. E.g. <script type="c-text">user@uca.fr</script> : <i>"le compte <script type="c-text">user</script> du serveur <script type="c-text">uca.fr</script>"</i>.</div>
+
+<div class="hint"><script type="c-bash">~<h>[$USER]</h></script> : répertoire personnel de l'utilisateur <script type="c-bash"><h>$USER</h></script> <i>(par défaut, utilisateur courant)</i>.</div>
+</div>
+
+<div>
+    <div class="flex-3">
+        <div class="terminal"><pre>> ls
+<font color="#0039AA"><b>📂User1</b></font> <font color="#0039AA"><b>📂User2</b></font>
+> cd User1
+> ls
+<font color="#0039AA"><b>📂faa</b></font>  📄foo
+> </pre>
+        </div>
+        <div class="terminal"><pre><font color="#4CE64C"><b>user@host</b></font>:<font color="#295FCC"><b>/</b></font>$ ls
+<font color="#0039AA"><b>📂User1</b></font> <font color="#0039AA"><b>📂User2</b></font>
+<font color="#4CE64C"><b>user@host</b></font>:<font color="#295FCC"><b>/</b></font>$ cd User1
+<font color="#4CE64C"><b>user@host</b></font>:<font color="#295FCC"><b>/User1</b></font>$ ls
+<font color="#0039AA"><b>📂faa</b></font>  📄foo
+<font color="#4CE64C"><b>user@host</b></font>:<font color="#295FCC"><b>/User1</b></font>$ </pre>
+        </div>
+        <script type="c-shell">
+            📂 /
+            ├── 📂 User1
+            |   ├── 📂 faa
+            |   └── 📄 foo
+            └── 📂 User2
+                └── 📄 faa
+        </script>
+    </div>
+</div>
+            </frame-uca>
+        </frame-subsection>
+        <frame-subsection name="Les chemins">
+            <frame-uca>
+                <div class="flex-4">
+                    <div class="span-3">
+                        <div><b>Chemin (<i>path</i>) :</b> "route" à emprunter pour atteindre un fichier.
+                            <ul>
+                                <li><i>Chemin relatif :</i> part du <b>répertoire de travail</b> (noté <script type="c-text">.</script>).
+                                    <ul>
+                                        <li><div class="terminal"><pre><font color="#4CE64C"><b>user@host</b></font>:<font color="#295FCC"><b>/tmp</b></font>$ ls ./foo/faa</pre></div></li>
+                                    </ul>
+                                </li>
+                                <li><i>Chemin absolu :</i> part de la <b>racine</b> (noté <script type="c-text">/</script>).
+                                    <ul>
+                                        <li><div class="terminal"><pre><font color="#4CE64C"><b>user@host</b></font>:<font color="#295FCC"><b>/tmp</b></font>$ ls /tmp/foo/faa</pre></div></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+<div class="terminal">
 <pre>
 <font color="#0039AA"><b>📂 /</b></font>
 <font color="#8A8A8A">└── </font><font color="#0039AA"><b>📂 tmp</b></font>
     <font color="#8A8A8A">└── </font><font color="#0039AA"><b>📂 foo</b></font>
         <font color="#8A8A8A">├── </font>📄 faa
         <font color="#8A8A8A">├── </font><font color="#0039AA"><b>📂 fee</b></font>
-        <font color="#8A8A8A">├── </font>📄 fii
         <font color="#8A8A8A">└── </font>📄 fuu</pre>
-                </div>
-            💡 <script type="c-text">/tmp/foo/faa</script> est le chemin absolu de <script type="c-text">faa</script>.
-            </div>
-            <div>💡 Par convention, on suffixe le nom des dossiers par <script type="c-text">/</script>, e.g. <script type="c-text">/tmp/foo/fee/</script>.<br/>
-            <br/>
-            ⚠ Évitez les chemins absolus dans les scripts : il n'est pas forcément le même d'un ordinateur à l'autre.
-            </div>
-        </frame-uca>
-    </frame-subsection>
-    <frame-subsection id="relpath" name="Chemin relatif">
-        <frame-uca>
-            <div><b>Chemin relatif</b> (<i>relative path</i>) : en partant du <b>dossier de travail</b>, chemin pour atteindre le fichier.
-                <ul>
-                    <li><script type="c-text">./foo/faa</script> : chemin relatif de <script type="c-text">faa</script> à partir de <script type="c-text">/tmp/</script>.</li>
-                    <li><script type="c-text">./../../</script> : chemin relatif de <script type="c-text">/tmp/</script> à partir de <script type="c-text">/tmp/foo/fee/</script>, avec <script type="c-text">../</script> le dossier parent. </li>
-                </ul>
-            </div>
-            <div><b>Dossier de travail</b> (<i>working directory</i>), noté <script type="c-text">./</script> : dossier dans lequel on se trouve actuellement.
-                <ul>
-                    <li><script type="c-bash">cd <h>$DIR</h></script> (<i><u>c</u>hange <u>d</u>irectory</i>) : se déplacer dans le dossier <script type="c-bash"><h>$DIR</h></script>. <todo>TODO: cd - & cd</todo></li>
-                    <li><script type="c-bash">pwd</script> (<i><u>p</u>rint <u>w</u>orking <u>d</u>irectory</i>) : afficher le dossier de travail.
-<div class="terminal"><pre>$ pwd
-/tmp/foo
-</pre></div>
-                    </li>
-                </ul>
-            </div>
-            <div>💡 Ce dossier est indiqué dans l'<b>invite de commande</b> :
-<div class="terminal"><pre><font color="#4CE64C"><b>demigda@demigda-Latitude-5400</b></font>:<font color="#295FCC"><b>/tmp/foo</b></font>$</pre></div>
-            </div>
-        </frame-uca>
-        <frame-uca>
-            <div>💡 <script type="c-bash">ls <h>$DIR</h></script> : liste le contenu d'un dossier.
-<div class="terminal">
-<pre>$ ls foo
-📄  faa  <font color="#0039AA"><b>📂  fee</b></font>  📄  fii  📄  fuu</pre>
 </div>
-            </div>
-            <div>⚠ <b>fichiers cachés</b> : fichiers dont le nom commence par <script type="c-text">.</script>, ne s'affiche qu'avec l'option <script type="c-bash">-A</script> (<u>a</u>ll).</div>
-        </frame-uca>
-    </frame-subsection>
-    <frame-subsection id="pathset" name="Ensemble de chemins">
+                </div>
+
+                <div class="exo">Écrivez les chemins identifiant les fichiers suivants :
+                    <div class="flex-3">
+                        <div class="span-2">
+                            <ul>
+                                <li></li>
+                            </ul>
+                        </div>
+
+<div class="terminal">
+<pre>
+<font color="#0039AA"><b>📂 /</b></font>
+<font color="#8A8A8A">└── </font><font color="#0039AA"><b>📂 tmp</b></font>
+    <font color="#8A8A8A">└── </font><font color="#0039AA"><b>📂 foo</b></font>
+        <font color="#8A8A8A">├── </font>📄 faa
+        <font color="#8A8A8A">├── </font><font color="#0039AA"><b>📂 fee</b></font>
+        <font color="#8A8A8A">└── </font>📄 fuu</pre>
+</div>
+                </div>
+                    </div>
+                </div>
+
+<div class="hint">Par convention, lorsque le chemin désigne un dossier, on le suffixera par <script type="c-text">/</script>, e.g. <script type="c-text">./foo/fee/</script>.</div>
+
+            </frame-uca>
+            <frame-uca>
+
+
+<div><b>Caractères de remplacements (<i>wildcard</i>),</b> dans un chemin, représentent :
+    <ul>
+        <li><script type="c-text">*</script> : 0 à plusieurs <b>caractères</b>, <i>e.g. <script type="c-bash">*.txt</script> : les fichiers d'extension ".txt".</i></li>
+        <li><script type="c-text">**/</script> : 0 à plusieurs <b>dossiers</b>, <i>e.g. <script type="c-bash">**/foo.txt</script> : les fichiers "foo.txt" dans un des sous dossiers.</i></li>
+        <li><script type="c-text">{<h>$VALS,...</h>}</script> : une <b>alternative</b>, <i>e.g. <script type="c-bash">{foo,faa}.txt</script> : "foo.txt" ou "faa.txt".</i></li>
+    </ul>
+</div>
+
+<div>
+    <div>Avant d'exécuter la ligne de commande, le Shell la réécrit en interprétant les caractères spéciaux (e.g. <script type="c-bash">*</script>, <script type="c-bash">~</script>).</div>
+
+    <div class="danger">Échapper (ou placer entre guillemets) un caractère empêche son interprétation par le Shell.<br/>E.g. <script type="c-bash">find . -name '*.txt'</script> où <script type="c-text">*</script> sera interprété par la commande (au lieu du Shell).
+    </div>
+</div>
+
+<div class="hint">Nous fournissons <script type="c-bash">dry-run <h>$CMDLINE</h></script> affichant la ligne de commande finale, sans l'exécuter :
+    <script type="c-shell">
+        $ dry-run cp *.txt -t ~
+        cp foo.txt faa.txt -t /home/user
+        $ !!
+    </script>
+</div>
+            </frame-uca>
+        </frame-subsection>
+    </frame-section>
+    <frame-section name="Le terminal">
+        <frame-subsection name="Une pseudo-imprimante">
         <frame-uca>
+
+            <div>Le terminal se comporte comme une imprimante :
+                <ul>
+                    <li>reçoit un flux séquentiel de caractères, qu'il "imprime" l'un après l'autre.</li>
+                    <li><b>mais</b> n'affiche que les dernières lignes à l'écran.</li>
+                    <li>permet de défiler (<i>scroll</i>) à l'écran l'ensemble des lignes "imprimées".</li>
+                </ul>
+            </div>
+
+            <div><b>Caractères de contrôle</b> : caractères non-imprimables transmis dans le même flux que les caractères à "imprimer", e.g. :
+                <ul class="flex-5">
+                    <li><script type="c-text">\n</script>, <i><u>n</u>ewline</i>.</li>
+                    <li><script type="c-text">\t</script>, <i><u>t</u>abulation</i>.</li>
+                    <li><script type="c-text">\b</script>, <i><u>b</u>ackspace</i>.</li>
+                    <li><script type="c-text">\a</script>, <i><u>a</u>lert</i>.</li>
+                    <li><script type="c-text">\e</script> ou <script type="c-text">\033</script>, <i><u>e</u>scape</i>.</li>
+                </ul>
+            <br/>
+            <b>Séquences de contrôle</b> : série de caractères commençant par <script type="c-text">\e</script> (aussi noté <script type="c-text">^[</script>).
             <ul>
-                <li>pour manipuler plusieurs fichiers ⇒ écrire leurs chemins uns à uns ☹.</li>
+                <li>pour des opérations plus spécifiques, <i>e.g. changer la couleur du texte, déplacer le curseur, etc.</i></li>
             </ul>
-            <ul>
-                <li>Représenter un ensemble de chemins avec les <b>caractères de remplacements</b> (<i>wildcard</i>) :
-                    <ul>
-                        <li><script type="c-text">*</script> : 0 à plusieurs <b>caractères</b>, <i>e.g. <script type="c-bash">./*.txt</script> : tous les fichiers d'extension ".txt"</i>.</li>
-                        <li><script type="c-text">**/</script> : 0 à plusieurs <b>dossiers</b>, <i>e.g. <script type="c-bash">./**/a.txt</script> : le fichier "a.txt" dans un des sous dossiers</i>.</li>
-                        <li><script type="c-text">{<h>$VALS,...</h>}</script> : une <b>alternative</b>, <i>e.g. <script type="c-bash">./{foo,faa}.txt</script> : "./foo.txt" ou "./faa.txt"</i>.</li>
-                    </ul>
-                </li>
+            </div>
+            <div>
+            C'est ainsi que certaines commandes Shell contrôlent le terminal, comme :
+            <ul class="flex-2">
+                <li><script type="c-bash">clear</script> : efface l'écran.</li>
+                <li><script type="c-bash">reset</script> : réinitialise le terminal.</li>
             </ul>
-            <div>💡 <script type="c-text">~<h>[$USER]</h>/</script> : alias représentant le chemin absolu du home de l'utilisateur <script type="c-text"><h>$USER</h></script> (actuel si non précisé).<br/>
-            💡 Utilisez l'auto-complétion afin d'éviter les erreurs lors de la saisie d'un chemin.
+
+            <div class="hint"><script type="c-bash">exit</script> : quitte le Shell actuel. Le terminal graphique associé est généralement fermé.<br/>
+            Elle n'envoie pas de séquence de contrôle.</div>
             </div>
         </frame-uca>
-    </frame-subsection>
-</frame-section>
+        </frame-subsection>
+        <frame-subsection name="Le clavier">
+            <frame-uca>
+                <div>Le terminal converti les événements clavier en un flux séquentiel de caractères.
+                    <ul>
+                        <li>lu par la commande en cours d'exécution, sinon par le Shell.</li>
+                        <li>peut contenir des caractères de contrôle (et séquences de contrôle).</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <div>Le terminal interprète certains raccourcis claviers sans les envoyer au flux (usuellement préfixés par <script type="c-text">^+⇧</script>) :
+                        <ul class="flex-2">
+                            <li><script type="c-text">^+⇧+C</script>, copier</li>
+                            <li><script type="c-text">^+⇧+V</script>, coller</li>
+                        </ul>
+                    </div>
+                    <br/>
+                    <div class="danger">Attention à ne pas oublier la touche majuscule pour la copie.<br/>
+                    En effet, <script type="c-text">^+C</script> met fin à la commande en cours d'exécution.</div>
+                </div>
+
+                <div class="hint">Sous Linux, vous pouvez aussi coller un texte sélectionné via le clic-milieu ou clic-molette de la souris.</div>
+            </frame-uca>
+        </frame-subsection>
+        <frame-subsection name="Commandes TUI">
+            <frame-uca>
+                <div>Des commandes Shell lancent des applications TUI dans le terminal, <i>e.g. <script type="c-bash">nano</script> lance un éditeur de texte :</i><br/>
+                    <div class="flex-2">
+                        <script type="c-shell">
+                            $ nano
+                        </script>
+                        <div class="center">
+                            <img src="../CM/assets/nano.png"/><br/>
+                            <i>Raccourcis claviers indiqués en bas de la fenêtre.</i>
+                        </div>
+                    </div>
+                </div>
+
+                <div>Lorsqu'une commande s'exécute, elle "prend" le contrôle du terminal (clavier et écran).
+                    <ul>
+                        <li>elle ne "rend" le contrôle qu'une fois son exécution terminée.</li>
+                        <li>on revient alors au Shell, permettant d'entrer de nouvelles commandes.</li>
+                    </ul>
+                </div>
+
+                <div class="hint">Les TUI sont plus ergonomiques, mais moins "standard".<br/>
+                Afin de faciliter votre apprentissage, nous proposerons des alternatives TUI lorsque possible.</div>
+            </frame-uca>
+            <frame-uca>
+                <div>Le Shell et les commandes écrivent dans un <b>tampon</b> (<i>buffer</i>), affiché ensuite à l'écran par le terminal.</div>
+
+                <div>En réalité, il dispose de 2 buffers (≈ 2 imprimantes, dont une seule est affichée à l'écran) :
+                    <ul class="flex-2">
+                        <li>le buffer <b>principal</b> : pour les commandes CLI.</li>
+                        <li>le buffer <b>alternatif</b> : pour les commandes TUI.</li>
+                    </ul>
+                </div>
+
+                <div class="flex-3 gap">
+                    <img style="width: 100%" src="../CM/assets/terminal-TUI0.svg"/>
+                    <img style="width: 100%" src="../CM/assets/terminal-TUI.svg"/>
+                    <img style="width: 100%" src="../CM/assets/terminal-TUI2.svg"/>
+                </div>
+
+                <div class="hint">Lorsqu'on quitte l'application TUI, on retrouve ainsi l'écran tel qu'il était avant son lancement.</div>
+            </frame-uca>
+        </frame-subsection>
+    </frame-section>
         </main>
     </body>
 </html>

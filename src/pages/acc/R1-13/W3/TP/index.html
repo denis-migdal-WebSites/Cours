@@ -2,7 +2,7 @@
 <html lang="fr">
     <head>
         <meta charset="utf8"/>
-        <title>TD3 (Accueil Numérique)</title>
+        <title>TP3 (Accueil Numérique)</title>
         <meta name="color-scheme" content="dark light">
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
         <link   href="/@templates/TPSubject@2026/index.css"  rel="stylesheet">
@@ -12,85 +12,129 @@
         <main>
             <h1>TD3 : Commandes Shell (2x2h)</h1>
 
+<h2>Consignes</h2>
+
+<div>En vous aidant de la cheat sheet fournie, vous effectuerez les opérations suivantes dans le terminal spécial (ASTerm), puis copierez la ligne de commande dans la zone de texte prévue à cet effet.</div>
+
+<div class="danger">L'utilisation d'IA casse tout l'intérêt des exercices, elle est ainsi <u><b>strictement interdite</b></u>.</div>
+
 <h2>Prise en main</h2>
 
+<h3>Installation</h3>
+
+<div>Afin d'éviter que vous ne supprimiez vos fichiers par erreur, vous exécuterez vos commandes dans un ordinateur virtual, par le biais d'un terminal spécial (ASTerm) que nous allons installer.</div>
+
+<!--
+    Dans scratch/public/S2_AdmSys/ASTerm/
+    - placer VM dans "ASTerm.ova"
+    - placer SSH keys dans "keys" (et renommer).
+
+-->
+
 <ol>
-    <li>Ouvrez un nouveau terminal (tapez <script type="c-text">Terminal</script> dans <script type="c-text">Activités</script> en haut à gauche).</li>
-    <li>Installez le serveur en copiant le texte ci-dessous dans le terminal :
+    <li>Ouvrez un nouveau terminal (tapez <script type="c-text">Terminal</script> dans <script type="c-text">Activités</script> en haut à gauche de l'écran).</li>
+    <li>Installez le terminal spécial en <u>copiant</u> le texte ci-dessous dans le terminal :
 <script type="c-bash">
 /home/scratch/denmigda/public/S2_AdmSys/ASTerm/ASTerm.install
 </script></li>
-    <li>Le serveur est désormais lancé. Vous pourrez le retrouver dans la liste des applications sous le nom "ASTerm".</li>
-    <li><q-text>Dans l'invite, identifiez le nom de l'ordinateur et de l'utilisateur actuel :</q-text></li>
+    <li>Le terminal spécial est désormais lancé. Vous le retrouvez dans la liste des applications sous le nom "ASTerm".</li>
 </ol>
 
-<todo>prise en main du terminal (#17+#18)</todo>
+<h3>Saisir des commandes</h3>
 
-<h2>Commandes Shell</h2>
+<ol>
+    <li>Écrivez <script type="c-bash">echo Hello</script> dans le terminal, puis tapez sur la touche entrée (<script type="c-text">⏎</script>)pour exécuter la commande.</li>
+    <li>Grâce aux flèches du clavier (<script type="c-text">←</script>/<script type="c-text">→</script>/<script type="c-text">↑</script>/<script type="c-text">↓</script>), modifiez la commande précédente en <script type="c-bash">echo Hell no</script>, puis exécutez-la.</li>
+    <li><q-text @qid="0faf857e">En utilisant les raccourcis clavier de copie, exécutez la commande <script type="c-bash">echo ~</script>, puis donnez son résultat ci-dessous :</q-text></li>
+    <li><q-text @qid="8d10aee5">En utilisant le clic-molette de la souris, exécutez la commande <script type="c-bash">echo '~'</script>, puis donnez son résultat ci-dessous :</q-text></li>
+    <li>Tapez <script type="c-text">e</script> dans le terminal, puis utilisez la touche tabulation 2 fois (<script type="c-text">⭾+⭾</script>) pour voir les possibilités d'auto-complétion.</li>
+    <li>Ajoutez <script type="c-text">c</script>, puis rappuyez sur la touche tabulation (<script type="c-text">⭾</script>) pour auto-compléter la commande que vous exécuterez.</li>
+</ol>
 
-<div>Vous utilisez des lignes de commandes afin d'effectuer les opérations suivantes sur ASTerm.</div>
+<h3>Caractères spéciaux</h3>
+
+<div class="hint">Pour rappel, nous fournissons la commande <script type="c-bash">dry-run <h>$CMDLINE</h></script> qui affiche la ligne de commande après réécriture du shell, sans l'exécuter. Vous pouvez ensuite exécuter la commande via la commande <script type="c-bash">!!</script>.</div>
+
+<ol>
+    <li><q-text @qid="c05260a7">Exécutez <script type="c-bash">dry-run echo ~</script> et <script type="c-bash">dry-run echo '~'</script>, puis expliquez les résultats obtenus :</q-text></li>
+    <li><q-text @qid="a2b4a7cc">Exécutez <script type="c-bash">dry-run {A,B}</script>, <script type="c-bash">dry-run '{A,B}'</script> et <script type="c-bash">dry-run {A, B}</script>, puis expliquez les résultats obtenus :</q-text></li>
+</ol>
+
+<h2>Navigation</h2>
+
+<h3>Invite de commande</h3>
+
+<ol>
+    <li>En observant l'invite de commande, identifiez :
+        <ol class="flex-3">
+            <li><q-text @qid="8bdfec35">Le nom de l'ordinateur :</q-text></li>
+            <li><q-text @qid="05eeb939">Le nom de l'utilisateur :</q-text></li>
+            <li><q-text @qid="55702628">Le dossier de travail :</q-text></li>
+        </ol>
+    </li>
+</ol>
 
 <h3>Lister</h3>
-
 <ol>
-    <li><q-text> Affichez le chemin du répertoire de travail actuel.</q-text></li>
-    <li><q-text> Comment expliquez vous que le résultat de la commande soit différente de l'invite ?</q-text></li>
-    <li><q-text> Affichez le contenu du dossier racine (<b>sans</b> les fichiers cachés).</q-text></li>
-    <li><q-text> Affichez le contenu du dossier courant (<b>avec</b> les fichiers cachés).</q-text></li>
-    <li><q-text>Affichez le contenu du dossier courant (<b>avec</b> les fichiers cachés <b>et</b> les détails).</q-text></li>
-    <li><q-text>Quelle est la taille et date de dernière modification du fichier <script type="c-text">.bashrc</script> ?</q-text></li>
-    <li><q-text>Recherchez dans le dossier <script type="c-text">/var/log/</script> les fichiers d'extension <script type="c-text">.log</script>.</q-text></li>
+    <li><q-text @qid="03ff5656" @lang="bash"> Affichez le chemin du répertoire de travail actuel.</q-text></li>
+    <li><q-text @qid="ded2c738" @lang="bash"> Affichez le contenu du dossier courant (<b>sans</b> les fichiers cachés).</q-text></li>
+    <li><q-text @qid="61392e6f" @lang="bash"> Affichez le contenu du dossier courant (<b>avec</b> les fichiers cachés).</q-text></li>
+    <li><q-text @qid="8052336b" @lang="bash"> Affichez le contenu du dossier racine.</q-text></li>
+    <li><q-text @qid="d92c1ecf" @lang="bash"> Affichez l'arborescence (option <script type="c-bash">--tree</script>) du dossier TP (utilisez un chemin relatif) :</q-text></li>
 </ol>
 
-<h3>Navigation</h3>
+<h3>Naviguer</h3>
 
 <ol>
-    <li><q-text>Allez dans le dossier racine (chemin <b>absolu</b>).</q-text></li>
-    <li><q-text>Allez dans votre dossier home.</q-text></li>
-    <li><q-text>Retournez au dossier précédent.</q-text></li>
-    <li><q-text>Allez dans le home de <script type="c-text">zeus</script> en utilisant <script type="c-text">~<h>$USER</h></script>.</q-text></li>
-    <li><q-text>Allez dans le dossier <script type="c-text">/var/log/</script> via un chemin <b>relatif</b>).</q-text></li>
+    <li><q-text @qid="78c7fad8" @lang="bash">Allez dans le dossier racine (chemin <b>absolu</b>).</q-text></li>
+    <li><q-text @qid="cb584583" @lang="bash">Allez dans votre dossier home.</q-text></li>
+    <li><q-text @qid="d4ac7f92" @lang="bash">Retournez au dossier précédent.</q-text></li>
+    <li><q-text @qid="af4a2761" @lang="bash">Allez dans le home de <script type="c-text">zeus</script> en utilisant <script type="c-text">~<h>$USER</h></script>.</q-text></li>
+    <li><q-text @qid="2a43e096" @lang="bash">Recherchez dans le dossier <script type="c-text">/var/log/</script> les fichiers d'extension <script type="c-text">.log</script>.</q-text></li>
+    <li><q-text @qid="a8e45356" @lang="bash">Allez dans le dossier <script type="c-text">/var/log/</script> via un chemin <b>relatif</b>).</q-text></li>
 </ol>
+
+<h2>Manipulations de fichiers</h2>
+
+<div>Vous allez manipuler des fichiers dans le dossier <script type="c-bash">~/TP/TP0/</script>. Pour cela, nous vous fournissons la commande <script type="c-bash">tp0-reset</script> permettant de (re-)créer ce dossier pour les besoins de cet exercice. En cas d'erreurs dans la manipulation des fichiers, vous pourrez utiliser cette commande pour réinitialiser l'exercice afin de repartir sur des bases propres.</div>
+
+<div class="hint">N'hésitez pas à utiliser la commande <script type="c-bash">ls --tree <h>$DIR</h></script> afin de visualiser l'état de l'arborescence.</div>
 
 <h3>Création et édition de fichiers</h3>
 
 <ol>
-    <li><q-text>Créez un nouveau fichier <script type="c-text">/tmp/test</script> vide.</q-text></li>
-    <li><q-text>En <b>une seule</b> ligne de commande créez l'arborescence ci-dessous :
-  <script type="c-bash">
-    📂 /tmp/
-    ├── 📂 A
-    │   ├── 📂 1
-    │   └── 📂 2
-    └── 📂 B
-        ├── 📂 1
-        └── 📂 2
-  </script></q-text></li>
+    <li>Initialisez l'arborescence.</li>
+    <li><q-text @qid="aedde650" @lang="bash">En <b>une seule</b> ligne de commande créez un dossier <script type="c-text">share/@me/</script> pour <u>tous</u> les dossiers de <script type="c-text">~/TP/TP0/</script> :</q-text></li>
+    <li><q-text @qid="6f43f7e8" @lang="shell">En <b>une seule</b> ligne de commande créez un fichier <u>vide</u> <script type="c-text">share/logs.txt/</script> pour les dossiers <script type="c-text">Alain/</script> et <script type="c-text">Lou/</script>:</q-text></li>
 </ol>
 
 <h3>Déplacer, copier et renommer</h3>
 
-<todo>rendre questions moins dépendantes les unes des autres (reset cmd ?).</todo>
-<todo>tree cmd to visualise ?</todo>
-
+<!--
 <ol>
     <li><q-text> <b>Copiez</b> le <b>dossier</b> <script type="c-bash">B/</script> dans le dossier <script type="c-bash">A/</script>.</q-text></li>
     <li><q-text> <b>Déplacez</b> <script type="c-bash">A/B/</script> dans le dossier <script type="c-bash">A/1/</script>.</q-text></li>
     <li><q-text> <b>Déplacez et renommez</b> le dossier <script type="c-bash">A/1/B/</script> en <script type="c-bash">/tmp/C</script>.</q-text></li>
     <li><q-text> <b>Copiez et renommez</b> le <b>dossier</b> <script type="c-bash">C/</script> en <script type="c-bash">/tmp/D</script>.</q-text></li>
-    <li><q-text> <b>Copiez</b> les <b>dossiers</b> <script type="c-bash">{A,B,C}/</script> du serveur vers le dossier <script type="c-bash">/tmp/</script> du poste de travail.</q-text></li>
 </ol>
+
+-->
 
 <h3>Supprimer des fichiers</h3>
 
 <ol>
-    <li><q-text> Placez les dossiers <script type="c-bash">B/2/</script> et <script type="c-bash">A/2/</script> dans la corbeille.</q-text></li>
-    <li><q-text> Listez le contenu de la corbeille.</q-text></li>
-    <li><q-text> Restaurez le dossier <script type="c-bash">A/2/</script>.</q-text></li>
-    <li><q-text> Videz la corbeille.</q-text></li>
-    <li><q-text> Avec la commande <script type="c-bash">rm</script>, supprimez le dossier <script type="c-bash">A/2/</script>.</q-text></li>
-    <li><q-text> Ce dossier apparaît-il dans la corbeille ? Pourquoi ?</q-text></li>
+    <li><q-text @qid="de1a7da7" @lang="bash"> Placez les fichiers <script type="c-bash">Paul/todo</script> et <script type="c-bash">Lou/planning</script> dans la corbeille.</q-text></li>
+    <li><q-text @qid="7a54a176" @lang="bash"> Listez le contenu de la corbeille.</q-text></li>
+    <li><q-text @qid="a67dbad2" @lang="bash"> Restaurez le fichier <script type="c-bash">Lou/planning</script>.</q-text></li>
+    <li><q-text @qid="3c390bee" @lang="bash"> Videz la corbeille.</q-text></li>
+    <li><q-text @qid="d06253b1" @lang="bash"> Avec la commande <script type="c-bash">rm</script>, supprimez le dossier <script type="c-bash">Lou/planning</script>.</q-text></li>
+    <li><q-text @qid="b847b892" @lang="bash">Listez le contenu de la corbeille. Le fichier apparaît-il dans la corbeille ? Pourquoi ?</q-text></li>
 </ol>
+
+<h2>Commandes TUI</h2>
+
+- NANO
+- GDU
 
         </main>
     </body>
