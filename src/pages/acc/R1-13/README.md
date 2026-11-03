@@ -9,3 +9,8 @@ TP2
 ---
 
 - Demander à faire des fiches, laisser ~1h15, puis faire des retours.
+
+CM3
+---
+
+~5min par exo.

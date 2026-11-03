@@ -9,3 +9,7 @@
         <li><script type="c-bash">!<h>$CMD</h></script> : réexécute la dernière commande <script type="c-bash"><h>$CMD</h></script> exécutée.</li>
     </ul>
 </div>
+
+Votre home est usuellement contenu dans le dossier <script type="c-text">/home/<h>$USER]</h>/</script>, et est usuellement organisé de la sorte :
+
+├── 📄 .bashrc         # [NE PAS TOUCHER] configuration du shell (bash).
