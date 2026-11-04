@@ -144,10 +144,39 @@
 
 <h2>Commandes TUI</h2>
 
-- NANO + usage (principal).
-- GDU + usage (d pour delete ? pour aide ?).
+<h3>Éditeur de fichier (nano)</h3>
 
-<div>💡 La commande <script type="c-text">gdu <h>[$DIR]</h></script> permet de visualiser les fichiers et dossiers les plus volumineux.</div>
+<div><script type="c-bash">nano <h>[$FILE]</h></script> permet de modifier un fichier via une interface TUI. Ses raccourcis sont rappelés en bas de l'écran, dont :
+    <ul class="flex-3">
+        <li><script type="c-text">^+X</script> : quitter</li>
+        <li><script type="c-text">^+O</script> : enregistrer</li>
+        <li><script type="c-text">^+G</script> : afficher la documentation</li>
+    </ul>
+</div>
+
+<ol>
+    <li><q-text @qid="fb26ddd4" @lang="bash">À l'aide de nano, modifiez le contenu du fichier <script type="c-text">Lou/README.txt</script> :</q-text></li>
+    <li>Fermez le fichier, puis rouvrez-le afin de vérifier que vos modifications ont bien été enregistrées.</li>
+</ol>
+
+<h3>Explorateur de fichier (gdu)</h3>
+
+<div><script type="c-bash">gdu <h>[$DIR]</h></script> ouvre un explorateur de fichiers TUI. Entre crochets, il indique le volume occupé par chaque fichier.
+    <ul class="flex-3">
+        <li><script type="c-text">Q</script> : quitter.</li>
+        <li><script type="c-text">↑</script>/<script type="c-text">↓</script> : naviguer la liste des fichiers.</li>
+        <li><script type="c-text">←</script>/<script type="c-text">→</script> : quitter/entrer dans un dossier.</li>
+        <li><script type="c-text">D</script> : supprimer le fichier.</li>
+        <li><script type="c-text">I</script> : afficher les informations du fichier.</li>
+        <li><script type="c-text">?</script> : afficher la documentation.</li>
+    </ul>
+</div>
+
+<ol>
+    <li>Utilisez <script type="c-text">gdu</script> pour naviguer l’arborescence de <script type="c-text">TP0</script>. Supprimez quelques fichiers.</li>
+</ol>
+
+<div class="hint">La commande <script type="c-text">gdu</script> est relativement pratique pour visualiser les fichiers et dossiers les plus volumineux.</div>
 
         </main>
     </body>
