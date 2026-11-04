@@ -251,24 +251,25 @@
 
                     <div><b>Signature :</b> décrit l'usage d'une commande.
                         <ul>
-                            <li><script type="c-bash">rm <h>[-r]</h> <h>$FILE...</h></script> : <b>supprimer</b> (<i><u>r</u>e<u>m</u>ove</i>).</li>
-                            <li><script type="c-bash">cp <h>[-r]</h> <h>$SRC...</h> <h>-t|-T $DST</h></script> : <b>copier</b> (<i><u>c</u>o<u>p</u>y</i>).</li>
-                            <li><script type="c-bash">mv <h>$SRC...</h> <h>-t|-T $DST</h></script> : <b>déplacer</b> (<i><u>m</u>o<u>v</u>e</i>).</li>
+                            <li><script type="c-bash">rm <h>[-r]</h> <h>$FILE...</h></script> (<i><u>r</u>e<u>m</u>ove</i>) : <b>supprimer</b>.</li>
+                            <li><script type="c-bash">cp <h>[-r]</h> <h>$SRC...</h> <h>-t|-T $DST</h></script> (<i><u>c</u>o<u>p</u>y</i>) : <b>copier</b>.</li>
+                            <li><script type="c-bash">mv <h>$SRC...</h> <h>-t|-T $DST</h></script> (<i><u>m</u>o<u>v</u>e</i>) : <b>déplacer</b>.</li>
                         </ul>
                         <br/>
                         <div><b>Options :</b> modifie le comportement des commandes:
                             <ul>
-                                <li><script type="c-bash"><h>-r</h></script> : si dossier (<i><u>r</u>ecursive</i>).</li>
-                                <li><script type="c-bash"><h>-t $DST</h></script> <b>dossier</b> où placer <script type="c-bash"><h>$SRC</h></script> (<i><u>t</u>arget</i>).</li>
-                                <li><script type="c-bash"><h>-T $DST</h></script> nouv. <b>chemin</b> de <script type="c-bash"><h>$SRC</h></script> (<i>not  <u>t</u>arget</i>).</li>
+                                <li><script type="c-bash"><h>-r</h></script> (<i><u>r</u>ecursive</i>) : si dossier.</li>
+                                <li><script type="c-bash"><h>-t $DST</h></script> (<i><u>t</u>arget</i>) <b>dossier</b> où placer le fichier.</li>
+                                <li><script type="c-bash"><h>-T $DST</h></script> (<i>not  <u>t</u>arget</i>) nouveau <b>nom</b> du fichier.</li>
                             </ul>
                         </div>
                     </div>
 
                     <div>
                         <ol>
-                            <li><b>recopier</b> la signature de la commande.</li>
-                            <li><b>remplacer</b> les encadrés.</li>
+                            <li><b>Identifier</b> la commande à utiliser.</li>
+                            <li><b>Recopier</b> sa signature.</li>
+                            <li><b>Remplacer</b> les encadrés.</li>
                         </ol>
                     <table style="border: 1px solid light-dark(black, white);">
                         <thead>
@@ -309,9 +310,25 @@
                 </div>
                 </div>
 
-                <div class="exo">...<br/><br/><br/><br/><br/></div>
+                <div class="exo">Donnez les lignes de commandes pour :
+                    <div class="flex-3">
+                        <ul class="span-2">
+                            <li>copier le fichier <script type="c-text">foo</script>, en nommant sa copie <script type="c-text">fii</script>.</li>
+                            <li>déplacer le fichier <script type="c-text">faa</script> vers le dossier <script type="c-text">fuu</script>.</li>
+                            <li>supprimer le dossier <script type="c-text">fuu</script>.</li>
+                        </ul>
+                        <script type="c-text" style="font-style: normal;">
+                            ├── 📂 fuu
+                            ├── 📄 faa
+                            └── 📄 foo
+                        </script>
+                    </div>
+                </div>
             </frame-uca>
             <frame-uca>
+
+                <div class="hint">Nous fournissons une <i>cheat sheet</i> donnant l'usage simplifié des commandes que nous utiliserons.</div>
+
                 <div>La manière d'accéder à la documentation d'une commande dépend de sa nature (cf <script type="c-bash">type -t <h>$CMD</h></script>) :
                     <div class="flex-2">
                         <script type="c-shell">
@@ -332,8 +349,6 @@
                 </div>
                 <div>
                     <div class="hint">La commande <script type="c-bash">tldr <h>$CMD</h></script> est une version simplifiée de <script type="c-bash">man</script> et de <script type="c-bash">help</script>.</div>
-
-                    <div class="hint">Nous fournissons une <i>cheat sheet</i> donnant l'usage simplifié des commandes que nous utiliserons.</div>
                 </div>
             </frame-uca>
         </frame-subsection>
@@ -409,6 +424,26 @@
     </script>
 </div>
 
+<div class="hint">En réalité, un répertoire est un fichier spécial répertoriant la liste des fichiers/dossiers qu'il contient.
+    <div class="flex-3 gap">
+        <script type="c-text">
+            30 .
+            45 ..
+            72 faa
+        </script>
+        <div class="span-2">
+            Chaque entrée associe un identifiant de fichier (<i>inode</i>) à un nom.
+            <br/>
+            <br/>
+            <script type="c-text">.</script> et <script type="c-text">..</script> sont des entrées spéciales correspondant :
+                <ul class="flex-2">
+                    <li><script type="c-text">.</script> : au dossier lui-même.</li>
+                    <li><script type="c-text">..</script> : à son dossier parent.</li>
+                </ul>
+        </div>
+    </div>
+</div>
+
 <div class="hint">Les <b>répertoires</b> (<i>directory</i>) sont aussi appelés <b>dossiers</b> (<i>folder</i>) :
     <ul>
         <li><i>Répertoire :</i> terme technique consacré.</li>
@@ -436,8 +471,8 @@
 
                 <div><b>Les commandes :</b>
                     <ul>
-                        <li><script type="c-bash">ls <h>[$DIR]</h></script> (<i><u>l</u>i<u>s</u>t</i>) affiche le contenu du dossier (<i>par défaut, du répertoire de travail</i>).</li>
-                        <li><script type="c-bash">cd <h>[$DIR]</h></script> (<i><u>c</u>hange <u>d</u>irectory</i>) aller dans le dossier (<i>par défaut, répertoire personnel</i>).</li>
+                        <li><script type="c-bash">ls <h>[$DIR]</h></script> (<i><u>l</u>i<u>s</u>t</i>) <b>affiche le contenu</b> du dossier (<i>si omis, du répertoire de travail</i>).</li>
+                        <li><script type="c-bash">cd <h>[$DIR]</h></script> (<i><u>c</u>hange <u>d</u>irectory</i>) <b>aller dans</b> le dossier (<i>si omis, répertoire personnel</i>).</li>
                     </ul>
                 </div>
                     
@@ -464,9 +499,11 @@
     </div>
     <div slide="2">
         <div class="flex-3">
-            <div class="span-2 exo">Quelles commandes pour :
+            <div class="span-2 exo">Donnez les lignes de commandes pour :
                 <ul>
-                    <li>XXX</li>
+                    <li>depuis la racine, aller dans le dossier <script type="c-text">faa</script>.</li>
+                    <li>depuis le dossier <script type="c-text">faa</script>, aller dans <script type="c-text">User2</script>.</li>
+                    <li>depuis <script type="c-text">User2</script>, aller dans <script type="c-text">User1</script>, puis afficher le contenu de <script type="c-text">faa</script>.</li>
                 </ul>
             </div>
             <script type="c-shell">
@@ -480,7 +517,7 @@
         </div>
     </div>
 </div>
-    <div class="hint"><script type="c-text">..</script> : dossier parent du répertoire courant.
+    <div class="hint"><script type="c-bash">cd ..</script> permet de remonter l'arborescence (<script type="c-bash">..</script> désignant le dossier parent du répertoire de travail).
     </div>
 
     <div class="hint"><script type="c-bash">ls --tree <h>[$DIR]</h></script> : affiche l'arborescence du dossier <i>(option spécifique à la version utilisée)</i>.</div>
@@ -547,6 +584,7 @@
         </frame-subsection>
         <frame-subsection name="Les chemins">
             <frame-uca>
+                <!-- TODO: animation -->
                 <div class="flex-4">
                     <div class="span-3">
                         <div><b>Chemin (<i>path</i>) :</b> "route" à emprunter pour atteindre un fichier.
@@ -575,23 +613,23 @@
 </div>
                 </div>
 
-                <div class="exo">Écrivez les chemins identifiant les fichiers suivants :
+                <div class="exo">Écrivez les chemins identifiant le fichier <script type="c-text">foo</script> :
                     <div class="flex-3">
                         <div class="span-2">
                             <ul>
-                                <li></li>
+                                <li>son chemin absolu.</li>
+                                <li>son chemin relatif depuis la racine.</li>
+                                <li>son chemin relatif depuis <script type="c-text">User2</script>.</li>
                             </ul>
                         </div>
-
-<div class="terminal">
-<pre>
-<font color="#0039AA"><b>📂 /</b></font>
-<font color="#8A8A8A">└── </font><font color="#0039AA"><b>📂 tmp</b></font>
-    <font color="#8A8A8A">└── </font><font color="#0039AA"><b>📂 foo</b></font>
-        <font color="#8A8A8A">├── </font>📄 faa
-        <font color="#8A8A8A">├── </font><font color="#0039AA"><b>📂 fee</b></font>
-        <font color="#8A8A8A">└── </font>📄 fuu</pre>
-</div>
+                        <script type="c-shell" style="font-style: normal;">
+                            📂 /
+                            ├── 📂 User1
+                            |   ├── 📂 faa
+                            |   └── 📄 foo
+                            └── 📂 User2
+                                └── 📄 faa
+                        </script>
                 </div>
                     </div>
                 </div>
@@ -601,29 +639,119 @@
             </frame-uca>
             <frame-uca>
 
-
-<div><b>Caractères de remplacements (<i>wildcard</i>),</b> dans un chemin, représentent :
+<div>Lorsqu'on manipule un ensemble de fichiers, mieux vaut éviter d'écrire leurs chemins uns à uns.
     <ul>
-        <li><script type="c-text">*</script> : 0 à plusieurs <b>caractères</b>, <i>e.g. <script type="c-bash">*.txt</script> : les fichiers d'extension ".txt".</i></li>
-        <li><script type="c-text">**/</script> : 0 à plusieurs <b>dossiers</b>, <i>e.g. <script type="c-bash">**/foo.txt</script> : les fichiers "foo.txt" dans un des sous dossiers.</i></li>
-        <li><script type="c-text">{<h>$VALS,...</h>}</script> : une <b>alternative</b>, <i>e.g. <script type="c-bash">{foo,faa}.txt</script> : "foo.txt" ou "faa.txt".</i></li>
+        <li>un seul argument pour représenter un ensemble de chemins.</li>
     </ul>
 </div>
 
-<div>
-    <div>Avant d'exécuter la ligne de commande, le Shell la réécrit en interprétant les caractères spéciaux (e.g. <script type="c-bash">*</script>, <script type="c-bash">~</script>).</div>
+<div><b>Métacaractères</b>, dans un argument représentent :
+    <ul class="flex-3">
+        <li><script type="c-text">*</script> : 0 à plusieurs <b>caractères</b></li>
+        <li><script type="c-text">**/</script> : 0 à plusieurs <b>dossiers</b></li>
+        <li><script type="c-text">{<h>$VALS,...</h>}</script> : une <b>alternative</b></li>
+    </ul>
+</div>
 
-    <div class="danger">Échapper (ou placer entre guillemets) un caractère empêche son interprétation par le Shell.<br/>E.g. <script type="c-bash">find . -name '*.txt'</script> où <script type="c-text">*</script> sera interprété par la commande (au lieu du Shell).
+<div><i>Par exemple :</i>
+    <div class="flex-4">
+        <ul class="span-3">
+            <table style="border: 1px solid light-dark(black, white)">
+                <thead>
+                    <tr>
+                        <th>Argument</th>
+                        <th>Signification</th>
+                        <th>Chemins</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><script type="c-text">./*.txt</script></td>
+                        <td>les fichiers d'extension ".txt"</td>
+                        <td><script type="c-text">./foo.txt</script>, <script type="c-text">./faa.txt</script></td>
+                    </tr>
+                    <tr>
+                        <td><script type="c-text">./**/foo.txt</script></td>
+                        <td>les fichiers "foo.txt" (récursif)</td>
+                        <td><script type="c-text">./foo.txt</script>, <script type="c-text">./User1/foo.txt</script></td>
+                    </tr>
+                    <tr>
+                        <td><script type="c-text">{a,b}{x,y}</script></td>
+                        <td>les combinaisons possibles</td>
+                        <td><script type="c-text">ax</script>, <script type="c-text">ay</script> <script type="c-text">bx</script> <script type="c-text">by</script></td>
+                    </tr>
+                </tbody>
+            </table>
+        </ul>
+        <script type="c-text">
+            📂 .
+            ├── 📂 User1
+            |   ├── 📄 foo.txt
+            ├── 📄 foo.txt
+            └── 📄 faa.txt
+        </script>
     </div>
 </div>
 
-<div class="hint">Nous fournissons <script type="c-bash">dry-run <h>$CMDLINE</h></script> affichant la ligne de commande finale, sans l'exécuter :
-    <script type="c-shell">
-        $ dry-run cp *.txt -t ~
-        cp foo.txt faa.txt -t /home/user
-        $ !!
-    </script>
+<div class="danger"><script type="c-text">*</script> ne peut apparaître qu'en fin de chemin.</div>
+    </frame-uca>
+    </frame-subsection>
+    <frame-subsection name="Réécritures de la ligne de commande">
+    <frame-uca>
+<div>
+    <div>Avant d'exécuter la ligne de commande, le Shell la réécrit en interprétant les métacaractères (dont <script type="c-bash">'</script>, <script type="c-bash">~</script>).</div>
+    <ul>
+        <li>il génère ainsi les arguments correspondant au motif fourni.</li>
+        <li><script type="c-text">*</script> et <script type="c-text">**</script> sont remplacés tel que chaque argument généré désigne un chemin <u>existant</u>.</li>
+    </ul>
 </div>
+
+<div class="hint">Nous fournissons <script type="c-bash">dry-run <h>$CMDLINE</h></script> affichant les arguments qui seraient réellement transmis à la commande (i.e. après les réécritures du Shell). Vous pourrez ensuite l'exécuter via la commande <script type="c-bash">!!</script>.
+    <div class="flex-2">
+        <script type="c-shell">
+            $ dry-run echo [{A,B}]
+            echo <h>[A]</h> <h>[B]</h>
+            $ !!
+        </script>
+        <script type="c-shell">
+            $ dry-run cp ./*.txt -t ~
+            cp <h>./foo.txt</h> <h>./faa.txt</h> <h>-t</h> <h>/home/user</h>
+            $ !!
+        </script>
+    </div>
+</div>
+</frame-uca>
+<frame-uca>
+<div class="danger">Lorsque le Shell échoue à trouver une correspondance, <script type="c-text">*</script> et <script type="c-text">**</script> sont laissés tels quels :
+        <div class="flex-3">
+            <script type="c-shell">
+                $ dry-run echo ./*.txt
+                echo <h>./foo.txt</h> <h>./faa.txt</h>
+            </script>
+            <script type="c-shell">
+                $ dry-run echo ./*.tx
+                echo <h>./*.tx</h>
+            </script>
+            <script type="c-shell">
+                ├── 📄 foo.txt
+                └── 📄 faa.txt
+            </script>
+    </div>
+</div>
+
+<div class="danger">Échapper (ou placer entre guillemets) un caractère empêche son interprétation par le Shell.<br/>E.g. si <script type="c-text">*</script> doit être envoyé à la commande au lieu d'être interprété par le Shell :
+        <div class="flex-2">
+        <script type="c-shell">
+            $ dry-run find . -name *.txt
+            find <h>.</h> <h>-name</h> <h>foo.txt</h> <h>faa.txt</h>
+        </script>
+        <script type="c-shell">
+            $ dry-run find . -name '*.txt'
+            find <h>.</h> <h>-name</h> <h>*.txt</h>
+        </script>
+    </div>
+</div>
+
             </frame-uca>
         </frame-subsection>
     </frame-section>

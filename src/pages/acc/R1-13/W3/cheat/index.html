@@ -27,28 +27,28 @@
 <h4>Navigation</h4>
 
 <ul>
-    <li><script type="c-bash">pwd</script> : affiche le dossier de travail (<i><u>p</u>rint <u>w</u>orking <u>d</u>irectory</i>).</li>
-    <li><script type="c-bash">ls <h>[-A]</h> <h>[$DIR]</h></script> : <u>l</u>i<u>s</u>te le contenu du dossier (dossier de travail si non indiqué), dont <script type="c-bash">-A</script> (<i><u>a</u>ll</i>) fichiers cachés.</li>
-    <li><script type="c-bash">cd <h>[$DIR|-]</h></script> : se déplacer dans le dossier (<i><u>c</u>hange <u>d</u>irectory</i>). Dossier précédent si -, home si non indiqué.</li>
+    <li><script type="c-bash">pwd</script> (<i><u>p</u>rint <u>w</u>orking <u>d</u>irectory</i>) : affiche le chemin du dossier de travail.</li>
+    <li><script type="c-bash">ls <h>[-A]</h> <h>[$DIR]</h></script> : <u>l</u>i<u>s</u>te le contenu du dossier (si omis, dossier de travail). <script type="c-bash">-A</script> (<i><u>a</u>ll</i>) dont fichiers cachés.</li>
+    <li><script type="c-bash">cd <h>[$DIR|-]</h></script> (<i><u>c</u>hange <u>d</u>irectory</i>) : se déplacer dans le dossier (si omis, dossier <script type="c-bash">~</script>, si <script type="c-bash">-</script> revenir au dossier précédent).</li>
 </ul>
 
 <h4>Manipuler les fichiers</h4>
 
 <ul>
-    <li><script type="c-bash">mkdir <h>[-p]</h> <h>$DIR...</h></script> : <b>créer des dossiers</b> (<i><u>m</u>a<u>k</u>e <u>dir</u>ectory</i>).<span style="float:right"><script type="c-bash"><h>-p</h></script> créer les <u>p</u>arents dossiers si inexistant.</span></li>
+    <li><script type="c-bash">mkdir <h>[-p]</h> <h>$DIR...</h></script> (<i><u>m</u>a<u>k</u>e <u>dir</u>ectory</i>) : <b>créer des dossiers</b>.<span style="float:right"><script type="c-bash"><h>-p</h></script> créer les <u>p</u>arents dossiers si inexistant.</span></li>
     <li><script type="c-bash">touch <h>$FILE...</h></script> : <b>créer des fichiers</b> vides.</li>
 </ul>
 
 <div class="flex-2">
     <ul>
-        <li><script type="c-bash">rm <h>[-r]</h> <h>$FILE...</h></script> : <b>supprimer</b> (<i><u>r</u>e<u>m</u>ove</i>).</li>
-        <li><script type="c-bash">cp <h>[-r]</h> <h>$SRC...</h> <h>-t|-T $DST</h></script> : <b>copier</b> (<i><u>c</u>o<u>p</u>y</i>).</li>
-        <li><script type="c-bash">mv      <h>$SRC...</h> <h>-t|-T $DST</h></script> : <b>déplacer</b> (<i><u>m</u>o<u>v</u>e</i>).</li>
+        <li><script type="c-bash">rm <h>[-r]</h> <h>$FILE...</h></script> (<i><u>r</u>e<u>m</u>ove</i>) : <b>supprimer</b>.</li>
+        <li><script type="c-bash">cp <h>[-r]</h> <h>$SRC...</h> <h>-t|-T $DST</h></script> (<i><u>c</u>o<u>p</u>y</i>) : <b>copier</b>.</li>
+        <li><script type="c-bash">mv      <h>$SRC...</h> <h>-t|-T $DST</h></script> (<i><u>m</u>o<u>v</u>e</i>) : <b>déplacer</b>.</li>
     </ul>
     <ul>
-        <li><script type="c-bash"><h>-r</h></script> : si dossier (<i><u>r</u>ecursive</i>).</li>
-        <li><script type="c-bash"><h>-t $DST</h></script> <b>dossier</b> dans lequel placer <script type="c-bash"><h>$SRC</h></script> (<i><u>t</u>arget</i>).</li>
-        <li><script type="c-bash"><h>-T $DST</h></script> nouveau <b>chemin</b> de <script type="c-bash"><h>$SRC</h></script> (<i>not  <u>t</u>arget</i>).</li>
+        <li><script type="c-bash"><h>-r</h></script> (<i><u>r</u>ecursive</i>) : si dossier.</li>
+        <li><script type="c-bash"><h>-t $DST</h></script> (<i><u>t</u>arget</i>) <b>dossier cible</b> où placer le fichier.</li>
+        <li><script type="c-bash"><h>-T $DST</h></script> (<i>not  <u>t</u>arget</i>) nouveau <b>nom/chemin</b> du fichier.</li>
     </ul>
 </div>
 

@@ -14,7 +14,7 @@
 
 <h2>Consignes</h2>
 
-<div>En vous aidant de la cheat sheet fournie, vous effectuerez les opérations suivantes dans le terminal spécial (ASTerm), puis copierez la ligne de commande dans la zone de texte prévue à cet effet.</div>
+<div>En vous aidant de la cheat sheet fournie (ainsi que de vos supports de cours), vous effectuerez les opérations qui vous seront demandées dans un terminal spécial (ASTerm). Vous copierez ensuite la ligne de commande exécutée dans la zone de texte prévue à cet effet.</div>
 
 <div class="danger">L'utilisation d'IA casse tout l'intérêt des exercices, elle est ainsi <u><b>strictement interdite</b></u>.</div>
 
@@ -43,21 +43,21 @@
 <h3>Saisir des commandes</h3>
 
 <ol>
-    <li>Écrivez <script type="c-bash">echo Hello</script> dans le terminal, puis tapez sur la touche entrée (<script type="c-text">⏎</script>)pour exécuter la commande.</li>
+    <li>Tapez <script type="c-text">e</script> dans le terminal, puis utilisez la touche tabulation 2 fois (<script type="c-text">⭾+⭾</script>) pour voir les possibilités d'auto-complétion.</li>
+    <li>Ajoutez <script type="c-text">c</script>, puis rappuyez sur la touche tabulation (<script type="c-text">⭾</script>) pour auto-compléter la commande.</li>
+    <li>Ajoutez <script type="c-text">Hello</script>, puis tapez sur la touche entrée (<script type="c-text">⏎</script>) pour exécuter la ligne de commande (<script type="c-bash">echo Hello</script>).</li>
     <li>Grâce aux flèches du clavier (<script type="c-text">←</script>/<script type="c-text">→</script>/<script type="c-text">↑</script>/<script type="c-text">↓</script>), modifiez la commande précédente en <script type="c-bash">echo Hell no</script>, puis exécutez-la.</li>
     <li><q-text @qid="0faf857e">En utilisant les raccourcis clavier de copie, exécutez la commande <script type="c-bash">echo ~</script>, puis donnez son résultat ci-dessous :</q-text></li>
     <li><q-text @qid="8d10aee5">En utilisant le clic-molette de la souris, exécutez la commande <script type="c-bash">echo '~'</script>, puis donnez son résultat ci-dessous :</q-text></li>
-    <li>Tapez <script type="c-text">e</script> dans le terminal, puis utilisez la touche tabulation 2 fois (<script type="c-text">⭾+⭾</script>) pour voir les possibilités d'auto-complétion.</li>
-    <li>Ajoutez <script type="c-text">c</script>, puis rappuyez sur la touche tabulation (<script type="c-text">⭾</script>) pour auto-compléter la commande que vous exécuterez.</li>
 </ol>
 
 <h3>Caractères spéciaux</h3>
 
-<div class="hint">Pour rappel, nous fournissons la commande <script type="c-bash">dry-run <h>$CMDLINE</h></script> qui affiche la ligne de commande après réécriture du shell, sans l'exécuter. Vous pouvez ensuite exécuter la commande via la commande <script type="c-bash">!!</script>.</div>
+<div class="hint">Pour rappel, nous fournissons une commande <script type="c-bash">dry-run <h>$CMDLINE</h></script> affichant les arguments qui seraient réellement transmis à la commande (i.e. après les réécritures du Shell). Vous pourrez ensuite l'exécuter via la commande <script type="c-bash">!!</script>.</div>
 
 <ol>
-    <li><q-text @qid="c05260a7">Exécutez <script type="c-bash">dry-run echo ~</script> et <script type="c-bash">dry-run echo '~'</script>, puis expliquez les résultats obtenus :</q-text></li>
-    <li><q-text @qid="a2b4a7cc">Exécutez <script type="c-bash">dry-run [{A,B}]</script>, <script type="c-bash">dry-run '[{A,B}]'</script> et <script type="c-bash">dry-run [{A, B}]</script>, puis expliquez les résultats obtenus :</q-text></li>
+    <li><q-text @qid="c05260a7">Exécutez <script type="c-bash">dry-run echo ~</script>, puis <script type="c-bash">dry-run echo '~'</script>. Expliquez les résultats obtenus :</q-text></li>
+    <li><q-text @qid="a2b4a7cc">Exécutez <script type="c-bash">dry-run [{A,B}]</script>, <script type="c-bash">dry-run '[{A,B}]'</script>, puis <script type="c-bash">dry-run [{A, B}]</script>. Expliquez les résultats obtenus :</q-text></li>
 </ol>
 
 <h2>Navigation</h2>
@@ -75,12 +75,16 @@
 </ol>
 
 <h3>Lister</h3>
+
+<div class="hint">Pour rappel, il est attendu que vous utilisiez la cheat sheet fournie (ainsi que vos supports de cours), afin de répondre aux questions suivantes.</div>
+
 <ol>
     <li><q-text @qid="03ff5656" @lang="bash"> Affichez le chemin du répertoire de travail actuel.</q-text></li>
     <li><q-text @qid="ded2c738" @lang="bash"> Affichez le contenu du dossier courant (<b>sans</b> les fichiers cachés).</q-text></li>
     <li><q-text @qid="61392e6f" @lang="bash"> Affichez le contenu du dossier courant (<b>avec</b> les fichiers cachés).</q-text></li>
     <li><q-text @qid="8052336b" @lang="bash"> Affichez le contenu du dossier racine.</q-text></li>
-    <li><q-text @qid="d92c1ecf" @lang="bash"> Affichez l'arborescence (option <script type="c-bash">--tree</script>) du dossier TP (utilisez un chemin relatif) :</q-text></li>
+    <li><q-text @qid="68fee4e0" @lang="bash"> Affichez le contenu du dossier TP (utilisez un chemin relatif) :</q-text></li>
+    <li><q-text @qid="d92c1ecf" @lang="bash"> Ajoutez l'option <script type="c-bash">--tree</script> à la commande précédente pour en visualiser le contenu sous la forme d'une arborescence :</q-text></li>
 </ol>
 
 <h3>Naviguer</h3>
@@ -96,15 +100,15 @@
 
 <h2>Manipulations de fichiers</h2>
 
-<div>Vous allez manipuler des fichiers dans le dossier <script type="c-bash">~/TP/TP0/</script>. Pour cela, nous vous fournissons la commande <script type="c-bash">tp0-reset</script> permettant de (re-)créer ce dossier pour les besoins de cet exercice. En cas d'erreurs dans la manipulation des fichiers, vous pourrez utiliser cette commande pour réinitialiser l'exercice afin de repartir sur des bases propres.</div>
+<div>Vous allez manipuler des fichiers dans le dossier <script type="c-bash">~/TP/TP0/</script>. Pour cela, nous vous fournissons la commande <script type="c-bash">tp0-reset</script> permettant de (re-)créer ce dossier pour les besoins de cet exercice. En cas d'erreurs dans la manipulation des fichiers, vous pourrez utiliser cette commande pour réinitialiser l'exercice, vous permettant de repartir sur une base saine.</div>
 
 <div class="hint">N'hésitez pas à utiliser la commande <script type="c-bash">ls --tree <h>$DIR</h></script> afin de visualiser l'état de l'arborescence.</div>
 
 <h3>Création et édition de fichiers</h3>
 
 <ol>
-    <li>Initialisez l'arborescence.</li>
-    <li><q-text @qid="aedde650" @lang="bash">En <b>une seule</b> ligne de commande créez un dossier <script type="c-text">share/@me/</script> pour <u>tous</u> les dossiers de <script type="c-text">~/TP/TP0/</script> :</q-text></li>
+    <li>Exécutez la commande <script type="c-bash">tp0-reset</script> afin d'initialisez l'arborescence sur laquelle vous travaillerez.</li>
+    <li><q-text @qid="aedde650" @lang="bash">En <b>une seule</b> ligne de commande créez un dossier <script type="c-text">share/@me/</script> dans les dossiers <script type="c-text">Lou/</script>, <script type="c-text">Paul/</script>, et <script type="c-text">Alain/</script> :</q-text></li>
     <li><q-text @qid="6f43f7e8" @lang="shell">En <b>une seule</b> ligne de commande créez un fichier <u>vide</u> <script type="c-text">share/logs.txt</script> pour les dossiers <script type="c-text">Alain/</script> et <script type="c-text">Lou/</script>:</q-text></li>
 </ol>
 
