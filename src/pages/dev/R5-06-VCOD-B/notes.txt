@@ -1,0 +1,205 @@
+Livre
+
+#1-2
+- agile :
+    - backlog : liste de features à implémenté priorisée
+    - itération incrémentale :
+        - timeboxed : 1 semaine à 1 mois
+            - taille fixe (sauf e.g. due jours fériés).
+        - au début : choix des features à implémenter
+            -> de la conception à l'intégration, en passant par les tests
+        - à la fin : démonstration auprès des clients => collecte le feedback et adapte les plans en conséquence.
+            => s'assure demande = ce qu'ils voulaient.
+            => coût modif moindre (car tôt)
+                => flexible = agile :)
+        => produit utilisable (ship) à la fin de chaque itération.
+            => important car on est tj en retard
+                => garantie d'avoir une version (récente) qui marche.
+        => fast result.
+        => tester des choses/tester des pistes. On se plante => converger vers un truc bien par itérations successives (d'où le real life feedback)
+            => qu'est-ce qui marche/marche pas ?
+        => évite le rush de fin de projet (plus beaucoup de tps pour tout finir)
+    => approprié quand on navigue à vue : idée vague de ce qu'on veut.
+
+#14 structure de scrum (people)
+- product owner = représente le client.
+- scrum master (rôle) => organise Scrum, pas de pouvoir hiérarchique.
+    -> beaucoup de bullcrap des coach pro pour se vendre.
+- devs (équipes 5-9 pers)
+    -> profils divers/complémentaire.
+        -> spécialisations individuelles (e.g. UX/Tests/C++/etc.)
+        -> i.e. chacun ses propres compétences.
+        => pas "team de UX".
+    -> en scrum, discutent entre eux, en autonomie du meilleur moyen de faire ce qui est demandé par le product owner.
+
+#17 structure de scrum (process)
+- product backlog
+    -> hiérarchie de backlog possible (e.g. par (sous-)produit/par équipe/par components)
+    - items : features / changes / defect / technical / technical debts (rendre visible / elles ont un coût financier -retarde le dev- #157)
+    - features
+        -> feature -> user stories
+            -> pour qui, quoi, pourquoi
+            -> discussion
+            -> ATTD : condition de validation (acceptance)
+        - estimer coût/complexité/etc.
+            -> value/importance client.
+            -> nombre (difficile) vs label (relatif gp).
+                -> relative size + facile
+                -> nombre forcément faux variance.
+                -> mais moyenne quand nombre important "se compense".
+                -> estimé par les devs
+                    -> besoin mécanisme de consensus
+                        -> e.g. planning poker.
+                        -> au autre.
+                        => pas débattre 2h.
+                + pas un engagement (sinon inflation du coût pour "marge")
+                -> pas besoin d'être précis => variance.
+        - prioriser
+        - refine = grosse feature en sous features + précises.
+        - delete (archiver)
+- sprint planning
+    - établir le sprint goal pour le sprint qui arrive.
+        -> pas y passer trop de temps => chef pratique.
+    - casse features en tâche à accomplir
+        -> sprint backlog
+    - associe une durée à chaque tâche
+        -> permet de voir la charge des personnes responsables
+        -> pas passer trop de temps à estimer, et estimation toujours arbitraire/fausse.
+    - ne peut changer une fois le sprint débuté.
+- sprint execution : bosse en autonomie.
+    - daily scrum/daily stand in : timeboxed 15min.
+        -> lourd (surtout quand sous pression).
+            -> chacun à son tour :
+            (ce que j'ai fait, ce que je vais faire, obstacle).
+        -> pause(s) café(s) = mieux.
+- sprint review : présentation de ce qui a été fait auprès du client/users
+    -> collecte des feedbacks et adaptations.
+    -> démonstration plus que présentation (slides).
+    -> peut faire plusieurs projets à la fois (l'un après l'autre ofc).
+        -> un peu comme réunion de département / réunion de stakeholders.
+- sprint retrospective (démarche qualité)
+    -> retour sur le process. 
+    -> lourd, surtout si sprint = 1 semaine.
+    => mieux vaut une réunion d'équipe 1/mois ou des réunions ad hoc si difficultés.
+    => ou fusionner avec le sprint planning, sans prendre 10 ans.
+    => avoir un focus pré-déterminé sur des problèmes constatés :
+        => e.g. améliorer les tests unitaires, etc.
+        => pas une collecte de retours donc.
+            => collecte de data objectives avant réunion.
+
+=> on garde de la conception au tout début, mais sans trop prédire.
+
+#56
+- Fast but do not hurry.
+    => substanable pace (sur le long terme)
+
+- ~= internal (actionnaires) vs external stakeholder (users)
+
+========================
+
+=> draw.io : axis ???
+=> multi-task = bad (cost of switch context/se mettre dedans - encore plus si plan [multiples deadlines peu de marges car variance / moyenne => moins de variance, on peut se rattraper])
+=> dev pipeline != planning.
+    => dev pipeline = feature progression.
+    => planning = toute la conception puis tout xxx (sur l'ensemble des tâches choisies dans l'itération)
+        => 100% features à 90%
+        => vs 90% features à 100% => put back in backlog
+=> on peut mixer approches :
+    => calendrier global itératif (e.g. 1 mois ui, 1 mois bdd, etc).
+        ~> les grandes étapes (estimations + qu'engagement).
+        ~> on peut faire aussi une conception générale au début + installation de l'env de dev.
+    => à l'intérieur itératif incrémental.
+
+Plan ?
+1. Cycle devs
+2. Iteratif
+    -> timeboxed vs non
+        => timeboxed = réunions régulières (e.g. lundi à 10h).
+        -> à l'intérieur : modèle.
+        -> par tâche vs global.
+3. Tâche (priorisation)
+4. Tâche planification
+5. RH management + prix dette technique + maths + démarche qualité.
+    -> Gantt is "plan-based" (ou restrospective => besoin de logger [dont démarche qualité]).
+        => Sur une semaine boff.
+    -> dette technique réserver un % du temps => paye petit à petit.
+        -> technical debt backlog
+    -> éviter grosse période d'un coup => pause le productif.
+    -> time is money : salaires + opportunité (vente)
+    -> coût de dev vs ce que la feature va rapporter/bug va coûter.
+        -> décisions go/no go (coût, bénéfices, risques, etc)
+    -> planning : release date => marketing à prévoir, battre ses concurrents (sortir avant lui)
+    => planifier = facile. Respecter le plan = difficile.
+
+=======================
+
+#66
+- check points
+
+#52
+Management ressource
+    - idle work cost more than idle worker.
+        -> si réparti dans trop de projets/équipe : coût de passer de l'un à l'autre, retard impacte plein de projets.
+        -> tenter abs de les faire bosser à 100% = wasteful
+            -> 110% => 90% la semaine suivante
+            -> burn out / fatigue.
+            => humain pas machine / opti = mauvaise idée.
+                => besoin flexibilité / adapter le planning au fur des aléas.
+                => tenter d'aller + vite à un coût : moins de recul, conception bâclée, bug pas corrigés,(cut corners -> dette technique) etc.
+        -> du temps pour s'organiser/trier ses fichiers
+        -> prendre du recul
+        -> marge pour imprévus (technique ou humain - e.g. maladie)
+        -> etc.
+
+#29 : waterfall
+    -> (plan based :)
+        -> quand : well defined, predictable, no changes in besoins.
+        -> défault : décisions précoces sans tout savoir / pas basé sur la pratique + on peut se tromper.
+        => exploring : proto / PoC
+
+#9
+Kanban : interrupt driven work (e.g. support)
+    => agile pas idéal, car planifier impossible
+    => mais pour communiquer sur l'état = bien (vs pour se répartir les tâches)
+        => i.e. colonne en cours vs colonne responsabilité de dev 1 (todolist dev1).
+
+Démarche qualité ?
+=> e.g. bugs / retards / acceptance / etc.
+- https://fr.wikipedia.org/wiki/Six_Sigma
+- DMAIC » en anglais : Define, Measure, Analyse, Improve, Control
+- les matrices de KANO ?
+    -> tests dont tests de perf, de charge, etc.
+        -> des tests qui ne sont pas dans ATP. (<= avant)
+        -> mais aussi des indicateurs d'alerte/incident (<= pendant)
+            -> logs doivent permettre de comprendre la situation.
+    -> reproductibilité => déployé 1 fois ou 100x = identique.
+    -> réduire la variance des résultats obs (e.g. latence)
+
+Dot voting :
+- brainstorm avec post-it
+    => async brainstorming.
+    => think before meeting.
+    => ou pendant meeting.
+- vote en plaçant un "point" de couleur sur le post-it.
+
+- release train : release à des dates spécifiques.
+    -> un sprint réservé à du hardening, intégration, etc ?
+
+    - front up plan vs replanning/adapting
+- plus il est précis, plus il sera faux.
+    -> cf variance vs moyenne.
+
+- high level backlog (ce qu'on veut faire dans les grandes lignes)
+    - roadmaps (ordonner chronologiquement / par étapes)
+        - milestone
+    - release planning
+        - une date aux grandes étapes du roadmap
+
+- sunk cost fallacy
+    => pas hésiter à abandonner.
+
+- burn up graph => target line + progression line en fonction du tps.
+
+=> estimations du temps requis souvent mauvaises
+	=> imprévus (chose plus difficile qu'il n'y paraît, bug bizarre, etc)
+	=> on peut pas penser à tout (à zut y'a d'autres cas à gérer, ça implique de faire ça).
