@@ -1,4 +1,4 @@
-build/TS
+build/cache
 node_modules/
 package-lock.json
 dist/

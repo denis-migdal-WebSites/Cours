@@ -6,7 +6,8 @@
     "compilerOptions": {
 
         "rootDir": ".",
-        "outDir": "./build/TS",
+        "outDir": "./build/cache/TS",
+        "tsBuildInfoFile": "./build/cache/TS/tsconfig.tsbuildinfo",
 
         "paths": {
             "@Cours/*"    : ["./src/*"],
