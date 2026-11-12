@@ -1,5 +1,5 @@
 import { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
-import { type FrameUCA } from "WebSlides@2026/widgets/frames/FrameUCA";
+import { type FrameUCA } from "WebSlides@2026/webui/widgets/frames/FrameUCA";
 
 // ensure init.
 import "@Cours/components/@topics/bdr/SQL/SQLDymTable";

@@ -1,4 +1,4 @@
-import { type FrameUCA } from "WebSlides@2026/widgets/frames/FrameUCA";
+import { type FrameUCA } from "WebSlides@2026/webui/widgets/frames/FrameUCA";
 import { SQLDymTable } from "@Cours/components/@topics/bdr/SQL/SQLDymTable";
 import { _doStep } from "../../CM/players/order_helpers";
 
